@@ -1,0 +1,20 @@
+# Compiled source #
+###################
+*.dll
+*.exe
+*.o
+*.so
+Makefile
+bin/
+.obj/
+.build/
+
+# Directories created by eclipse
+sw/.cproject
+sw/.project
+sw/.settings
+
+# Temporary files
+*.temp
+*~
+*.user

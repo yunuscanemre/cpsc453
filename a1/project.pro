@@ -2,6 +2,7 @@ TEMPLATE = app
 TARGET = a1
 CONFIG += qt
 QT = core gui opengl #  qt libraries to use
+LIBS += -lGLU #is not pulled in by default
 
 HEADERS += *.h
 SOURCES += *.cpp

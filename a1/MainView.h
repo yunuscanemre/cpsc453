@@ -2,7 +2,10 @@
 #define MAINVIEW_H_
 
 #include <ui_MainWindow.h>
-#include <QtGui/qmainwindow.h>
+
+class GlWidget;
+class QMainWindow;
+class RgbImage;
 
 class MainView
 {
@@ -11,10 +14,13 @@ public:
    virtual ~MainView();
    
    virtual void show();
+   virtual void setOrigImage(RgbImage* image);
    
 private:
    QMainWindow* mainWindow_;
    Ui::MainWindow* mainUi_;
+   GlWidget* original_;
+   GlWidget* modified_;
 
 };
 

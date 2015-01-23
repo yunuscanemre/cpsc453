@@ -10,11 +10,12 @@ bin/
 .build/
 
 # Directories created by eclipse
-sw/.cproject
-sw/.project
-sw/.settings
+.cproject
+.project
+.settings
 
 # Temporary files
 *.temp
 *~
 *.user
+*.user.*

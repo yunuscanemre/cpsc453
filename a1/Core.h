@@ -2,7 +2,7 @@
 #define CORE_H_
 
 class MainView;
-class RgbImage;
+class QImage;
 
 class Core
 {
@@ -12,7 +12,7 @@ public:
 
 private: // Members
    MainView* view_;
-   RgbImage* image_;
+   QImage* image_;
 };
 
 #endif

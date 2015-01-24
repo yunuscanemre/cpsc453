@@ -1,5 +1,5 @@
 #include <GlWidget.h>
-#include <RgbImage.h>
+#include <QImage>
 #include <QWidget>
 #include <stdlib.h>
 #include <GL/gl.h>
@@ -9,7 +9,7 @@ GlWidget::GlWidget(QWidget *parent) : QGLWidget(parent)
 {
 }
 
-void GlWidget::loadImage(RgbImage* image)
+void GlWidget::loadImage(QImage* image)
 {
    glClearColor (0.0, 0.0, 0.0, 0.0);
    glShadeModel(GL_FLAT);
@@ -23,8 +23,8 @@ void GlWidget::loadImage(RgbImage* image)
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-   gluBuild2DMipmaps(GL_TEXTURE_2D, 3,image->GetNumCols(), image->GetNumRows(),
-                    GL_RGB, GL_UNSIGNED_BYTE, image->ImageData() );
+   gluBuild2DMipmaps(GL_TEXTURE_2D, 3,image->height(), image->width(),
+                    GL_RGB, GL_UNSIGNED_BYTE, image->bits() );
 }
 
 void GlWidget::paintGL()

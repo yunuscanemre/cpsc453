@@ -5,7 +5,7 @@
 
 class GlWidget;
 class QMainWindow;
-class RgbImage;
+class QImage;
 
 class MainView
 {
@@ -14,13 +14,19 @@ public:
    virtual ~MainView();
    
    virtual void show();
-   virtual void setOrigImage(RgbImage* image);
+   virtual void setOrigImage(QImage* image);
    
+private:
+   void setupUi();
+   void setQuantization(int level);
+
 private:
    QMainWindow* mainWindow_;
    Ui::MainWindow* mainUi_;
    GlWidget* original_;
    GlWidget* modified_;
+
+
 
 };
 

@@ -48,6 +48,29 @@ RgbImage::RgbImage( int numRows, int numCols )
 	}
 }
 
+RgbImage::RgbImage(RgbImage* image)
+{
+   NumRows = image->GetNumRows();
+   NumCols = image->GetNumCols();
+   ImagePtr = new unsigned char[NumRows*GetNumBytesPerRow()];
+   if ( !ImagePtr ) {
+      fprintf(stderr, "Unable to allocate memory for %ld x %ld bitmap.\n",
+            NumRows, NumCols);
+      Reset();
+      ErrorCode = MemoryError;
+   }
+   unsigned char* thisImage = ImagePtr;
+   unsigned char* otherImage = (unsigned char*) image->ImageData();
+
+   // Copy other image to this image
+   int rowLen = GetNumBytesPerRow();
+   for ( int i=0; i<NumRows; i++ ) {
+      for ( int j=0; j<rowLen; j++ ) {
+         *(thisImage++) = *(otherImage++);
+      }
+   }
+}
+
 /* ********************************************************************
  *  LoadBmpFile
  *  Read into memory an RGB image from an uncompressed BMP file.

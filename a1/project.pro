@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = a1
-CONFIG += qt
+CONFIG += qt debug
 QT = core gui opengl #  qt libraries to use
 LIBS += -lGLU #is not pulled in by default
 

@@ -1,11 +1,22 @@
 #include <MainView.h>
 #include <GlWidget.h>
 #include <QVBoxLayout>
-#include <QImage>
+#include <RgbImage.h>
+
+#include <Helpers.h>
 
 MainView::MainView() 
 {
    setupUi();
+
+   qtConnect(mainUi_->quantizationEntry, SIGNAL(valueChanged(int)),
+             this, SIGNAL(quantizationChanged(int)));
+
+   qtConnect(mainUi_->actionOpenImage, SIGNAL(triggered(bool)),
+             this, SIGNAL(openImageSelected(bool)));
+
+   qtConnect(mainUi_->actionSaveImage, SIGNAL(triggered(bool)),
+             this, SIGNAL(saveImageSelected(bool)));
 }
 
 MainView::~MainView() 
@@ -17,13 +28,19 @@ void MainView::show()
    mainWindow_->show();
 }
 
-void MainView::setOrigImage(QImage* image)
+void MainView::setOrigImage(RgbImage* image)
 {
    // opengl calls affect this widget
    original_->makeCurrent();
    original_->loadImage(image);
+   modified_->updateGL();
+}
+
+void MainView::setModifiedImage(RgbImage* image)
+{
    modified_->makeCurrent();
    modified_->loadImage(image);
+   modified_->updateGL();
 }
 
 void MainView::setupUi()
@@ -40,17 +57,9 @@ void MainView::setupUi()
    QVBoxLayout* modImgLayout = new QVBoxLayout(mainUi_->modImgContainerWidget);
    modImgLayout->addWidget(modified_);
    mainUi_->modImgContainerWidget->setLayout(modImgLayout);
+   mainUi_->quantizationEntry->
+      setStatusTip("Sets quantization level. Hit enter for changes to take effect.");
 }
 
-void MainView::setQuantization(int level)
-{
-   // setup quantization matrix
-   int quantize[255];
-   std::fill_n(quantize, 255, 0);
-   for (int i = 0; i < 256; i++)
-   {
-      int q = (int) floor(255 * floor(i * (level - 1) / 255.0) / (level - 1));
-      quantize[i] = q;
-   }
-}
+
 

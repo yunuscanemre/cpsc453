@@ -33,6 +33,7 @@ public:
 	RgbImage();
 	RgbImage( const char* filename );
 	RgbImage( int numRows, int numCols );	// Initialize a blank bitmap of this size.
+	RgbImage(RgbImage* image);
 	~RgbImage();
 
 	bool LoadBmpFile( const char *filename );		// Loads the bitmap from the specified file

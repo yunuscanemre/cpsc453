@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QtOpenGL/qgl.h>
 
-class QImage;
+class RgbImage;
 
 class GlWidget : public QGLWidget
 {
@@ -13,7 +13,7 @@ class GlWidget : public QGLWidget
 public:
    GlWidget(QWidget *parent);
 
-   void loadImage(QImage* image);
+   void loadImage(RgbImage* image);
 
 protected:
    virtual void paintGL();

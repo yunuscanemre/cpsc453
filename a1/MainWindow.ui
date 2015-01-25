@@ -52,7 +52,9 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QWidget" name="modImgContainerWidget" native="true"/>
+          <widget class="QWidget" name="modImgContainerWidget" native="true">
+           <zorder></zorder>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -65,16 +67,38 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QPushButton" name="openFileButton">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Open Image...</string>
+         <string>Quantization Level</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="openFileButton_2">
-        <property name="text">
-         <string>Save Modified...</string>
+       <widget class="QSpinBox" name="quantizationEntry">
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>2</number>
+        </property>
+        <property name="maximum">
+         <number>256</number>
+        </property>
+        <property name="value">
+         <number>256</number>
         </property>
        </widget>
       </item>
@@ -83,6 +107,40 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1019</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSelection">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <addaction name="actionOpenImage"/>
+    <addaction name="actionSaveImage"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuSelection"/>
+  </widget>
+  <action name="actionOpenImage">
+   <property name="text">
+    <string>Open BMP Image...</string>
+   </property>
+  </action>
+  <action name="actionSaveImage">
+   <property name="text">
+    <string>Save BMP Image...</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

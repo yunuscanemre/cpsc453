@@ -6,11 +6,13 @@
 #include <stdio.h>
 #include <Helpers.h>
 #include <Pixel.h>
+#include <QMessageBox>
 
 Core::Core()
 {
    image_ = NULL;
    modifiedImage_ = NULL;
+   dissolveImage_ = NULL;
    view_ = new MainView();
    view_->show();
    selectAnImageToOpen();
@@ -26,6 +28,15 @@ Core::Core()
 
    qtConnect(view_, SIGNAL(contrastChanged(double)), this,
          SLOT(setContrast(double)));
+
+   qtConnect(view_, SIGNAL(contrastChanged(double)), this,
+         SLOT(setContrast(double)));
+
+   qtConnect(view_, SIGNAL(dissolveChanged(double)), this,
+         SLOT(setDissolve(double)));
+
+   qtConnect(view_, SIGNAL(dissolveSelected(bool)), this,
+         SLOT(selectDissolveImage()));
 
    qtConnect(view_, SIGNAL(openImageSelected(bool)), this,
          SLOT(selectAnImageToOpen()));
@@ -57,6 +68,26 @@ void Core::selectAnImageToOpen()
    view_->setModifiedImage(modifiedImage_);
 }
 
+void Core::selectDissolveImage()
+{
+   QString fileToLoad = QFileDialog::getOpenFileName(NULL,
+         "Select a bmp image to open");
+   if (fileToLoad.isNull())
+      return;
+
+   deletePointer(dissolveImage_);
+   dissolveImage_ = new RgbImage(fileToLoad.toStdString().c_str());
+   if(dissolveImage_->GetNumRows() != image_->GetNumRows() ||
+      dissolveImage_->GetNumCols() != image_->GetNumCols())
+   {
+      QMessageBox::warning(NULL, "Images Are Not Same Size",
+                           "Dissolve image must be the same size as the image original image");
+      return;
+   }
+   view_->setModifiedImage(image_);
+   view_->enableDissolve();
+}
+
 void Core::saveModifiedImage()
 {
    QString saveFile = QFileDialog::getSaveFileName(NULL,
@@ -64,6 +95,23 @@ void Core::saveModifiedImage()
    if (saveFile.isNull())
       return;
    modifiedImage_->WriteBmpFile(saveFile.toStdString().c_str());
+}
+
+void Core::setDissolve(double distance) // BONUS
+{
+   // FIX ? Images need to be the same size
+   reInitializeModifiedImage();
+   for (int i = 0; i < modifiedImage_->GetNumRows(); i++)
+   {
+      for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
+      {
+         Pixel src = image_->GetRgbPixel(i, j);
+         Pixel dest = dissolveImage_->GetRgbPixel(i, j);
+         Pixel blended = dest.blend(src, distance);
+         modifiedImage_->SetRgbPixel(i, j, blended);
+      }
+   }
+   view_->setModifiedImage(modifiedImage_);
 }
 
 void Core::setContrast(double scale) // BONUS

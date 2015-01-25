@@ -16,12 +16,14 @@ public:
 
 private slots:
    void selectAnImageToOpen();
+   void selectDissolveImage();
    void saveModifiedImage();
 
    void setQuantization(int level);
    void setBrightness(double scale);
    void setSaturation(double scale);
-   void setContrast(double scale);
+   void setContrast(double scale); // BONUS
+   void setDissolve(double distance); // BONUS
 
 private:
    void reInitializeModifiedImage();
@@ -30,6 +32,7 @@ private: // Members
    MainView* view_;
    RgbImage* image_;
    RgbImage* modifiedImage_;
+   RgbImage* dissolveImage_;
 };
 
 #endif

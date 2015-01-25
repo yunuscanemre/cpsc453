@@ -21,6 +21,12 @@ MainView::MainView()
    qtConnect(mainUi_->contrastEntry, SIGNAL(valueChanged(double)),
              this, SIGNAL(contrastChanged(double)));
 
+   qtConnect(mainUi_->dissolveEntry, SIGNAL(valueChanged(double)),
+             this, SIGNAL(dissolveChanged(double)));
+
+   qtConnect(mainUi_->dissolveSelect, SIGNAL(clicked(bool)),
+                this, SIGNAL(dissolveSelected(bool)));
+
    qtConnect(mainUi_->actionOpenImage, SIGNAL(triggered(bool)),
              this, SIGNAL(openImageSelected(bool)));
 
@@ -50,6 +56,11 @@ void MainView::setModifiedImage(RgbImage* image)
    modified_->makeCurrent();
    modified_->loadImage(image);
    modified_->updateGL();
+}
+
+void MainView::enableDissolve()
+{
+   mainUi_->dissolveEntry->setEnabled(true);
 }
 
 void MainView::setupUi()

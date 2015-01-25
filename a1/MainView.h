@@ -16,18 +16,21 @@ public:
    MainView();
    virtual ~MainView();
    
-   virtual void show();
-   virtual void setOrigImage(RgbImage* image);
+   void show();
+   void setOrigImage(RgbImage* image);
    void setModifiedImage(RgbImage* image);
+   void enableDissolve();
    
 signals:
    void quantizationChanged(int level);
    void brightnessChanged(double scale);
    void saturationChanged(double scale);
    void contrastChanged(double scale);
+   void dissolveChanged(double distance);
 
    void openImageSelected(bool checked);
    void saveImageSelected(bool checked);
+   void dissolveSelected(bool checked);
 
 private:
    void setupUi();

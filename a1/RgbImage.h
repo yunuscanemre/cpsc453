@@ -57,6 +57,7 @@ public:
    const unsigned char* GetRgbPixelRaw( long row, long col ) const;
    unsigned char* GetRgbPixelRaw( long row, long col );
    void SetRgbPixel( long row, long col, Pixel p);
+//   void extendRowCol(long row, long col);
    ////
 
 

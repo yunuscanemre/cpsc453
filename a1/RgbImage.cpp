@@ -31,6 +31,7 @@ RgbImage::RgbImage( int numRows, int numCols )
 {
 	NumRows = numRows;
 	NumCols = numCols;
+	averageLuminance = -1;
 	ImagePtr = new unsigned char[NumRows*GetNumBytesPerRow()];
 	if ( !ImagePtr ) {
 		fprintf(stderr, "Unable to allocate memory for %ld x %ld bitmap.\n", 
@@ -52,6 +53,7 @@ RgbImage::RgbImage(RgbImage* image)
 {
    NumRows = image->GetNumRows();
    NumCols = image->GetNumCols();
+   averageLuminance = -1;
    ImagePtr = new unsigned char[NumRows*GetNumBytesPerRow()];
    if ( !ImagePtr ) {
       fprintf(stderr, "Unable to allocate memory for %ld x %ld bitmap.\n",
@@ -281,6 +283,11 @@ void RgbImage::writeShort( short data, FILE* outfile )
  * SetRgbPixel routines allow changing the contents of the RgbImage. *
  *********************************************************************/
 
+void RgbImage::SetRgbPixel( long row, long col, Pixel p)
+{
+   SetRgbPixelf(row, col, p.red, p.green, p.blue);
+}
+
 void RgbImage::SetRgbPixelf( long row, long col, double red, double green, double blue )
 {
 	SetRgbPixelc( row, col, doubleToUnsignedChar(red), 
@@ -292,7 +299,7 @@ void RgbImage::SetRgbPixelc( long row, long col,
 				   unsigned char red, unsigned char green, unsigned char blue )
 {
 	assert ( row<NumRows && col<NumCols );
-	unsigned char* thePixel = GetRgbPixel( row, col );
+	unsigned char* thePixel = GetRgbPixelRaw( row, col );
 	*(thePixel++) = red;
 	*(thePixel++) = green;
 	*(thePixel) = blue;

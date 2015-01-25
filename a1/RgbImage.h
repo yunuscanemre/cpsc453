@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <Pixel.h>
 
 // Include the next line to turn off the routines that use OpenGL
 // #define RGBIMAGE_DONT_USE_OPENGL
@@ -33,7 +34,6 @@ public:
 	RgbImage();
 	RgbImage( const char* filename );
 	RgbImage( int numRows, int numCols );	// Initialize a blank bitmap of this size.
-	RgbImage(RgbImage* image);
 	~RgbImage();
 
 	bool LoadBmpFile( const char *filename );		// Loads the bitmap from the specified file
@@ -48,10 +48,17 @@ public:
 	long GetNumBytesPerRow() const { return ((3*NumCols+3)>>2)<<2; }	
 	const void* ImageData() const { return (void*)ImagePtr; }
 
-	const unsigned char* GetRgbPixel( long row, long col ) const;
-	unsigned char* GetRgbPixel( long row, long col );
 	void GetRgbPixel( long row, long col, float* red, float* green, float* blue ) const;
-	void GetRgbPixel( long row, long col, double* red, double* green, double* blue ) const;
+
+	// I modified/added these
+   RgbImage(RgbImage* image);
+	Pixel GetRgbPixel( long row, long col) const;
+	double GetAverageLuminance();
+   const unsigned char* GetRgbPixelRaw( long row, long col ) const;
+   unsigned char* GetRgbPixelRaw( long row, long col );
+   void SetRgbPixel( long row, long col, Pixel p);
+   ////
+
 
 	void SetRgbPixelf( long row, long col, double red, double green, double blue );
 	void SetRgbPixelc( long row, long col, 
@@ -77,6 +84,10 @@ private:
 	long NumCols;				// number of columns in image
 	int ErrorCode;				// error code
 
+	// I modified/added these
+	double averageLuminance;
+	////
+
 	static short readShort( FILE* infile );
 	static long readLong( FILE* infile );
 	static void skipChars( FILE* infile, int numChars );
@@ -93,6 +104,7 @@ inline RgbImage::RgbImage()
 	NumCols = 0;
 	ImagePtr = 0;
 	ErrorCode = 0;
+	averageLuminance = -1;
 }
 
 inline RgbImage::RgbImage( const char* filename )
@@ -101,6 +113,7 @@ inline RgbImage::RgbImage( const char* filename )
 	NumCols = 0;
 	ImagePtr = 0;
 	ErrorCode = 0;
+	averageLuminance = -1;
 	LoadBmpFile( filename );
 }
 
@@ -110,7 +123,7 @@ inline RgbImage::~RgbImage()
 }
 
 // Returned value points to three "unsigned char" values for R,G,B
-inline const unsigned char* RgbImage::GetRgbPixel( long row, long col ) const
+inline const unsigned char* RgbImage::GetRgbPixelRaw( long row, long col ) const
 {
 	assert ( row<NumRows && col<NumCols );
 	const unsigned char* ret = ImagePtr;
@@ -119,7 +132,7 @@ inline const unsigned char* RgbImage::GetRgbPixel( long row, long col ) const
 	return ret;
 }
 
-inline unsigned char* RgbImage::GetRgbPixel( long row, long col ) 
+inline unsigned char* RgbImage::GetRgbPixelRaw( long row, long col )
 {
 	assert ( row<NumRows && col<NumCols );
 	unsigned char* ret = ImagePtr;
@@ -131,21 +144,41 @@ inline unsigned char* RgbImage::GetRgbPixel( long row, long col )
 inline void RgbImage::GetRgbPixel( long row, long col, float* red, float* green, float* blue ) const
 {
 	assert ( row<NumRows && col<NumCols );
-	const unsigned char* thePixel = GetRgbPixel( row, col );
+	const unsigned char* thePixel = GetRgbPixelRaw( row, col );
 	const float f = 1.0f/255.0f;
 	*red = f*(float)(*(thePixel++));
 	*green = f*(float)(*(thePixel++));
 	*blue = f*(float)(*thePixel);
 }
 
-inline void RgbImage::GetRgbPixel( long row, long col, double* red, double* green, double* blue ) const
+inline Pixel RgbImage::GetRgbPixel( long row, long col ) const
 {
 	assert ( row<NumRows && col<NumCols );
-	const unsigned char* thePixel = GetRgbPixel( row, col );
+	const unsigned char* thePixel = GetRgbPixelRaw( row, col );
 	const double f = 1.0/255.0;
-	*red = f*(double)(*(thePixel++));
-	*green = f*(double)(*(thePixel++));
-	*blue = f*(double)(*thePixel);
+	double red = f*(double)(*(thePixel++));
+	double green = f*(double)(*(thePixel++));
+	double blue = f*(double)(*thePixel);
+	return Pixel(red, green, blue);
+}
+
+inline double RgbImage::GetAverageLuminance()
+{
+   // dont average if we already calculated it before
+   if(averageLuminance != -1)
+      return averageLuminance;
+
+   double total = 0.0;
+   int size = GetNumRows()*GetNumCols();
+   for (int i = 0; i < GetNumRows(); i++)
+   {
+      for (int j = 0; j < GetNumCols(); j++)
+      {
+         total+=GetRgbPixel(i, j).luminance();
+      }
+   }
+   averageLuminance = (total/size);
+   return averageLuminance;
 }
 
 inline void RgbImage::Reset()

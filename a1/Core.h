@@ -15,9 +15,16 @@ public:
    ~Core();
 
 private slots:
-   void setQuantization(int level);
    void selectAnImageToOpen();
    void saveModifiedImage();
+
+   void setQuantization(int level);
+   void setBrightness(double scale);
+   void setSaturation(double scale);
+   void setContrast(double scale);
+
+private:
+   void reInitializeModifiedImage();
 
 private: // Members
    MainView* view_;

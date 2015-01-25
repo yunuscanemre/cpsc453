@@ -13,6 +13,8 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QDoubleSpinBox>
+#include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
@@ -20,6 +22,7 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QSpinBox>
 #include <QtGui/QStatusBar>
@@ -44,10 +47,21 @@ public:
     QGroupBox *modifiedImageBox;
     QVBoxLayout *verticalLayout_2;
     QWidget *modImgContainerWidget;
-    QHBoxLayout *horizontalLayout_2;
-    QSpacerItem *horizontalSpacer_2;
+    QGridLayout *gridLayout;
+    QSpacerItem *horizontalSpacer_4;
+    QSpacerItem *horizontalSpacer_3;
+    QLabel *label_2;
+    QDoubleSpinBox *brightnessEntry;
+    QPushButton *dissolveSelect;
+    QLabel *label_3;
+    QDoubleSpinBox *dissolveEntry;
+    QLabel *label_4;
+    QDoubleSpinBox *contrastEntry;
+    QDoubleSpinBox *saturationEntry;
+    QSpacerItem *horizontalSpacer_5;
     QLabel *label;
     QSpinBox *quantizationEntry;
+    QSpacerItem *horizontalSpacer_2;
     QStatusBar *statusbar;
     QMenuBar *menuBar;
     QMenu *menuSelection;
@@ -100,17 +114,87 @@ public:
 
         verticalLayout_3->addLayout(horizontalLayout);
 
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        horizontalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        gridLayout = new QGridLayout();
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_2->addItem(horizontalSpacer_2);
+        gridLayout->addItem(horizontalSpacer_4, 2, 0, 1, 1);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_3, 1, 0, 1, 1);
+
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        gridLayout->addWidget(label_2, 1, 1, 1, 1);
+
+        brightnessEntry = new QDoubleSpinBox(centralwidget);
+        brightnessEntry->setObjectName(QString::fromUtf8("brightnessEntry"));
+        brightnessEntry->setKeyboardTracking(false);
+        brightnessEntry->setDecimals(1);
+        brightnessEntry->setMinimum(0);
+        brightnessEntry->setMaximum(50);
+        brightnessEntry->setSingleStep(0.1);
+        brightnessEntry->setValue(1);
+
+        gridLayout->addWidget(brightnessEntry, 1, 2, 1, 1);
+
+        dissolveSelect = new QPushButton(centralwidget);
+        dissolveSelect->setObjectName(QString::fromUtf8("dissolveSelect"));
+
+        gridLayout->addWidget(dissolveSelect, 4, 1, 1, 1);
+
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        gridLayout->addWidget(label_3, 2, 1, 1, 1);
+
+        dissolveEntry = new QDoubleSpinBox(centralwidget);
+        dissolveEntry->setObjectName(QString::fromUtf8("dissolveEntry"));
+        dissolveEntry->setEnabled(false);
+        dissolveEntry->setKeyboardTracking(false);
+        dissolveEntry->setDecimals(1);
+        dissolveEntry->setMaximum(1);
+        dissolveEntry->setSingleStep(0.1);
+
+        gridLayout->addWidget(dissolveEntry, 4, 2, 1, 1);
+
+        label_4 = new QLabel(centralwidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        gridLayout->addWidget(label_4, 3, 1, 1, 1);
+
+        contrastEntry = new QDoubleSpinBox(centralwidget);
+        contrastEntry->setObjectName(QString::fromUtf8("contrastEntry"));
+        contrastEntry->setKeyboardTracking(false);
+        contrastEntry->setDecimals(1);
+        contrastEntry->setMinimum(-10);
+        contrastEntry->setMaximum(50);
+        contrastEntry->setSingleStep(0.1);
+        contrastEntry->setValue(1);
+
+        gridLayout->addWidget(contrastEntry, 3, 2, 1, 1);
+
+        saturationEntry = new QDoubleSpinBox(centralwidget);
+        saturationEntry->setObjectName(QString::fromUtf8("saturationEntry"));
+        saturationEntry->setKeyboardTracking(false);
+        saturationEntry->setDecimals(1);
+        saturationEntry->setMinimum(-10);
+        saturationEntry->setMaximum(50);
+        saturationEntry->setSingleStep(0.1);
+        saturationEntry->setValue(1);
+
+        gridLayout->addWidget(saturationEntry, 2, 2, 1, 1);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_5, 3, 0, 1, 1);
 
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
 
-        horizontalLayout_2->addWidget(label);
+        gridLayout->addWidget(label, 0, 1, 1, 1);
 
         quantizationEntry = new QSpinBox(centralwidget);
         quantizationEntry->setObjectName(QString::fromUtf8("quantizationEntry"));
@@ -119,10 +203,14 @@ public:
         quantizationEntry->setMaximum(256);
         quantizationEntry->setValue(256);
 
-        horizontalLayout_2->addWidget(quantizationEntry);
+        gridLayout->addWidget(quantizationEntry, 0, 2, 1, 1);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_2, 0, 0, 1, 1);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_2);
+        verticalLayout_3->addLayout(gridLayout);
 
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
@@ -147,12 +235,16 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "CPSC453 - A1", 0, QApplication::UnicodeUTF8));
         actionOpenImage->setText(QApplication::translate("MainWindow", "Open BMP Image...", 0, QApplication::UnicodeUTF8));
         actionSaveImage->setText(QApplication::translate("MainWindow", "Save BMP Image...", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
         originalImgBox->setTitle(QApplication::translate("MainWindow", "Original Image", 0, QApplication::UnicodeUTF8));
         modifiedImageBox->setTitle(QApplication::translate("MainWindow", "Modified Image", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("MainWindow", "Brigtness Scale", 0, QApplication::UnicodeUTF8));
+        dissolveSelect->setText(QApplication::translate("MainWindow", "*Dissolve Image...", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("MainWindow", "Saturation", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("MainWindow", "*Contrast", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Quantization Level", 0, QApplication::UnicodeUTF8));
         menuSelection->setTitle(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

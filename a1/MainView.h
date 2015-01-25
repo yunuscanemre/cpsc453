@@ -22,6 +22,10 @@ public:
    
 signals:
    void quantizationChanged(int level);
+   void brightnessChanged(double scale);
+   void saturationChanged(double scale);
+   void contrastChanged(double scale);
+
    void openImageSelected(bool checked);
    void saveImageSelected(bool checked);
 

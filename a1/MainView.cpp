@@ -12,6 +12,15 @@ MainView::MainView()
    qtConnect(mainUi_->quantizationEntry, SIGNAL(valueChanged(int)),
              this, SIGNAL(quantizationChanged(int)));
 
+   qtConnect(mainUi_->brightnessEntry, SIGNAL(valueChanged(double)),
+             this, SIGNAL(brightnessChanged(double)));
+
+   qtConnect(mainUi_->saturationEntry, SIGNAL(valueChanged(double)),
+             this, SIGNAL(saturationChanged(double)));
+
+   qtConnect(mainUi_->contrastEntry, SIGNAL(valueChanged(double)),
+             this, SIGNAL(contrastChanged(double)));
+
    qtConnect(mainUi_->actionOpenImage, SIGNAL(triggered(bool)),
              this, SIGNAL(openImageSelected(bool)));
 
@@ -57,8 +66,12 @@ void MainView::setupUi()
    QVBoxLayout* modImgLayout = new QVBoxLayout(mainUi_->modImgContainerWidget);
    modImgLayout->addWidget(modified_);
    mainUi_->modImgContainerWidget->setLayout(modImgLayout);
-   mainUi_->quantizationEntry->
-      setStatusTip("Sets quantization level. Hit enter for changes to take effect.");
+
+   QString tip = "Hit enter for changes to take effect. You can scroll through values.";
+   mainUi_->quantizationEntry->setStatusTip(tip);
+   mainUi_->brightnessEntry->setStatusTip(tip);
+   mainUi_->saturationEntry->setStatusTip(tip);
+   mainUi_->contrastEntry->setStatusTip(tip);
 }
 
 

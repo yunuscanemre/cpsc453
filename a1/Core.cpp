@@ -29,8 +29,8 @@ Core::Core()
    qtConnect(view_, SIGNAL(contrastChanged(double)), this,
          SLOT(setContrast(double)));
 
-   qtConnect(view_, SIGNAL(contrastChanged(double)), this,
-         SLOT(setContrast(double)));
+   qtConnect(view_, SIGNAL(scaleChanged(int)), this,
+         SLOT(setScale(int)));
 
    qtConnect(view_, SIGNAL(dissolveChanged(double)), this,
          SLOT(setDissolve(double)));
@@ -81,7 +81,7 @@ void Core::selectDissolveImage()
       dissolveImage_->GetNumCols() != image_->GetNumCols())
    {
       QMessageBox::warning(NULL, "Images Are Not Same Size",
-                           "Dissolve image must be the same size as the image original image");
+                           "Dissolve image must be the same size as the original image");
       return;
    }
    view_->setModifiedImage(image_);
@@ -129,6 +129,31 @@ void Core::setContrast(double scale) // BONUS
       }
    }
    view_->setModifiedImage(modifiedImage_);
+}
+
+void Core::setScale(int scale)
+{
+   reInitializeModifiedImage();
+
+   for (uint i = 0; i < modifiedImage_->GetNumRows(); i++)
+   {
+      for (uint j = 0; j < modifiedImage_->GetNumCols(); j++)
+      {
+         uint scaledCol = scale*j;
+         if(modifiedImage_->isValidPoint(i, scaledCol))
+         {
+            Pixel p = image_->GetRgbPixel(i, j);
+            modifiedImage_->SetRgbPixel(i, scaledCol, p);
+//            modifiedImage_->SetRgbPixel(i, j, Pixel(0));
+//            for(uint s = j; j < scaledCol; j++)
+//               modifiedImage_->SetRgbPixel(i, s, p);
+
+         }
+         else break; // if scale location out of bounds go onto next row
+      }
+   }
+   view_->setModifiedImage(modifiedImage_);
+
 }
 
 void Core::setSaturation(double scale)

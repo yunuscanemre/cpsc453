@@ -62,6 +62,9 @@ public:
     QLabel *label;
     QSpinBox *quantizationEntry;
     QSpacerItem *horizontalSpacer_2;
+    QSpinBox *scaleEntry;
+    QLabel *label_5;
+    QSpacerItem *horizontalSpacer_6;
     QStatusBar *statusbar;
     QMenuBar *menuBar;
     QMenu *menuSelection;
@@ -143,7 +146,7 @@ public:
         dissolveSelect = new QPushButton(centralwidget);
         dissolveSelect->setObjectName(QString::fromUtf8("dissolveSelect"));
 
-        gridLayout->addWidget(dissolveSelect, 4, 1, 1, 1);
+        gridLayout->addWidget(dissolveSelect, 5, 1, 1, 1);
 
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -158,12 +161,12 @@ public:
         dissolveEntry->setMaximum(1);
         dissolveEntry->setSingleStep(0.1);
 
-        gridLayout->addWidget(dissolveEntry, 4, 2, 1, 1);
+        gridLayout->addWidget(dissolveEntry, 5, 2, 1, 1);
 
         label_4 = new QLabel(centralwidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
-        gridLayout->addWidget(label_4, 3, 1, 1, 1);
+        gridLayout->addWidget(label_4, 4, 1, 1, 1);
 
         contrastEntry = new QDoubleSpinBox(centralwidget);
         contrastEntry->setObjectName(QString::fromUtf8("contrastEntry"));
@@ -174,7 +177,7 @@ public:
         contrastEntry->setSingleStep(0.1);
         contrastEntry->setValue(1);
 
-        gridLayout->addWidget(contrastEntry, 3, 2, 1, 1);
+        gridLayout->addWidget(contrastEntry, 4, 2, 1, 1);
 
         saturationEntry = new QDoubleSpinBox(centralwidget);
         saturationEntry->setObjectName(QString::fromUtf8("saturationEntry"));
@@ -189,7 +192,7 @@ public:
 
         horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_5, 3, 0, 1, 1);
+        gridLayout->addItem(horizontalSpacer_5, 4, 0, 1, 1);
 
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
@@ -208,6 +211,24 @@ public:
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         gridLayout->addItem(horizontalSpacer_2, 0, 0, 1, 1);
+
+        scaleEntry = new QSpinBox(centralwidget);
+        scaleEntry->setObjectName(QString::fromUtf8("scaleEntry"));
+        scaleEntry->setKeyboardTracking(false);
+        scaleEntry->setMinimum(1);
+        scaleEntry->setMaximum(5);
+        scaleEntry->setValue(1);
+
+        gridLayout->addWidget(scaleEntry, 3, 2, 1, 1);
+
+        label_5 = new QLabel(centralwidget);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+
+        gridLayout->addWidget(label_5, 3, 1, 1, 1);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_6, 3, 0, 1, 1);
 
 
         verticalLayout_3->addLayout(gridLayout);
@@ -246,6 +267,7 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "Saturation", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("MainWindow", "*Contrast", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Quantization Level", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("MainWindow", "Scale", 0, QApplication::UnicodeUTF8));
         menuSelection->setTitle(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

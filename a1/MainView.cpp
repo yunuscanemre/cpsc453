@@ -18,6 +18,9 @@ MainView::MainView()
    qtConnect(mainUi_->saturationEntry, SIGNAL(valueChanged(double)),
              this, SIGNAL(saturationChanged(double)));
 
+   qtConnect(mainUi_->scaleEntry, SIGNAL(valueChanged(int)),
+             this, SIGNAL(scaleChanged(int)));
+
    qtConnect(mainUi_->contrastEntry, SIGNAL(valueChanged(double)),
              this, SIGNAL(contrastChanged(double)));
 

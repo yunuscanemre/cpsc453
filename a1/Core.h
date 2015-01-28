@@ -22,6 +22,7 @@ private slots:
    void setQuantization(int level);
    void setBrightness(double scale);
    void setSaturation(double scale);
+   void setScale(int scale);
    void setContrast(double scale); // BONUS
    void setDissolve(double distance); // BONUS
 

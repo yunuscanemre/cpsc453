@@ -25,6 +25,7 @@ signals:
    void quantizationChanged(int level);
    void brightnessChanged(double scale);
    void saturationChanged(double scale);
+   void scaleChanged(int scale);
    void contrastChanged(double scale);
    void dissolveChanged(double distance);
 

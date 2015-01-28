@@ -288,6 +288,13 @@ void RgbImage::SetRgbPixel( long row, long col, Pixel p)
    SetRgbPixelf(row, col, p.red, p.green, p.blue);
 }
 
+bool RgbImage::isValidPoint(long row, long col) const
+{
+   if(row < NumRows && col < NumCols)
+      return true;
+   else return false;
+}
+
 void RgbImage::SetRgbPixelf( long row, long col, double red, double green, double blue )
 {
 	SetRgbPixelc( row, col, doubleToUnsignedChar(red), 

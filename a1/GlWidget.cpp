@@ -9,7 +9,7 @@ GlWidget::GlWidget(QWidget *parent) : QGLWidget(parent)
 {
 }
 
-void GlWidget::loadImage(RgbImage* image)
+void GlWidget::drawRgbImage(RgbImage* image)
 {
    glClearColor (0.0, 0.0, 0.0, 0.0);
    glShadeModel(GL_FLAT);
@@ -52,6 +52,7 @@ void GlWidget::paintGL()
    glFlush();
    glDisable(GL_TEXTURE_2D);
 }
+
 void GlWidget::resizeGL(int w, int h)
 {
    float viewWidth = 1.1;
@@ -72,6 +73,15 @@ void GlWidget::resizeGL(int w, int h)
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 }
+
+//void GlWidget::rotateImage(int degrees)
+//{
+//   glRotatef(degrees, 0.0f, 1.0f, 0.0f);
+//   paintGL();
+//   glFlush();
+//
+//}
+
 void GlWidget::initializeGL()
 {
 }

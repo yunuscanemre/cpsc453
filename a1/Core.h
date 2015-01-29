@@ -23,6 +23,7 @@ private slots:
    void setBrightness(double scale);
    void setSaturation(double scale);
    void setScale(int scale);
+   void setRotation(int rotation);
    void setContrast(double scale); // BONUS
    void setDissolve(double distance); // BONUS
 

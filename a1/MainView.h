@@ -20,12 +20,14 @@ public:
    void setOrigImage(RgbImage* image);
    void setModifiedImage(RgbImage* image);
    void enableDissolve();
-   
+//   void rotateImage(int degrees);
+
 signals:
    void quantizationChanged(int level);
    void brightnessChanged(double scale);
    void saturationChanged(double scale);
    void scaleChanged(int scale);
+   void rotationChanged(int rotation);
    void contrastChanged(double scale);
    void dissolveChanged(double distance);
 

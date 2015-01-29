@@ -21,6 +21,9 @@ MainView::MainView()
    qtConnect(mainUi_->scaleEntry, SIGNAL(valueChanged(int)),
              this, SIGNAL(scaleChanged(int)));
 
+   qtConnect(mainUi_->rotationEntry, SIGNAL(valueChanged(int)),
+             this, SIGNAL(rotationChanged(int)));
+
    qtConnect(mainUi_->contrastEntry, SIGNAL(valueChanged(double)),
              this, SIGNAL(contrastChanged(double)));
 
@@ -50,14 +53,14 @@ void MainView::setOrigImage(RgbImage* image)
 {
    // opengl calls affect this widget
    original_->makeCurrent();
-   original_->loadImage(image);
+   original_->drawRgbImage(image);
    modified_->updateGL();
 }
 
 void MainView::setModifiedImage(RgbImage* image)
 {
    modified_->makeCurrent();
-   modified_->loadImage(image);
+   modified_->drawRgbImage(image);
    modified_->updateGL();
 }
 
@@ -65,6 +68,11 @@ void MainView::enableDissolve()
 {
    mainUi_->dissolveEntry->setEnabled(true);
 }
+
+//void MainView::rotateImage(int degrees)
+//{
+//   modified_->rotateImage(degrees);
+//}
 
 void MainView::setupUi()
 {

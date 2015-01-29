@@ -1,9 +1,11 @@
+#include <stdio.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <MainView.h>
 #include <Core.h>
 #include <RgbImage.h>
 #include <QFileDialog>
 #include <QColor>
-#include <stdio.h>
 #include <Helpers.h>
 #include <Pixel.h>
 #include <QMessageBox>
@@ -31,6 +33,9 @@ Core::Core()
 
    qtConnect(view_, SIGNAL(scaleChanged(int)), this,
          SLOT(setScale(int)));
+
+   qtConnect(view_, SIGNAL(rotationChanged(int)), this,
+         SLOT(setRotation(int)));
 
    qtConnect(view_, SIGNAL(dissolveChanged(double)), this,
          SLOT(setDissolve(double)));
@@ -133,20 +138,28 @@ void Core::setContrast(double scale) // BONUS
 
 void Core::setScale(int scale)
 {
+   if(scale <=1)
+   {
+      view_->setModifiedImage(image_);
+      return;
+   }
+
    reInitializeModifiedImage();
 
-   for (uint i = 0; i < modifiedImage_->GetNumRows(); i++)
+   for (uint currRow = 0; currRow < image_->GetNumRows(); currRow++)
    {
-      for (uint j = 0; j < modifiedImage_->GetNumCols(); j++)
+      for (uint currCol = 0; currCol < image_->GetNumCols(); currCol++)
       {
-         uint scaledCol = scale*j;
-         if(modifiedImage_->isValidPoint(i, scaledCol))
+         uint scaledCol = scale*currCol;
+         if(modifiedImage_->isValidPoint(currRow, scaledCol))
          {
-            Pixel p = image_->GetRgbPixel(i, j);
-            modifiedImage_->SetRgbPixel(i, scaledCol, p);
-//            modifiedImage_->SetRgbPixel(i, j, Pixel(0));
-//            for(uint s = j; j < scaledCol; j++)
-//               modifiedImage_->SetRgbPixel(i, s, p);
+            Pixel pToCopy =  image_->GetRgbPixel(currRow, currCol);
+            modifiedImage_->SetRgbPixel(currRow, scaledCol, pToCopy);
+
+            for(int j = scaledCol-1, count=1; count<scale && j>0; j--, count++)
+            {
+               modifiedImage_->SetRgbPixel(currRow, j, Pixel(0));
+            }
 
          }
          else break; // if scale location out of bounds go onto next row
@@ -154,6 +167,34 @@ void Core::setScale(int scale)
    }
    view_->setModifiedImage(modifiedImage_);
 
+}
+
+void Core::setRotation(int rotation)
+{
+   if(rotation <= 0)
+   {
+      view_->setModifiedImage(image_);
+      return;
+   }
+//   view_->rotateImage(rotation);
+   reInitializeModifiedImage();
+   double radRotation = (M_PI*(double)rotation)/180;
+   for (int row = 0; row < image_->GetNumRows(); row++)
+   {
+      int newRow, newCol = 0;
+      for (int col = 0; col < image_->GetNumCols(); col++)
+      {
+         newRow = row*cos(-radRotation) - col*sin(-radRotation);
+         newCol = row*sin(-radRotation) + col*cos(-radRotation);
+         if(modifiedImage_->isValidPoint(newRow, newCol))
+         {
+            Pixel p = image_->GetRgbPixel(row, col);
+            modifiedImage_->SetRgbPixel(newRow, newCol, p);
+         }
+         else break;
+      }
+   }
+   view_->setModifiedImage(modifiedImage_);
 }
 
 void Core::setSaturation(double scale)

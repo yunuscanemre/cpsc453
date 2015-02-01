@@ -18,6 +18,7 @@ private slots:
    void selectAnImageToOpen();
    void selectDissolveImage();
    void saveModifiedImage();
+   void exit();
 
    void setQuantization(int level);
    void setBrightness(double scale);

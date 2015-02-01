@@ -20,7 +20,6 @@ public:
    void setOrigImage(RgbImage* image);
    void setModifiedImage(RgbImage* image);
    void enableDissolve();
-//   void rotateImage(int degrees);
 
 signals:
    void quantizationChanged(int level);
@@ -33,6 +32,7 @@ signals:
 
    void openImageSelected(bool checked);
    void saveImageSelected(bool checked);
+   void exitSelected(bool checked);
    void dissolveSelected(bool checked);
 
 private:
@@ -43,9 +43,6 @@ private:
    Ui::MainWindow* mainUi_;
    GlWidget* original_;
    GlWidget* modified_;
-
-
-
 };
 
 #endif

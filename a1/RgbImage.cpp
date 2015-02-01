@@ -290,7 +290,7 @@ void RgbImage::SetRgbPixel( long row, long col, Pixel p)
 
 bool RgbImage::isValidPoint(long row, long col) const
 {
-   if(row < NumRows && col < NumCols)
+   if(row >= 0 && col >= 0 && row < NumRows && col < NumCols)
       return true;
    else return false;
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,24 +10,24 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QStatusBar>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -75,26 +75,26 @@ public:
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
+            MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(1019, 677);
         actionOpenImage = new QAction(MainWindow);
-        actionOpenImage->setObjectName(QString::fromUtf8("actionOpenImage"));
+        actionOpenImage->setObjectName(QStringLiteral("actionOpenImage"));
         actionSaveImage = new QAction(MainWindow);
-        actionSaveImage->setObjectName(QString::fromUtf8("actionSaveImage"));
+        actionSaveImage->setObjectName(QStringLiteral("actionSaveImage"));
         actionExit = new QAction(MainWindow);
-        actionExit->setObjectName(QString::fromUtf8("actionExit"));
+        actionExit->setObjectName(QStringLiteral("actionExit"));
         centralwidget = new QWidget(MainWindow);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayout_3 = new QVBoxLayout(centralwidget);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         originalImgBox = new QGroupBox(centralwidget);
-        originalImgBox->setObjectName(QString::fromUtf8("originalImgBox"));
+        originalImgBox->setObjectName(QStringLiteral("originalImgBox"));
         verticalLayout = new QVBoxLayout(originalImgBox);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         origImgContainerWidget = new QWidget(originalImgBox);
-        origImgContainerWidget->setObjectName(QString::fromUtf8("origImgContainerWidget"));
+        origImgContainerWidget->setObjectName(QStringLiteral("origImgContainerWidget"));
 
         verticalLayout->addWidget(origImgContainerWidget);
 
@@ -106,11 +106,11 @@ public:
         horizontalLayout->addItem(horizontalSpacer);
 
         modifiedImageBox = new QGroupBox(centralwidget);
-        modifiedImageBox->setObjectName(QString::fromUtf8("modifiedImageBox"));
+        modifiedImageBox->setObjectName(QStringLiteral("modifiedImageBox"));
         verticalLayout_2 = new QVBoxLayout(modifiedImageBox);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         modImgContainerWidget = new QWidget(modifiedImageBox);
-        modImgContainerWidget->setObjectName(QString::fromUtf8("modImgContainerWidget"));
+        modImgContainerWidget->setObjectName(QStringLiteral("modImgContainerWidget"));
 
         verticalLayout_2->addWidget(modImgContainerWidget);
 
@@ -121,7 +121,7 @@ public:
         verticalLayout_3->addLayout(horizontalLayout);
 
         gridLayout = new QGridLayout();
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         gridLayout->addItem(horizontalSpacer_4, 2, 0, 1, 1);
@@ -131,12 +131,12 @@ public:
         gridLayout->addItem(horizontalSpacer_3, 1, 0, 1, 1);
 
         label_2 = new QLabel(centralwidget);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setObjectName(QStringLiteral("label_2"));
 
         gridLayout->addWidget(label_2, 1, 1, 1, 1);
 
         brightnessEntry = new QDoubleSpinBox(centralwidget);
-        brightnessEntry->setObjectName(QString::fromUtf8("brightnessEntry"));
+        brightnessEntry->setObjectName(QStringLiteral("brightnessEntry"));
         brightnessEntry->setKeyboardTracking(false);
         brightnessEntry->setDecimals(1);
         brightnessEntry->setMinimum(0);
@@ -147,17 +147,17 @@ public:
         gridLayout->addWidget(brightnessEntry, 1, 2, 1, 1);
 
         dissolveSelect = new QPushButton(centralwidget);
-        dissolveSelect->setObjectName(QString::fromUtf8("dissolveSelect"));
+        dissolveSelect->setObjectName(QStringLiteral("dissolveSelect"));
 
         gridLayout->addWidget(dissolveSelect, 6, 1, 1, 1);
 
         label_3 = new QLabel(centralwidget);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setObjectName(QStringLiteral("label_3"));
 
         gridLayout->addWidget(label_3, 2, 1, 1, 1);
 
         dissolveEntry = new QDoubleSpinBox(centralwidget);
-        dissolveEntry->setObjectName(QString::fromUtf8("dissolveEntry"));
+        dissolveEntry->setObjectName(QStringLiteral("dissolveEntry"));
         dissolveEntry->setEnabled(false);
         dissolveEntry->setKeyboardTracking(false);
         dissolveEntry->setDecimals(1);
@@ -167,12 +167,12 @@ public:
         gridLayout->addWidget(dissolveEntry, 6, 2, 1, 1);
 
         label_4 = new QLabel(centralwidget);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setObjectName(QStringLiteral("label_4"));
 
         gridLayout->addWidget(label_4, 5, 1, 1, 1);
 
         contrastEntry = new QDoubleSpinBox(centralwidget);
-        contrastEntry->setObjectName(QString::fromUtf8("contrastEntry"));
+        contrastEntry->setObjectName(QStringLiteral("contrastEntry"));
         contrastEntry->setKeyboardTracking(false);
         contrastEntry->setDecimals(1);
         contrastEntry->setMinimum(-10);
@@ -183,7 +183,7 @@ public:
         gridLayout->addWidget(contrastEntry, 5, 2, 1, 1);
 
         saturationEntry = new QDoubleSpinBox(centralwidget);
-        saturationEntry->setObjectName(QString::fromUtf8("saturationEntry"));
+        saturationEntry->setObjectName(QStringLiteral("saturationEntry"));
         saturationEntry->setKeyboardTracking(false);
         saturationEntry->setDecimals(1);
         saturationEntry->setMinimum(-10);
@@ -198,12 +198,12 @@ public:
         gridLayout->addItem(horizontalSpacer_5, 5, 0, 1, 1);
 
         label = new QLabel(centralwidget);
-        label->setObjectName(QString::fromUtf8("label"));
+        label->setObjectName(QStringLiteral("label"));
 
         gridLayout->addWidget(label, 0, 1, 1, 1);
 
         quantizationEntry = new QSpinBox(centralwidget);
-        quantizationEntry->setObjectName(QString::fromUtf8("quantizationEntry"));
+        quantizationEntry->setObjectName(QStringLiteral("quantizationEntry"));
         quantizationEntry->setKeyboardTracking(false);
         quantizationEntry->setMinimum(2);
         quantizationEntry->setMaximum(256);
@@ -216,7 +216,7 @@ public:
         gridLayout->addItem(horizontalSpacer_2, 0, 0, 1, 1);
 
         scaleEntry = new QSpinBox(centralwidget);
-        scaleEntry->setObjectName(QString::fromUtf8("scaleEntry"));
+        scaleEntry->setObjectName(QStringLiteral("scaleEntry"));
         scaleEntry->setKeyboardTracking(false);
         scaleEntry->setMinimum(1);
         scaleEntry->setMaximum(5);
@@ -225,7 +225,7 @@ public:
         gridLayout->addWidget(scaleEntry, 3, 2, 1, 1);
 
         label_5 = new QLabel(centralwidget);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setObjectName(QStringLiteral("label_5"));
 
         gridLayout->addWidget(label_5, 3, 1, 1, 1);
 
@@ -234,15 +234,15 @@ public:
         gridLayout->addItem(horizontalSpacer_6, 3, 0, 1, 1);
 
         rotationEntry = new QSpinBox(centralwidget);
-        rotationEntry->setObjectName(QString::fromUtf8("rotationEntry"));
+        rotationEntry->setObjectName(QStringLiteral("rotationEntry"));
         rotationEntry->setKeyboardTracking(false);
         rotationEntry->setMaximum(360);
-        rotationEntry->setSingleStep(5);
+        rotationEntry->setSingleStep(1);
 
         gridLayout->addWidget(rotationEntry, 4, 2, 1, 1);
 
         label_6 = new QLabel(centralwidget);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setObjectName(QStringLiteral("label_6"));
 
         gridLayout->addWidget(label_6, 4, 1, 1, 1);
 
@@ -255,13 +255,13 @@ public:
 
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setObjectName(QStringLiteral("statusbar"));
         MainWindow->setStatusBar(statusbar);
         menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1019, 27));
         menuSelection = new QMenu(menuBar);
-        menuSelection->setObjectName(QString::fromUtf8("menuSelection"));
+        menuSelection->setObjectName(QStringLiteral("menuSelection"));
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuSelection->menuAction());
@@ -276,20 +276,20 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "CPSC453 - A1", 0, QApplication::UnicodeUTF8));
-        actionOpenImage->setText(QApplication::translate("MainWindow", "Open BMP Image...", 0, QApplication::UnicodeUTF8));
-        actionSaveImage->setText(QApplication::translate("MainWindow", "Save BMP Image...", 0, QApplication::UnicodeUTF8));
-        actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
-        originalImgBox->setTitle(QApplication::translate("MainWindow", "Original Image", 0, QApplication::UnicodeUTF8));
-        modifiedImageBox->setTitle(QApplication::translate("MainWindow", "Modified Image", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("MainWindow", "Brigtness Scale", 0, QApplication::UnicodeUTF8));
-        dissolveSelect->setText(QApplication::translate("MainWindow", "*Dissolve Image...", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("MainWindow", "Saturation", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("MainWindow", "*Contrast", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("MainWindow", "Quantization Level", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("MainWindow", "Scale", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("MainWindow", "Rotate", 0, QApplication::UnicodeUTF8));
-        menuSelection->setTitle(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "CPSC453 - A1", 0));
+        actionOpenImage->setText(QApplication::translate("MainWindow", "Open BMP Image...", 0));
+        actionSaveImage->setText(QApplication::translate("MainWindow", "Save BMP Image...", 0));
+        actionExit->setText(QApplication::translate("MainWindow", "Exit", 0));
+        originalImgBox->setTitle(QApplication::translate("MainWindow", "Original Image", 0));
+        modifiedImageBox->setTitle(QApplication::translate("MainWindow", "Modified Image", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Brigtness Scale", 0));
+        dissolveSelect->setText(QApplication::translate("MainWindow", "*Dissolve Image...", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Saturation", 0));
+        label_4->setText(QApplication::translate("MainWindow", "*Contrast", 0));
+        label->setText(QApplication::translate("MainWindow", "Quantization Level", 0));
+        label_5->setText(QApplication::translate("MainWindow", "Scale", 0));
+        label_6->setText(QApplication::translate("MainWindow", "Rotate", 0));
+        menuSelection->setTitle(QApplication::translate("MainWindow", "Menu", 0));
     } // retranslateUi
 
 };

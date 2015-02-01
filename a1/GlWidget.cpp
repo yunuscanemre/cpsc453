@@ -74,14 +74,6 @@ void GlWidget::resizeGL(int w, int h)
    glLoadIdentity();
 }
 
-//void GlWidget::rotateImage(int degrees)
-//{
-//   glRotatef(degrees, 0.0f, 1.0f, 0.0f);
-//   paintGL();
-//   glFlush();
-//
-//}
-
 void GlWidget::initializeGL()
 {
 }

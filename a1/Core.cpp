@@ -48,6 +48,14 @@ Core::Core()
 
    qtConnect(view_, SIGNAL(saveImageSelected(bool)), this,
          SLOT(saveModifiedImage()));
+
+   qtConnect(view_, SIGNAL(exitSelected(bool)), this,
+         SLOT(exit()));
+}
+
+void Core::exit()
+{
+   QCoreApplication::exit();
 }
 
 Core::~Core()
@@ -69,8 +77,8 @@ void Core::selectAnImageToOpen()
 
    image_ = new RgbImage(fileToLoad.toStdString().c_str());
    modifiedImage_ = new RgbImage(fileToLoad.toStdString().c_str());
-   view_->setOrigImage(image_);
    view_->setModifiedImage(modifiedImage_);
+   view_->setOrigImage(image_);
 }
 
 void Core::selectDissolveImage()
@@ -127,7 +135,7 @@ void Core::setContrast(double scale) // BONUS
    {
       for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
       {
-         Pixel p = modifiedImage_->GetRgbPixel(i, j);
+         Pixel p = image_->GetRgbPixel(i, j);
          double avrgLuminance = image_->GetAverageLuminance();
          Pixel blendedP = p.blend(Pixel(avrgLuminance), scale);
          modifiedImage_->SetRgbPixel(i, j, blendedP);
@@ -176,7 +184,7 @@ void Core::setRotation(int rotation)
       view_->setModifiedImage(image_);
       return;
    }
-//   view_->rotateImage(rotation);
+
    reInitializeModifiedImage();
    double radRotation = (M_PI*(double)rotation)/180;
    for (int row = 0; row < image_->GetNumRows(); row++)
@@ -191,7 +199,6 @@ void Core::setRotation(int rotation)
             Pixel p = image_->GetRgbPixel(row, col);
             modifiedImage_->SetRgbPixel(newRow, newCol, p);
          }
-         else break;
       }
    }
    view_->setModifiedImage(modifiedImage_);
@@ -205,7 +212,7 @@ void Core::setSaturation(double scale)
    {
       for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
       {
-         Pixel p = modifiedImage_->GetRgbPixel(i, j);
+         Pixel p = image_->GetRgbPixel(i, j);
          Pixel blendedP = p.blend(p.luminancePixel(), scale);
          modifiedImage_->SetRgbPixel(i, j, blendedP);
       }
@@ -221,7 +228,7 @@ void Core::setBrightness(double scale)
    {
       for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
       {
-         Pixel p = modifiedImage_->GetRgbPixel(i, j);
+         Pixel p = image_->GetRgbPixel(i, j);
          Pixel blendedP = p.blend(Pixel(0, 0, 0), scale);
          modifiedImage_->SetRgbPixel(i, j, blendedP);
       }
@@ -247,7 +254,7 @@ void Core::setQuantization(int level)
    {
       for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
       {
-         Pixel p = modifiedImage_->GetRgbPixel(i, j);
+         Pixel p = image_->GetRgbPixel(i, j);
          p.red = intToDoublePixel(quantize[p.redI()]);
          p.green = intToDoublePixel(quantize[p.greenI()]);
          p.blue = intToDoublePixel(quantize[p.blueI()]);
@@ -265,5 +272,5 @@ void Core::reInitializeModifiedImage()
    deletePointer(modifiedImage_);
 
    // reinitialize modified image
-   modifiedImage_ = new RgbImage(image_);
+   modifiedImage_ = new RgbImage(image_->GetNumRows(), image_->GetNumCols());
 }

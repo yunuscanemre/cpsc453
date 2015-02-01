@@ -5,6 +5,9 @@
 
 #include <Helpers.h>
 
+const QString TIP =
+      "Hit enter for changes to take effect. You can scroll through values.";
+
 MainView::MainView() 
 {
    setupUi();
@@ -38,6 +41,9 @@ MainView::MainView()
 
    qtConnect(mainUi_->actionSaveImage, SIGNAL(triggered(bool)),
              this, SIGNAL(saveImageSelected(bool)));
+
+   qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
+             this, SIGNAL(exitSelected(bool)));
 }
 
 MainView::~MainView() 
@@ -54,7 +60,7 @@ void MainView::setOrigImage(RgbImage* image)
    // opengl calls affect this widget
    original_->makeCurrent();
    original_->drawRgbImage(image);
-   modified_->updateGL();
+   original_->updateGL();
 }
 
 void MainView::setModifiedImage(RgbImage* image)
@@ -67,12 +73,9 @@ void MainView::setModifiedImage(RgbImage* image)
 void MainView::enableDissolve()
 {
    mainUi_->dissolveEntry->setEnabled(true);
+   mainUi_->dissolveEntry->setStatusTip(TIP);
 }
 
-//void MainView::rotateImage(int degrees)
-//{
-//   modified_->rotateImage(degrees);
-//}
 
 void MainView::setupUi()
 {
@@ -89,11 +92,14 @@ void MainView::setupUi()
    modImgLayout->addWidget(modified_);
    mainUi_->modImgContainerWidget->setLayout(modImgLayout);
 
-   QString tip = "Hit enter for changes to take effect. You can scroll through values.";
-   mainUi_->quantizationEntry->setStatusTip(tip);
-   mainUi_->brightnessEntry->setStatusTip(tip);
-   mainUi_->saturationEntry->setStatusTip(tip);
-   mainUi_->contrastEntry->setStatusTip(tip);
+   mainUi_->quantizationEntry->setStatusTip(TIP);
+   mainUi_->brightnessEntry->setStatusTip(TIP);
+   mainUi_->saturationEntry->setStatusTip(TIP);
+   mainUi_->scaleEntry->setStatusTip(TIP);
+   mainUi_->rotationEntry->setStatusTip(TIP);
+   mainUi_->contrastEntry->setStatusTip(TIP);
+   mainUi_->dissolveSelect->setStatusTip(QString("Select image to dissolve to"));
+   mainUi_->dissolveEntry->setStatusTip(QString("First select an image to dissolve to"));
 }
 
 

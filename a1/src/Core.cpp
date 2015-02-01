@@ -60,6 +60,7 @@ void Core::exit()
 
 Core::~Core()
 {
+   deletePointer(dissolveImage_);
    deletePointer(modifiedImage_);
    deletePointer(image_);
    deletePointer(view_);
@@ -124,17 +125,25 @@ void Core::saveModifiedImage()
 void Core::setDissolve(double distance) // BONUS
 {
    deletePointer(modifiedImage_);
-   // reinitialize modified image to original
-   modifiedImage_ = new RgbImage(image_);
 
-   for (int i = 0; i < image_->GetNumRows(); i++)
+   // modified image must be as big as the dissolve image, but
+   // needs to contain the original image to begin with
+   modifiedImage_ = new RgbImage(dissolveImage_->GetNumRows(),
+         dissolveImage_->GetNumCols(), image_);
+
+   for (int i = 0; i < dissolveImage_->GetNumRows(); i++)
    {
-      for (int j = 0; j < image_->GetNumCols(); j++)
+      for (int j = 0; j < dissolveImage_->GetNumCols(); j++)
       {
-            Pixel src = image_->GetRgbPixel(i, j);
-            Pixel dest = dissolveImage_->GetRgbPixel(i, j);
-            Pixel blended = dest.blend(src, distance);
-            modifiedImage_->SetRgbPixel(i, j, blended);
+         Pixel src;
+         if(image_->isValidPoint(i, j))
+         {
+            src = image_->GetRgbPixel(i, j);
+         }
+         Pixel dest = dissolveImage_->GetRgbPixel(i, j);
+         Pixel blended = dest.blend(src, distance);
+         modifiedImage_->SetRgbPixel(i, j, blended);
+
       }
    }
    view_->setModifiedImage(modifiedImage_);

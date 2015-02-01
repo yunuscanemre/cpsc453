@@ -88,23 +88,34 @@ void Core::selectDissolveImage()
    if (fileToLoad.isNull())
       return;
 
-   deletePointer(dissolveImage_);
-   dissolveImage_ = new RgbImage(fileToLoad.toStdString().c_str());
-   if(dissolveImage_->GetNumRows() != image_->GetNumRows() ||
-      dissolveImage_->GetNumCols() != image_->GetNumCols())
-   {
-      QMessageBox::warning(NULL, "Images Are Not Same Size",
-                           "Dissolve image must be the same size as the original image");
-      return;
-   }
+   reinitializeDissolveImage(fileToLoad);
    view_->setModifiedImage(image_);
    view_->enableDissolve();
+}
+
+void Core::reinitializeDissolveImage(QString fileToLoad)
+{
+   deletePointer(dissolveImage_);
+   RgbImage aImage(fileToLoad.toStdString().c_str());
+   if(aImage.GetNumRows() != image_->GetNumRows() ||
+      aImage.GetNumCols() != image_->GetNumCols())
+   {
+      QMessageBox::warning(NULL, "NOTE",
+                           "Note that dissolve image is not the same size"
+                           "as the original image. Will NOT auto-scale.");
+   }
+   // set dissolve image to the max size the original image and dissolve image
+   // can make combined.
+   int rows = qMax(image_->GetNumRows(), aImage.GetNumRows());
+   int cols = qMax(image_->GetNumCols(), aImage.GetNumCols());
+   dissolveImage_ = new RgbImage(rows, cols, &aImage);
+
 }
 
 void Core::saveModifiedImage()
 {
    QString saveFile = QFileDialog::getSaveFileName(NULL,
-         "Select save location");
+         "Select save location and enter file name");
    if (saveFile.isNull())
       return;
    modifiedImage_->WriteBmpFile(saveFile.toStdString().c_str());
@@ -112,16 +123,18 @@ void Core::saveModifiedImage()
 
 void Core::setDissolve(double distance) // BONUS
 {
-   // FIX ? Images need to be the same size
-   reInitializeModifiedImage();
-   for (int i = 0; i < modifiedImage_->GetNumRows(); i++)
+   deletePointer(modifiedImage_);
+   // reinitialize modified image to original
+   modifiedImage_ = new RgbImage(image_);
+
+   for (int i = 0; i < image_->GetNumRows(); i++)
    {
-      for (int j = 0; j < modifiedImage_->GetNumCols(); j++)
+      for (int j = 0; j < image_->GetNumCols(); j++)
       {
-         Pixel src = image_->GetRgbPixel(i, j);
-         Pixel dest = dissolveImage_->GetRgbPixel(i, j);
-         Pixel blended = dest.blend(src, distance);
-         modifiedImage_->SetRgbPixel(i, j, blended);
+            Pixel src = image_->GetRgbPixel(i, j);
+            Pixel dest = dissolveImage_->GetRgbPixel(i, j);
+            Pixel blended = dest.blend(src, distance);
+            modifiedImage_->SetRgbPixel(i, j, blended);
       }
    }
    view_->setModifiedImage(modifiedImage_);
@@ -192,8 +205,8 @@ void Core::setRotation(int rotation)
       int newRow, newCol = 0;
       for (int col = 0; col < image_->GetNumCols(); col++)
       {
-         newRow = row*cos(-radRotation) - col*sin(-radRotation);
-         newCol = row*sin(-radRotation) + col*cos(-radRotation);
+         newRow = trunc(row*cos(-radRotation) - col*sin(-radRotation)+0.5);
+         newCol = trunc(row*sin(-radRotation) + col*cos(-radRotation)+0.5);
          if(modifiedImage_->isValidPoint(newRow, newCol))
          {
             Pixel p = image_->GetRgbPixel(row, col);
@@ -271,6 +284,6 @@ void Core::reInitializeModifiedImage()
       return;
    deletePointer(modifiedImage_);
 
-   // reinitialize modified image
+   // reinitialize modified image to just black
    modifiedImage_ = new RgbImage(image_->GetNumRows(), image_->GetNumCols());
 }

@@ -73,6 +73,39 @@ RgbImage::RgbImage(RgbImage* image)
    }
 }
 
+RgbImage::RgbImage(int numRows, int numCols, RgbImage* image)
+{
+   NumRows = numRows;
+   NumCols = numCols;
+   averageLuminance = -1;
+   ImagePtr = new unsigned char[NumRows * GetNumBytesPerRow()];
+   if(!ImagePtr)
+   {
+      fprintf(stderr, "Unable to allocate memory for %ld x %ld bitmap.\n",
+            NumRows, NumCols);
+      Reset();
+      ErrorCode = MemoryError;
+   }
+   // Zero out the image
+   unsigned char* c = ImagePtr;
+   int rowLen = GetNumBytesPerRow();
+   for (int i = 0; i < NumRows; i++)
+   {
+      for (int j = 0; j < rowLen; j++)
+      {
+         *(c++) = 0;
+      }
+   }
+   // copy in range pixels from image into this image
+   for(int i = 0; i < image->GetNumRows(); i++)
+      for(int j = 0; j <  image->GetNumCols(); j++)
+      {
+         if(this->isValidPoint(i, j))
+            this->SetRgbPixel(i, j, image->GetRgbPixel(i, j));
+
+      }
+}
+
 /* ********************************************************************
  *  LoadBmpFile
  *  Read into memory an RGB image from an uncompressed BMP file.

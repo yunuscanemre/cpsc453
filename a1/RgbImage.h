@@ -52,6 +52,7 @@ public:
 
 	// I modified/added these
    RgbImage(RgbImage* image);
+   RgbImage(int numRows, int numCols, RgbImage* image);
 	Pixel GetRgbPixel( long row, long col) const;
 	double GetAverageLuminance();
    const unsigned char* GetRgbPixelRaw( long row, long col ) const;

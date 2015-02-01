@@ -30,6 +30,7 @@ private slots:
 
 private:
    void reInitializeModifiedImage();
+   void reinitializeDissolveImage(QString fileToLoadFrom);
 
 private: // Members
    MainView* view_;

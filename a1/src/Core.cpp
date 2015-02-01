@@ -102,8 +102,9 @@ void Core::reinitializeDissolveImage(QString fileToLoad)
       aImage.GetNumCols() != image_->GetNumCols())
    {
       QMessageBox::warning(NULL, "NOTE",
-                           "Note that dissolve image is not the same size"
-                           "as the original image. Will NOT auto-scale.");
+                           "Note that dissolve image is not the same size "
+                           "as the original image. Will NOT auto-scale images. "
+                           "Will use the larger dimensions for the modified image.");
    }
    // set dissolve image to the max size the original image and dissolve image
    // can make combined.

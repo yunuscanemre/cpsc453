@@ -2,9 +2,10 @@
 #define GLWIDGET_H_
 
 #include <QObject>
-#include <QtOpenGL/qgl.h>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
-class GlWidget : public QGLWidget
+class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
    Q_OBJECT
 
@@ -15,6 +16,13 @@ protected:
    virtual void paintGL();
    virtual void resizeGL(int w, int h);
    virtual void initializeGL();
+
+private:
+   void renderScene();
+   void ChangeSize(int w, int h);
+   void setupRenderingContext();
+   bool loadShaderFile(const char *filename, GLuint shader);
+
 };
 
 #endif /* GLWIDGET_H_ */

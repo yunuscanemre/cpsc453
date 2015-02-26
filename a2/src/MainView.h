@@ -27,6 +27,7 @@ private:
 private:
    QMainWindow* mainWindow_;
    Ui::MainWindow* mainUi_;
+   GlWidget* scene_;
 };
 
 #endif

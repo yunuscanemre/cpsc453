@@ -12,7 +12,7 @@ CONFIG += qt debug
 QT = core gui opengl
 
 # libraries to link against
-LIBS += -lGLU #is not pulled in by default
+LIBS += -lGLU -lGL #is not pulled in by default
 
 ###################################################### Related to files
 

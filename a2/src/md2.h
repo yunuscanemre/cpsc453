@@ -17,7 +17,7 @@
 // maximum number of vertices for a MD2 model
 #define MAX_MD2_VERTS			2048
 
-#include	<GL/glut.h>
+//#include	<GL/glut.h>
 #include	<fstream>
 
 

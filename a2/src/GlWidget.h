@@ -18,8 +18,6 @@ protected:
    virtual void initializeGL();
 
 private:
-   void renderScene();
-   void ChangeSize(int w, int h);
    void setupRenderingContext();
    bool loadShaderFile(const char *filename, GLuint shader);
 

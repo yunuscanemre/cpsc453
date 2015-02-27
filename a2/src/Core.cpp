@@ -19,22 +19,31 @@ Core::Core()
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
 
-   QString fileToLoad = QFileDialog::getOpenFileName(NULL,
-         "Select an md2 file");
+   QString fileToLoad = "models/astro/tris.md2";
+//   QString fileToLoad = QFileDialog::getOpenFileName(NULL,
+//         "Select an md2 file");
    if(fileToLoad != NULL)
    {
       md2_->LoadModel(fileToLoad.toStdString().c_str());
    }
 
-   vertices_ = new QVector<GLfloat>(md2_->num_xyz*3);
+   fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
+   fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
+
+   vertices_ = new QVector<GLfloat>();
    for(int i = 0; i < md2_->num_tris; i++)
       for(int j = 0; j<3; j++)
          for(int k = 0; k < 3; k++)
+         {
+//            float val = md2_->m_vertices[md2_->tris[i].index_xyz[j]][k];
+//            fprintf(stderr, "  %f \n", val);
             vertices_->append(md2_->m_vertices[md2_->tris[i].index_xyz[j]][k]);
+         }
+
 
    fprintf(stderr, "got %d \n", vertices_->size());
-   for(int i = 0; i < vertices_->size(); i++)
-      fprintf(stderr, " val %f ", vertices_->at(i));
+//   for(int i = 0; i < vertices_->size(); i++)
+//      fprintf(stderr, " val %f ", vertices_->at(i));
 
    view_->createGlWidget(vertices_);
 }
@@ -46,6 +55,7 @@ void Core::exit()
 
 Core::~Core()
 {
+   deletePointer(vertices_);
    deletePointer(md2_);
    deletePointer(view_);
 }

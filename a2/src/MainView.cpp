@@ -14,6 +14,21 @@ MainView::MainView()
              this, SLOT(changeCameraY(int)));
    qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(int)),
              this, SLOT(changeCameraZ(int)));
+
+   qtConnect(mainUi_->translateX, SIGNAL(valueChanged(int)),
+             this, SLOT(translateX(int)));
+   qtConnect(mainUi_->translateY, SIGNAL(valueChanged(int)),
+             this, SLOT(translateY(int)));
+   qtConnect(mainUi_->translateZ, SIGNAL(valueChanged(int)),
+             this, SLOT(translateZ(int)));
+
+   qtConnect(mainUi_->rotateX, SIGNAL(valueChanged(int)),
+             this, SLOT(rotateX(int)));
+   qtConnect(mainUi_->rotateY, SIGNAL(valueChanged(int)),
+             this, SLOT(rotateY(int)));
+   qtConnect(mainUi_->rotateZ, SIGNAL(valueChanged(int)),
+             this, SLOT(rotateZ(int)));
+
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
 
@@ -36,6 +51,36 @@ void MainView::changeCameraY(int y)
 void MainView::changeCameraZ(int z)
 {
    scene_->setCameraZ(z);
+}
+
+void MainView::translateX(int x)
+{
+   scene_->setTranslateX(x);
+}
+
+void MainView::translateY(int y)
+{
+   scene_->setTranslateY(y);
+}
+
+void MainView::translateZ(int z)
+{
+   scene_->setTranslateZ(z);
+}
+
+void MainView::rotateX(int x)
+{
+   scene_->setRotateX(x);
+}
+
+void MainView::rotateY(int y)
+{
+   scene_->setRotateY(y);
+}
+
+void MainView::rotateZ(int z)
+{
+   scene_->setRotateZ(z);
 }
 
 void MainView::createGlWidget(QVector<GLfloat>* vertices)

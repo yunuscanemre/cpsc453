@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <stdlib.h>
 #include <iostream>
+#include <Helpers.h>
 #include <QOpenGLVertexArrayObject>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -47,14 +48,26 @@ static const GLfloat tetVertices[] = {
 #define VERTEX_INDICES 3
 
 GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices) :
-      QOpenGLWidget(parent), qVAO_(NULL), cameraX_(0), cameraY_(0), cameraZ_(3), vertices_(vertices)
+      QOpenGLWidget(parent),
+      qVAO_(NULL),
+      cameraX_(0),
+      cameraY_(0),
+      cameraZ_(30),
+      transX_(0),
+      transY_(0),
+      transZ_(0),
+      rotateX_(0.0),
+      rotateY_(0.0),
+      rotateZ_(0.0),
+      vertices_(vertices)
 {
 
 }
 
 GlWidget::~GlWidget()
 {
-
+   qVAO_->destroy();
+   deletePointer(qVAO_);
 }
 
 void GlWidget::setCameraX(int x)
@@ -73,6 +86,40 @@ void GlWidget::setCameraZ(int z)
    update();
 }
 
+void GlWidget::setTranslateX(int x)
+{
+   transX_ = x;
+   update();
+}
+void GlWidget::setTranslateY(int y)
+{
+   transY_ = y;
+   update();
+}
+void GlWidget::setTranslateZ(int z)
+{
+   transZ_ = z;
+   update();
+}
+
+void GlWidget::setRotateX(int x)
+{
+   float rad = M_PI*(float)x/180.0;
+   rotateX_ = rad;
+}
+
+void GlWidget::setRotateY(int y)
+{
+   float rad = M_PI*(float)y/180.0;
+   rotateY_ = rad;
+}
+
+void GlWidget::setRotateZ(int z)
+{
+   float rad = M_PI*(float)z/180.0;
+   rotateZ_ = rad;
+}
+
 void GlWidget::paintGL()
 {
    GLuint modelViewMatrixID = glGetUniformLocation(myShaderProgram,
@@ -83,25 +130,39 @@ void GlWidget::paintGL()
    glm::mat4 projMatrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
    // Camera matrix
-   glm::mat4 View = glm::lookAt(glm::vec3(cameraX_, cameraY_, cameraZ_), // Camera is at (4,3,3), in World Space
+   glm::mat4 viewMatrix = glm::lookAt(glm::vec3(cameraX_, cameraY_, cameraZ_), // Camera is at (4,3,3), in World Space
    glm::vec3(0, 0, 0), // and looks at the origin
    glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
          );
+
    // Model matrix : an identity matrix (model will be at the origin)
    glm::mat4 Model = glm::mat4(1.0f);
-   // Our ModelViewProjection : multiplication of our 3 matrices
-   glm::mat4 modelViewMatrix = View * Model; // Remember, matrix multiplication is the other way around
+
+   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(transX_, transY_, transZ_));
+
+   // Translate View
+   viewMatrix = viewMatrix*translationMatrix;
+
+   glm::mat4 xRotationMatrix = glm::rotate(viewMatrix, rotateX_, glm::vec3(1.0f, 0.0f, 0.0f));
+   glm::mat4 yRotationMatrix = glm::rotate(viewMatrix, rotateY_, glm::vec3(0.0f, 1.0f, 0.0f));
+   glm::mat4 zRotationMatrix = glm::rotate(viewMatrix, rotateZ_, glm::vec3(0.0f, 0.0f, 1.0f));
+
+   // Rotate View
+   viewMatrix = viewMatrix*xRotationMatrix;
+   viewMatrix = viewMatrix*yRotationMatrix;
+   viewMatrix = viewMatrix*zRotationMatrix;
+
+   glm::mat4 modelViewMatrix = viewMatrix * Model;
 
    // Clear the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glUseProgram(myShaderProgram);
+
    // Send our transformation to the currently bound shader,
-   // in the "MVP" uniform
    glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
    glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
-//     glEnableVertexAttribArray(0);
-//   qVAO_->bind();
 
+   glEnableVertexAttribArray( VERTEX_DATA);
    glVertexAttribPointer(0, // attribute. No particular reason for 0, but must match the layout in the shader.
          3,                  // size
          GL_FLOAT,           // type
@@ -179,9 +240,9 @@ void GlWidget::setupRenderingContext()
 
    // Now we'll use the attribute locations to map our vertex data (in
    // the VBO) to the shader
-   glEnableVertexAttribArray( VERTEX_DATA);
-   glVertexAttribPointer( VERTEX_DATA, 4, GL_FLOAT, GL_FALSE, 0,
-         (const GLvoid*) 0);
+//   glEnableVertexAttribArray( VERTEX_DATA);
+//   glVertexAttribPointer( VERTEX_DATA, 3, GL_FLOAT, GL_FALSE, 0,
+//         (const GLvoid*) 0);
 //   glEnableVertexAttribArray( VERTEX_COLOUR);
 //   glVertexAttribPointer( VERTEX_COLOUR, 4, GL_FLOAT, GL_FALSE, 0,
 //         (const GLvoid*) vertices_->size());

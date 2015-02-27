@@ -20,6 +20,14 @@ public:
    void setCameraY(int y);
    void setCameraZ(int z);
 
+   void setTranslateX(int x);
+   void setTranslateY(int y);
+   void setTranslateZ(int z);
+
+   void setRotateX(int x);
+   void setRotateY(int y);
+   void setRotateZ(int z);
+
 protected:
    virtual void paintGL();
    virtual void resizeGL(int w, int h);
@@ -35,6 +43,12 @@ private:
    int cameraX_;
    int cameraY_;
    int cameraZ_;
+   int transX_;
+   int transY_;
+   int transZ_;
+   float rotateX_;
+   float rotateY_;
+   float rotateZ_;
    QVector<GLfloat>* vertices_;
 };
 

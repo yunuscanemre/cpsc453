@@ -38,6 +38,12 @@ void MainView::changeCameraZ(int z)
    scene_->setCameraZ(z);
 }
 
+void MainView::createGlWidget(QVector<GLfloat>* vertices)
+{
+   scene_ = new GlWidget(mainWindow_, vertices);
+   layout_->addWidget(scene_);
+}
+
 void MainView::show()
 {
    mainWindow_->show();
@@ -49,10 +55,9 @@ void MainView::setupUi()
    mainUi_ = new Ui::MainWindow();
    mainUi_->setupUi(mainWindow_);
 
-   scene_ = new GlWidget(mainWindow_);
-   QVBoxLayout* layout = new QVBoxLayout(mainUi_->containerWidget);
-   layout->addWidget(scene_);
-   mainUi_->containerWidget->setLayout(layout);
+
+   layout_ = new QVBoxLayout(mainUi_->containerWidget);
+   mainUi_->containerWidget->setLayout(layout_);
 }
 
 

@@ -27,11 +27,16 @@ Core::Core()
    }
 
    vertices_ = new QVector<GLfloat>(md2_->num_xyz*3);
-   for(int i = 0; i < md2_->num_xyz; i++)
+   for(int i = 0; i < md2_->num_tris; i++)
       for(int j = 0; j<3; j++)
-            vertices_->append(md2_->m_vertices[i][j]);
+         for(int k = 0; k < 3; k++)
+            vertices_->append(md2_->m_vertices[md2_->tris[i].index_xyz[j]][k]);
 
+   fprintf(stderr, "got %d \n", vertices_->size());
+   for(int i = 0; i < vertices_->size(); i++)
+      fprintf(stderr, " val %f ", vertices_->at(i));
 
+   view_->createGlWidget(vertices_);
 }
 
 void Core::exit()

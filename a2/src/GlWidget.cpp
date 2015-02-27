@@ -46,8 +46,8 @@ static const GLfloat tetVertices[] = {
 #define VERTEX_NORMAL 2
 #define VERTEX_INDICES 3
 
-GlWidget::GlWidget(QWidget *parent) :
-      QOpenGLWidget(parent), qVAO_(NULL), cameraX_(0), cameraY_(0), cameraZ_(3)
+GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices) :
+      QOpenGLWidget(parent), qVAO_(NULL), cameraX_(0), cameraY_(0), cameraZ_(3), vertices_(vertices)
 {
 
 }
@@ -112,7 +112,7 @@ void GlWidget::paintGL()
    // Note that this version of the draw command uses the
    // bound index buffer to get the vertex coordinates.
 //   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-   glDrawArrays(GL_TRIANGLES, 0, 6);
+   glDrawArrays(GL_TRIANGLES, 0, vertices_->size());
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -163,9 +163,9 @@ void GlWidget::setupRenderingContext()
    // We are using one VBO for all the data. For this demo, we won't be
    // making use of the normals but the code below shown how we might
    // store them in the VBO.
-   glBufferData(GL_ARRAY_BUFFER, sizeof(tetVertices), NULL,
+   glBufferData(GL_ARRAY_BUFFER, vertices_->size(), NULL,
          GL_STATIC_DRAW);
-   glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(tetVertices), tetVertices);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, vertices_->size(), vertices_->data());
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices), sizeof(tetColours),
 //         tetColours);
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),
@@ -182,9 +182,9 @@ void GlWidget::setupRenderingContext()
    glEnableVertexAttribArray( VERTEX_DATA);
    glVertexAttribPointer( VERTEX_DATA, 4, GL_FLOAT, GL_FALSE, 0,
          (const GLvoid*) 0);
-   glEnableVertexAttribArray( VERTEX_COLOUR);
-   glVertexAttribPointer( VERTEX_COLOUR, 4, GL_FLOAT, GL_FALSE, 0,
-         (const GLvoid*) (sizeof(tetVertices)));
+//   glEnableVertexAttribArray( VERTEX_COLOUR);
+//   glVertexAttribPointer( VERTEX_COLOUR, 4, GL_FLOAT, GL_FALSE, 0,
+//         (const GLvoid*) vertices_->size());
 }
 
 void GlWidget::loadAllShaders()

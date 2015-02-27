@@ -20,6 +20,9 @@
     </item>
     <item>
      <widget class="QSpinBox" name="cameraX">
+      <property name="minimum">
+       <number>-99</number>
+      </property>
       <property name="value">
        <number>5</number>
       </property>
@@ -27,6 +30,9 @@
     </item>
     <item>
      <widget class="QSpinBox" name="cameraY">
+      <property name="minimum">
+       <number>-99</number>
+      </property>
       <property name="value">
        <number>5</number>
       </property>
@@ -34,6 +40,9 @@
     </item>
     <item>
      <widget class="QSpinBox" name="cameraZ">
+      <property name="minimum">
+       <number>-99</number>
+      </property>
       <property name="value">
        <number>5</number>
       </property>

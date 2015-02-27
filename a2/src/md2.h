@@ -75,7 +75,9 @@ typedef struct
 
 } vertex_t;
 
-
+//vec3_t         *m_vertices;      // vertex array
+//tex_coord      *texs;
+//triangle_t     *tris;
 
 // frame
 typedef struct

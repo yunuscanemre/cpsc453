@@ -3,10 +3,13 @@
 
 #include <QObject>
 #include <ui_MainWindow.h>
+#include <QVector>
+#include <GL/gl.h>
 
 class GlWidget;
 class QMainWindow;
 class RgbImage;
+class QVBoxLayout;
 
 class MainView : public QObject
 {
@@ -15,7 +18,8 @@ class MainView : public QObject
 public:
    MainView();
    virtual ~MainView();
-   
+
+   void createGlWidget(QVector<GLfloat>* vertices);
    void show();
 
 signals:
@@ -34,6 +38,7 @@ private:
    QMainWindow* mainWindow_;
    Ui::MainWindow* mainUi_;
    GlWidget* scene_;
+   QVBoxLayout* layout_;
 };
 
 #endif

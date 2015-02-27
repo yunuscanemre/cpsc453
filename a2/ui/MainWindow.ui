@@ -18,6 +18,27 @@
     <item>
      <widget class="QWidget" name="containerWidget" native="true"/>
     </item>
+    <item>
+     <widget class="QSpinBox" name="cameraX">
+      <property name="value">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="cameraY">
+      <property name="value">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="cameraZ">
+      <property name="value">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

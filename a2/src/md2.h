@@ -63,7 +63,7 @@ typedef struct
 typedef struct
 {
     short   index_xyz[3];    // indexes to triangle's vertices
-    short   index_st[3];     // indexes to vertices' texture coorinates
+    short   index_st[3];     // indexes to vertices' texture coordinates
 
 } triangle_t;
 

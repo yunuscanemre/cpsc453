@@ -19,6 +19,12 @@ public:
    void show();
 
 signals:
+   void exitSelected(bool);
+
+private slots:
+void changeCameraX(int);
+void changeCameraY(int);
+void changeCameraZ(int);
 
 
 private:

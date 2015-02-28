@@ -20,8 +20,8 @@ Core::Core()
          SLOT(exit()));
 
    QString fileToLoad = "models/astro/tris.md2";
-//   QString fileToLoad = QFileDialog::getOpenFileName(NULL,
-//         "Select an md2 file");
+   QString fileToLoad = QFileDialog::getOpenFileName(NULL,
+         "Select an md2 file");
    if(fileToLoad != NULL)
    {
       md2_->LoadModel(fileToLoad.toStdString().c_str());
@@ -35,15 +35,8 @@ Core::Core()
       for(int j = 0; j<3; j++)
          for(int k = 0; k < 3; k++)
          {
-//            float val = md2_->m_vertices[md2_->tris[i].index_xyz[j]][k];
-//            fprintf(stderr, "  %f \n", val);
             vertices_->append(md2_->m_vertices[md2_->tris[i].index_xyz[j]][k]);
          }
-
-
-   fprintf(stderr, "got %d \n", vertices_->size());
-//   for(int i = 0; i < vertices_->size(); i++)
-//      fprintf(stderr, " val %f ", vertices_->at(i));
 
    view_->createGlWidget(vertices_);
 }

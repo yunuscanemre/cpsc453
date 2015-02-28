@@ -106,18 +106,21 @@ void GlWidget::setRotateX(int x)
 {
    float rad = M_PI*(float)x/180.0;
    rotateX_ = rad;
+   update();
 }
 
 void GlWidget::setRotateY(int y)
 {
    float rad = M_PI*(float)y/180.0;
    rotateY_ = rad;
+   update();
 }
 
 void GlWidget::setRotateZ(int z)
 {
    float rad = M_PI*(float)z/180.0;
    rotateZ_ = rad;
+   update();
 }
 
 void GlWidget::paintGL()
@@ -224,9 +227,9 @@ void GlWidget::setupRenderingContext()
    // We are using one VBO for all the data. For this demo, we won't be
    // making use of the normals but the code below shown how we might
    // store them in the VBO.
-   glBufferData(GL_ARRAY_BUFFER, vertices_->size(), NULL,
+   glBufferData(GL_ARRAY_BUFFER, vertices_->size()*sizeof(GLfloat), vertices_->data(),
          GL_STATIC_DRAW);
-   glBufferSubData(GL_ARRAY_BUFFER, 0, vertices_->size(), vertices_->data());
+//   glBufferSubData(GL_ARRAY_BUFFER, 0, vertices_->size(), vertices_->data());
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices), sizeof(tetColours),
 //         tetColours);
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),

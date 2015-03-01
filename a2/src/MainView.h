@@ -19,24 +19,26 @@ public:
    MainView();
    virtual ~MainView();
 
-   void createGlWidget(QVector<GLfloat>* vertices);
+   void createGlWidget(QVector<GLfloat>* vertices, QVector<GLfloat>* normals);
    void show();
 
 signals:
    void exitSelected(bool);
 
 private slots:
-void changeCameraX(int);
-void changeCameraY(int);
-void changeCameraZ(int);
+   void changeCameraX(int);
+   void changeCameraY(int);
+   void changeCameraZ(int);
 
-void translateX(int);
-void translateY(int);
-void translateZ(int);
+   void translateX(int);
+   void translateY(int);
+   void translateZ(int);
 
-void rotateX(int);
-void rotateY(int);
-void rotateZ(int);
+   void rotateX(int);
+   void rotateY(int);
+   void rotateZ(int);
+
+   void changeFOV(double fov);
 
 private:
    void setupUi();

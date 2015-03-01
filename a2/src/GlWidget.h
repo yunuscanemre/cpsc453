@@ -13,7 +13,7 @@ class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions
    Q_OBJECT
 
 public:
-   GlWidget(QWidget *parent, QVector<GLfloat>* vertices);
+   GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals);
    ~GlWidget();
 
    void setCameraX(int x);
@@ -27,6 +27,8 @@ public:
    void setRotateX(int x);
    void setRotateY(int y);
    void setRotateZ(int z);
+
+   void setFOV(double fov);
 
 protected:
    virtual void paintGL();
@@ -49,7 +51,9 @@ private:
    float rotateX_;
    float rotateY_;
    float rotateZ_;
+   float fov_;
    QVector<GLfloat>* vertices_;
+   QVector<GLfloat>* normals_;
 };
 
 #endif /* GLWIDGET_H_ */

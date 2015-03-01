@@ -43,23 +43,25 @@ static const GLfloat tetVertices[] = {
 
 // Constants to help with location bindings
 #define VERTEX_DATA 0
-#define VERTEX_COLOUR 1
-#define VERTEX_NORMAL 2
-#define VERTEX_INDICES 3
+#define VERTEX_COLOUR 2
+#define VERTEX_NORMAL 1
+//#define VERTEX_INDICES 3
 
-GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices) :
+GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals) :
       QOpenGLWidget(parent),
       qVAO_(NULL),
       cameraX_(0),
       cameraY_(0),
-      cameraZ_(30),
+      cameraZ_(8),
       transX_(0),
       transY_(0),
       transZ_(0),
       rotateX_(0.0),
       rotateY_(0.0),
       rotateZ_(0.0),
-      vertices_(vertices)
+      fov_(45),
+      vertices_(vertices),
+      normals_(normals)
 {
 
 }
@@ -123,14 +125,20 @@ void GlWidget::setRotateZ(int z)
    update();
 }
 
+void GlWidget::setFOV(double fov)
+{
+   fov_ = fov;
+   update();
+}
+
+
 void GlWidget::paintGL()
 {
-   GLuint modelViewMatrixID = glGetUniformLocation(myShaderProgram,
-         "mv_matrix");
+   GLuint modelViewMatrixID = glGetUniformLocation(myShaderProgram, "mv_matrix");
    GLuint projMatrixID = glGetUniformLocation(myShaderProgram, "proj_matrix");
 
    // Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-   glm::mat4 projMatrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+   glm::mat4 projMatrix = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
 
    // Camera matrix
    glm::mat4 viewMatrix = glm::lookAt(glm::vec3(cameraX_, cameraY_, cameraZ_), // Camera is at (4,3,3), in World Space
@@ -165,7 +173,7 @@ void GlWidget::paintGL()
    glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
    glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
 
-   glEnableVertexAttribArray( VERTEX_DATA);
+   glEnableVertexAttribArray(VERTEX_DATA);
    glVertexAttribPointer(0, // attribute. No particular reason for 0, but must match the layout in the shader.
          3,                  // size
          GL_FLOAT,           // type
@@ -200,8 +208,7 @@ void GlWidget::initializeGL()
    setupRenderingContext();
 }
 
-// This function does any needed initialization on the rendering
-// context.
+// This function does any needed initialization on the rendering context.
 void GlWidget::setupRenderingContext()
 {
 
@@ -224,12 +231,13 @@ void GlWidget::setupRenderingContext()
    glBindBuffer( GL_ARRAY_BUFFER, myVBO);
 
    // Allocate space and load vertex data into the buffer.
-   // We are using one VBO for all the data. For this demo, we won't be
-   // making use of the normals but the code below shown how we might
-   // store them in the VBO.
-   glBufferData(GL_ARRAY_BUFFER, vertices_->size()*sizeof(GLfloat), vertices_->data(),
-         GL_STATIC_DRAW);
-//   glBufferSubData(GL_ARRAY_BUFFER, 0, vertices_->size(), vertices_->data());
+   int verticesByteSize = vertices_->size()*sizeof(GLfloat);
+   int normalsByteSize = 0;//normals_->size()*sizeof(GLfloat);
+   int totalByteSize = verticesByteSize + normalsByteSize;
+   glBufferData(GL_ARRAY_BUFFER, totalByteSize, NULL, GL_STATIC_DRAW);
+
+   glBufferSubData(GL_ARRAY_BUFFER, 0, verticesByteSize, vertices_->data());
+//   glBufferSubData(GL_ARRAY_BUFFER, verticesByteSize, verticesByteSize, normals_->data());
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices), sizeof(tetColours),
 //         tetColours);
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),
@@ -312,8 +320,9 @@ void GlWidget::loadAllShaders()
    glAttachShader(myShaderProgram, hVertexShader);
    glAttachShader(myShaderProgram, hFragmentShader);
 
-   glBindAttribLocation(myShaderProgram, VERTEX_DATA, "vVertex");
-   glBindAttribLocation(myShaderProgram, VERTEX_COLOUR, "vColor");
+   glBindAttribLocation(myShaderProgram, VERTEX_DATA, "position");
+   glBindAttribLocation(myShaderProgram, VERTEX_NORMAL, "normal");
+   glBindAttribLocation(myShaderProgram, VERTEX_COLOUR, "color");
 
    glLinkProgram(myShaderProgram);
    glDeleteShader(hVertexShader);

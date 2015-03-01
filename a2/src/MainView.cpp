@@ -29,6 +29,9 @@ MainView::MainView()
    qtConnect(mainUi_->rotateZ, SIGNAL(valueChanged(int)),
              this, SLOT(rotateZ(int)));
 
+   qtConnect(mainUi_->fovEntry, SIGNAL(valueChanged(double)),
+             this, SLOT(changeFOV(double)));
+
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
 
@@ -83,9 +86,16 @@ void MainView::rotateZ(int z)
    scene_->setRotateZ(z);
 }
 
-void MainView::createGlWidget(QVector<GLfloat>* vertices)
+void MainView::changeFOV(double fov)
 {
-   scene_ = new GlWidget(mainWindow_, vertices);
+   scene_->setFOV(fov);
+}
+
+
+
+void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLfloat>* normals)
+{
+   scene_ = new GlWidget(mainWindow_, vertices, normals);
    layout_->addWidget(scene_);
 }
 

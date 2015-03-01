@@ -18,15 +18,15 @@ GLuint myShaderProgram;
 
 // Geometry for the simple scene - a tetrahedron with some vertex
 // attributes and a list of faces specifying connectivity
-static const GLfloat tetVertices[] = {
-      -1.0f, 0.0f, 0.0f,
-       1.0f, 0.0f, 0.0f,
-       0.0f, 1.0f, 0.0f,
-       -1.0f, 2.0f, 0.0f,
-       1.0f, 2.0f, 0.0f,
-       0.0f, 1.0f, 0.0f,
-
-};
+//static const GLfloat tetVertices[] = {
+//      -1.0f, 0.0f, 0.0f,
+//       1.0f, 0.0f, 0.0f,
+//       0.0f, 1.0f, 0.0f,
+//       -1.0f, 2.0f, 0.0f,
+//       1.0f, 2.0f, 0.0f,
+//       0.0f, 1.0f, 0.0f,
+//
+//};
 //static const GLushort tetFaceIndices[] = {
 // 0, 1, 2
 //};
@@ -113,18 +113,11 @@ void GlWidget::paintGL()
    glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
    glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
 
-   glEnableVertexAttribArray(VERTEX_DATA);
-   glVertexAttribPointer(0, // attribute. No particular reason for 0, but must match the layout in the shader.
-         3,                  // size
-         GL_FLOAT,           // type
-         GL_FALSE,           // normalized?
-         0,                  // stride
-         (void*) 0            // array buffer offset
-         );
    // Note that this version of the draw command uses the
    // bound index buffer to get the vertex coordinates.
 //   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-   glDrawArrays(GL_TRIANGLES, 0, vertices_->size());
+   int numberOfPoints = (vertices_->size()/3);
+   glDrawArrays(GL_TRIANGLES, 0, numberOfPoints);
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -204,16 +197,34 @@ void GlWidget::setupRenderingContext()
 
    // Allocate space and load vertex data into the buffer.
    int verticesByteSize = vertices_->size()*sizeof(GLfloat);
-   int normalsByteSize = 0;//normals_->size()*sizeof(GLfloat);
+   int normalsByteSize = normals_->size()*sizeof(GLfloat);
    int totalByteSize = verticesByteSize + normalsByteSize;
    glBufferData(GL_ARRAY_BUFFER, totalByteSize, NULL, GL_STATIC_DRAW);
 
    glBufferSubData(GL_ARRAY_BUFFER, 0, verticesByteSize, vertices_->data());
-//   glBufferSubData(GL_ARRAY_BUFFER, verticesByteSize, verticesByteSize, normals_->data());
+   glBufferSubData(GL_ARRAY_BUFFER, verticesByteSize, normalsByteSize, normals_->data());
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices), sizeof(tetColours),
 //         tetColours);
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),
 //         sizeof(tetNormals), tetNormals);
+
+
+   glEnableVertexAttribArray(VERTEX_DATA);
+   glVertexAttribPointer(VERTEX_DATA, // attribute. No particular reason for 0, but must match the layout in the shader.
+                         3,                  // size
+                         GL_FLOAT,           // type
+                         GL_FALSE,           // normalized?
+                         0,                  // stride
+                         (void*) 0            // array buffer offset
+                        );
+   glEnableVertexAttribArray(VERTEX_NORMAL);
+   glVertexAttribPointer(VERTEX_NORMAL,
+                         3,                  // size
+                         GL_FLOAT,           // type
+                         GL_FALSE,           // normalized?
+                         0,                  // stride
+                         (void*) 0
+                        );
 
    // Load face indices into the index buffer
 //   glGenBuffers(1, &myIndexBuffer);
@@ -312,9 +323,7 @@ void GlWidget::loadAllShaders()
 
 }
 
-////////////////////////////////////////////////////////////////
-// Load the shader from the specified file. Returns false if the
-// shader could not be loaded
+// Load the shader from the specified file. Returns false if the shader could not be loaded
 static GLubyte shaderText[8192];
 bool GlWidget::loadShaderFile(const char *filename, GLuint shader)
 {

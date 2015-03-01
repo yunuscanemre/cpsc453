@@ -17,8 +17,8 @@ Core::Core()
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
 
-   QString fileToLoad = "models/faerie/weapon.md2";
-//   QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
+//   QString fileToLoad = "models/faerie/weapon.md2";
+   QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
    if(fileToLoad != NULL)
    {
       md2_->LoadModel(fileToLoad.toStdString().c_str());
@@ -48,6 +48,7 @@ Core::Core()
       }
    }
 
+   fprintf(stderr, "num vertices %d \n", vertices_->size());
    fprintf(stderr, "num normals %d \n", normals_->size());
 
    view_->createGlWidget(vertices_, normals_);
@@ -83,7 +84,7 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
    float a_z = md2_->m_vertices[triangle->index_xyz[0]][2];
    glm::vec3 a(a_x, a_y, a_z);
 
-   glm::vec3 cross = glm::cross(c-a, c-b);
+   glm::vec3 cross = glm::cross(c-a, b-a);
    if(glm::dot((c-a), cross) > 0.0001)
       fprintf(stderr, "c-a DOT cross didnt = 0\n");
    if(glm::dot((c-b), cross) > 0.0001)
@@ -91,5 +92,5 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
    if(glm::dot((b-a), cross) > 0.0001)
       fprintf(stderr, "b-a DOT cross didnt = 0 \n");
 
-   return cross;
+   return glm::normalize(cross);
 }

@@ -20,6 +20,7 @@ public:
    void setTranslation(int x, int y, int z);
    void setRotation(int x, int y, int z);
    void setFOV(double fov);
+   void setScale(double scale);
 
 protected:
    virtual void paintGL();
@@ -43,6 +44,7 @@ private:
    float rotateY_;
    float rotateZ_;
    float fov_;
+   float scale_;
    QVector<GLfloat>* vertices_;
    QVector<GLfloat>* normals_;
 };

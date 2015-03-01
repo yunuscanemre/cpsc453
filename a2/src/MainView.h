@@ -30,6 +30,7 @@ private slots:
    void changeTranslation();
    void changeRotation();
    void changeFOV(double fov);
+   void changeScale(double scale);
 
 private:
    void setupUi();

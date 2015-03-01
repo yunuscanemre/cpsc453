@@ -32,6 +32,9 @@ MainView::MainView()
    qtConnect(mainUi_->fovEntry, SIGNAL(valueChanged(double)),
              this, SLOT(changeFOV(double)));
 
+   qtConnect(mainUi_->scaleEntry, SIGNAL(valueChanged(double)),
+             this, SLOT(changeScale(double)));
+
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
 
@@ -67,7 +70,10 @@ void MainView::changeFOV(double fov)
    scene_->setFOV(fov);
 }
 
-
+void MainView::changeScale(double scale)
+{
+   scene_->setScale(scale);
+}
 
 void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLfloat>* normals)
 {

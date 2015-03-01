@@ -10,7 +10,7 @@
 
 using namespace std;
 // VAO and VBO to handle vertex state and data
-GLuint myVBO;
+GLuint vertexVbo;
 GLuint myIndexBuffer;
 
 // shader program to use
@@ -60,6 +60,7 @@ GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>
       rotateY_(0.0),
       rotateZ_(0.0),
       fov_(45),
+      scale_(1),
       vertices_(vertices),
       normals_(normals)
 {
@@ -88,6 +89,9 @@ void GlWidget::paintGL()
 
    // Model matrix : an identity matrix (model will be at the origin)
    glm::mat4 Model = glm::mat4(1.0f);
+
+   // Scale Model
+   Model = glm::scale(Model, glm::vec3(scale_));
 
    glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(transX_, transY_, transZ_));
 
@@ -158,6 +162,12 @@ void GlWidget::setFOV(double fov)
    update();
 }
 
+void GlWidget::setScale(double scale)
+{
+   scale_ = scale;
+   update();
+}
+
 void GlWidget::initializeGL()
 {
    // These two lines will print out the version of OpenGL and GLSL
@@ -192,8 +202,8 @@ void GlWidget::setupRenderingContext()
    good ? cout << "VOA created\n" : cout << "VOA error\n";
    qVAO_->bind();
 
-   glGenBuffers(1, &myVBO);
-   glBindBuffer( GL_ARRAY_BUFFER, myVBO);
+   glGenBuffers(1, &vertexVbo);
+   glBindBuffer( GL_ARRAY_BUFFER, vertexVbo);
 
    // Allocate space and load vertex data into the buffer.
    int verticesByteSize = vertices_->size()*sizeof(GLfloat);
@@ -208,7 +218,7 @@ void GlWidget::setupRenderingContext()
 //   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),
 //         sizeof(tetNormals), tetNormals);
 
-
+// THIS DOESNT SEEM RIGHT
    glEnableVertexAttribArray(VERTEX_DATA);
    glVertexAttribPointer(VERTEX_DATA, // attribute. No particular reason for 0, but must match the layout in the shader.
                          3,                  // size

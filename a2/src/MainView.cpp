@@ -9,25 +9,25 @@ MainView::MainView()
    setupUi();
 
    qtConnect(mainUi_->cameraX, SIGNAL(valueChanged(int)),
-             this, SLOT(changeCameraX(int)));
+             this, SLOT(changeCamera()));
    qtConnect(mainUi_->cameraY, SIGNAL(valueChanged(int)),
-             this, SLOT(changeCameraY(int)));
+             this, SLOT(changeCamera()));
    qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(int)),
-             this, SLOT(changeCameraZ(int)));
+             this, SLOT(changeCamera()));
 
    qtConnect(mainUi_->translateX, SIGNAL(valueChanged(int)),
-             this, SLOT(translateX(int)));
+             this, SLOT(changeTranslation()));
    qtConnect(mainUi_->translateY, SIGNAL(valueChanged(int)),
-             this, SLOT(translateY(int)));
+             this, SLOT(changeTranslation()));
    qtConnect(mainUi_->translateZ, SIGNAL(valueChanged(int)),
-             this, SLOT(translateZ(int)));
+             this, SLOT(changeTranslation()));
 
    qtConnect(mainUi_->rotateX, SIGNAL(valueChanged(int)),
-             this, SLOT(rotateX(int)));
+             this, SLOT(changeRotation()));
    qtConnect(mainUi_->rotateY, SIGNAL(valueChanged(int)),
-             this, SLOT(rotateY(int)));
+             this, SLOT(changeRotation()));
    qtConnect(mainUi_->rotateZ, SIGNAL(valueChanged(int)),
-             this, SLOT(rotateZ(int)));
+             this, SLOT(changeRotation()));
 
    qtConnect(mainUi_->fovEntry, SIGNAL(valueChanged(double)),
              this, SLOT(changeFOV(double)));
@@ -41,49 +41,25 @@ MainView::~MainView()
 {
 }
 
-void MainView::changeCameraX(int x)
+void MainView::changeCamera()
 {
-   scene_->setCameraX(x);
+   scene_->setCamera(mainUi_->cameraX->value(),
+                     mainUi_->cameraY->value(),
+                     mainUi_->cameraZ->value());
 }
 
-void MainView::changeCameraY(int y)
+void MainView::changeTranslation()
 {
-   scene_->setCameraY(y);
+   scene_->setTranslation(mainUi_->translateX->value(),
+                          mainUi_->translateY->value(),
+                          mainUi_->translateZ->value());
 }
 
-void MainView::changeCameraZ(int z)
+void MainView::changeRotation()
 {
-   scene_->setCameraZ(z);
-}
-
-void MainView::translateX(int x)
-{
-   scene_->setTranslateX(x);
-}
-
-void MainView::translateY(int y)
-{
-   scene_->setTranslateY(y);
-}
-
-void MainView::translateZ(int z)
-{
-   scene_->setTranslateZ(z);
-}
-
-void MainView::rotateX(int x)
-{
-   scene_->setRotateX(x);
-}
-
-void MainView::rotateY(int y)
-{
-   scene_->setRotateY(y);
-}
-
-void MainView::rotateZ(int z)
-{
-   scene_->setRotateZ(z);
+   scene_->setRotation(mainUi_->rotateX->value(),
+                       mainUi_->rotateY->value(),
+                       mainUi_->rotateZ->value());
 }
 
 void MainView::changeFOV(double fov)

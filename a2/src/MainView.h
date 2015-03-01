@@ -26,18 +26,9 @@ signals:
    void exitSelected(bool);
 
 private slots:
-   void changeCameraX(int);
-   void changeCameraY(int);
-   void changeCameraZ(int);
-
-   void translateX(int);
-   void translateY(int);
-   void translateZ(int);
-
-   void rotateX(int);
-   void rotateY(int);
-   void rotateZ(int);
-
+   void changeCamera();
+   void changeTranslation();
+   void changeRotation();
    void changeFOV(double fov);
 
 private:

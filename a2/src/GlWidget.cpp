@@ -72,66 +72,6 @@ GlWidget::~GlWidget()
    deletePointer(qVAO_);
 }
 
-void GlWidget::setCameraX(int x)
-{
-   cameraX_ = x;
-   update();
-}
-void GlWidget::setCameraY(int y)
-{
-   cameraY_ = y;
-   update();
-}
-void GlWidget::setCameraZ(int z)
-{
-   cameraZ_ = z;
-   update();
-}
-
-void GlWidget::setTranslateX(int x)
-{
-   transX_ = x;
-   update();
-}
-void GlWidget::setTranslateY(int y)
-{
-   transY_ = y;
-   update();
-}
-void GlWidget::setTranslateZ(int z)
-{
-   transZ_ = z;
-   update();
-}
-
-void GlWidget::setRotateX(int x)
-{
-   float rad = M_PI*(float)x/180.0;
-   rotateX_ = rad;
-   update();
-}
-
-void GlWidget::setRotateY(int y)
-{
-   float rad = M_PI*(float)y/180.0;
-   rotateY_ = rad;
-   update();
-}
-
-void GlWidget::setRotateZ(int z)
-{
-   float rad = M_PI*(float)z/180.0;
-   rotateZ_ = rad;
-   update();
-}
-
-void GlWidget::setFOV(double fov)
-{
-   fov_ = fov;
-   update();
-}
-
-
 void GlWidget::paintGL()
 {
    GLuint modelViewMatrixID = glGetUniformLocation(myShaderProgram, "mv_matrix");
@@ -191,6 +131,38 @@ void GlWidget::resizeGL(int w, int h)
 {
    // Set Viewport to window dimensions
    glViewport(0, 0, w, h);
+}
+
+void GlWidget::setCamera(int x, int y, int z)
+{
+   cameraX_ = x;
+   cameraY_ = y;
+   cameraZ_ = z;
+   update();
+}
+
+void GlWidget::setTranslation(int x, int y, int z)
+{
+   transX_ = x;
+   transY_ = y;
+   transZ_ = z;
+   update();
+}
+void GlWidget::setRotation(int x, int y, int z)
+{
+   float xRad = M_PI*(float)x/180.0;
+   float yRad = M_PI*(float)y/180.0;
+   float zRad = M_PI*(float)z/180.0;
+   rotateX_ = xRad;
+   rotateY_ = yRad;
+   rotateZ_ = zRad;
+   update();
+}
+
+void GlWidget::setFOV(double fov)
+{
+   fov_ = fov;
+   update();
 }
 
 void GlWidget::initializeGL()

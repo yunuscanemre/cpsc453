@@ -16,18 +16,9 @@ public:
    GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals);
    ~GlWidget();
 
-   void setCameraX(int x);
-   void setCameraY(int y);
-   void setCameraZ(int z);
-
-   void setTranslateX(int x);
-   void setTranslateY(int y);
-   void setTranslateZ(int z);
-
-   void setRotateX(int x);
-   void setRotateY(int y);
-   void setRotateZ(int z);
-
+   void setCamera(int x, int y, int z);
+   void setTranslation(int x, int y, int z);
+   void setRotation(int x, int y, int z);
    void setFOV(double fov);
 
 protected:

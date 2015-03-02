@@ -21,6 +21,10 @@ public:
    void setRotation(int x, int y, int z);
    void setFOV(double fov);
    void setScale(double scale);
+   void setSpecularPower(double power);
+   void setAlbedo(double x, double y, double z);
+   void setAmbient(double x, double y, double z);
+   void setDiffuse(double x, double y, double z);
 
 protected:
    virtual void paintGL();
@@ -45,6 +49,16 @@ private:
    float rotateZ_;
    float fov_;
    float scale_;
+   float power_;
+   float albedoX_;
+   float albedoY_;
+   float albedoZ_;
+   float ambientX_;
+   float ambientY_;
+   float ambientZ_;
+   float diffuseX_;
+   float diffuseY_;
+   float diffuseZ_;
    QVector<GLfloat>* vertices_;
    QVector<GLfloat>* normals_;
 };

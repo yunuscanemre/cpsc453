@@ -31,6 +31,10 @@ private slots:
    void changeRotation();
    void changeFOV(double fov);
    void changeScale(double scale);
+   void changeSpecularPower(double power);
+   void changeAlbedo();
+   void changeAmbient();
+   void changeDiffuse();
 
 private:
    void setupUi();

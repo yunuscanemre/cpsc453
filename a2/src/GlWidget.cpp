@@ -46,7 +46,7 @@ GLuint myShaderProgram;
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
 //#define VERTEX_INDICES 3
-
+#define NUM_COMPONENTS_VERTEX 3
 GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals) :
       QOpenGLWidget(parent),
       qVAO_(NULL),
@@ -61,6 +61,16 @@ GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>
       rotateZ_(0.0),
       fov_(45),
       scale_(1),
+      power_(1),
+      albedoX_(0.7),
+      albedoY_(0.7),
+      albedoZ_(0.7),
+      ambientX_(0.1),
+      ambientY_(0.1),
+      ambientZ_(0.1),
+      diffuseX_(0.5),
+      diffuseY_(0.2),
+      diffuseZ_(0.7),
       vertices_(vertices),
       normals_(normals)
 {
@@ -75,8 +85,12 @@ GlWidget::~GlWidget()
 
 void GlWidget::paintGL()
 {
-   GLuint modelViewMatrixID = glGetUniformLocation(myShaderProgram, "mv_matrix");
-   GLuint projMatrixID = glGetUniformLocation(myShaderProgram, "proj_matrix");
+   GLint modelViewMatrixID = glGetUniformLocation(myShaderProgram, "mv_matrix");
+   GLint projMatrixID = glGetUniformLocation(myShaderProgram, "proj_matrix");
+   GLint specularPowerID = glGetUniformLocation(myShaderProgram, "specular_power");
+   GLint specularAlbedoID = glGetUniformLocation(myShaderProgram, "specular_albedo");
+   GLint ambientID = glGetUniformLocation(myShaderProgram, "ambient");
+   GLint diffuseAlbedoID = glGetUniformLocation(myShaderProgram, "diffuse_albedo");
 
    // Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
    glm::mat4 projMatrix = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
@@ -117,6 +131,12 @@ void GlWidget::paintGL()
    glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
    glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
 
+   glUniform1f(specularPowerID, power_);
+   glUniform3fv(specularAlbedoID, 1, &glm::vec3(albedoX_, albedoY_, albedoZ_)[0]);
+   glUniform3fv(ambientID, 1, &glm::vec3(ambientX_, ambientY_, ambientZ_)[0]);
+   glUniform3fv(diffuseAlbedoID, 1, &glm::vec3(diffuseX_, diffuseY_, diffuseZ_)[0]);
+
+
    // Note that this version of the draw command uses the
    // bound index buffer to get the vertex coordinates.
 //   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
@@ -145,6 +165,7 @@ void GlWidget::setTranslation(int x, int y, int z)
    transZ_ = z;
    update();
 }
+
 void GlWidget::setRotation(int x, int y, int z)
 {
    float xRad = M_PI*(float)x/180.0;
@@ -165,6 +186,36 @@ void GlWidget::setFOV(double fov)
 void GlWidget::setScale(double scale)
 {
    scale_ = scale;
+   update();
+}
+
+void GlWidget::setSpecularPower(double power)
+{
+   power_ = (float) power;
+   update();
+}
+
+void GlWidget::setAlbedo(double x, double y, double z)
+{
+   albedoX_ = (float) x;
+   albedoY_ = (float) y;
+   albedoZ_ = (float) z;
+   update();
+}
+
+void GlWidget::setAmbient(double x, double y, double z)
+{
+   ambientX_ = (float) x;
+   ambientY_ = (float) y;
+   ambientZ_ = (float) z;
+   update();
+}
+
+void GlWidget::setDiffuse(double x, double y, double z)
+{
+   diffuseX_ = (float) x;
+   diffuseY_ = (float) y;
+   diffuseZ_ = (float) z;
    update();
 }
 

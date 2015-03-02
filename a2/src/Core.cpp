@@ -34,7 +34,6 @@ Core::Core()
    {
       triangle_t* triangle = md2_->tris + i;
       glm::vec3 normal = calculateNormal(triangle);
-//      fprintf(stderr, "normal: %f, %f, %f \n", normal.x, normal.y, normal.z);
       normals_->append(normal.x);
       normals_->append(normal.y);
       normals_->append(normal.z);

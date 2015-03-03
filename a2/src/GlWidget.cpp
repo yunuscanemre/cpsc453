@@ -140,7 +140,7 @@ void GlWidget::paintGL()
    // Note that this version of the draw command uses the
    // bound index buffer to get the vertex coordinates.
 //   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-   int numberOfPoints = (vertices_->size()/3);
+   int numberOfPoints = (vertices_->size()/4);
    glDrawArrays(GL_TRIANGLES, 0, numberOfPoints);
 }
 
@@ -272,7 +272,7 @@ void GlWidget::setupRenderingContext()
 // THIS DOESNT SEEM RIGHT
    glEnableVertexAttribArray(VERTEX_DATA);
    glVertexAttribPointer(VERTEX_DATA, // attribute. No particular reason for 0, but must match the layout in the shader.
-                         3,                  // size
+                         4,                  // size
                          GL_FLOAT,           // type
                          GL_FALSE,           // normalized?
                          0,                  // stride

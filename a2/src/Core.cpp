@@ -44,6 +44,7 @@ Core::Core()
          {
             vertices_->append(md2_->m_vertices[triangle->index_xyz[j]][k]);
          }
+         vertices_->append(1.0f);
       }
    }
 
@@ -84,12 +85,10 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
    glm::vec3 a(a_x, a_y, a_z);
 
    glm::vec3 cross = glm::cross(c-a, b-a);
-   if(glm::dot((c-a), cross) > 0.0001)
-      fprintf(stderr, "c-a DOT cross didnt = 0\n");
-   if(glm::dot((c-b), cross) > 0.0001)
-      fprintf(stderr, "c-b DOT cross didnt = 0 \n");
-   if(glm::dot((b-a), cross) > 0.0001)
-      fprintf(stderr, "b-a DOT cross didnt = 0 \n");
 
-   return glm::normalize(cross);
+   glm::vec3 normalized = cross;
+   if(cross.x != 0 || cross.y != 0 || cross.z != 0)
+      normalized = glm::normalize(cross);
+
+   return -cross;
 }

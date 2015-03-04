@@ -10,56 +10,56 @@ MainView::MainView()
 
    // Camera
    qtConnect(mainUi_->cameraX, SIGNAL(valueChanged(double)),
-             this, SLOT(changeCamera()));
+             this, SLOT(updateCamera()));
    qtConnect(mainUi_->cameraY, SIGNAL(valueChanged(double)),
-             this, SLOT(changeCamera()));
+             this, SLOT(updateCamera()));
    qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(double)),
-             this, SLOT(changeCamera()));
+             this, SLOT(updateCamera()));
    qtConnect(mainUi_->fovEntry, SIGNAL(valueChanged(double)),
-             this, SLOT(changeFOV(double)));
+             this, SLOT(updateFov(double)));
 
    // Model
    qtConnect(mainUi_->translateX, SIGNAL(valueChanged(double)),
-             this, SLOT(changeTranslation()));
+             this, SLOT(updateTranslation()));
    qtConnect(mainUi_->translateY, SIGNAL(valueChanged(double)),
-             this, SLOT(changeTranslation()));
+             this, SLOT(updateTranslation()));
    qtConnect(mainUi_->translateZ, SIGNAL(valueChanged(double)),
-             this, SLOT(changeTranslation()));
+             this, SLOT(updateTranslation()));
 
    qtConnect(mainUi_->rotateX, SIGNAL(valueChanged(int)),
-             this, SLOT(changeRotation()));
+             this, SLOT(updateRotation()));
    qtConnect(mainUi_->rotateY, SIGNAL(valueChanged(int)),
-             this, SLOT(changeRotation()));
+             this, SLOT(updateRotation()));
    qtConnect(mainUi_->rotateZ, SIGNAL(valueChanged(int)),
-             this, SLOT(changeRotation()));
+             this, SLOT(updateRotation()));
 
    qtConnect(mainUi_->scaleEntry, SIGNAL(valueChanged(double)),
-             this, SLOT(changeScale(double)));
+             this, SLOT(updateScale(double)));
 
    // Lighting/Material
    qtConnect(mainUi_->powerEntry, SIGNAL(valueChanged(double)),
-             this, SLOT(changeSpecularPower(double)));
+             this, SLOT(updateSpecularPower(double)));
 
    qtConnect(mainUi_->albedoX, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAlbedo()));
+             this, SLOT(updateAlbedo()));
    qtConnect(mainUi_->albedoY, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAlbedo()));
+             this, SLOT(updateAlbedo()));
    qtConnect(mainUi_->albedoZ, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAlbedo()));
+             this, SLOT(updateAlbedo()));
 
    qtConnect(mainUi_->ambientX, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAmbient()));
+             this, SLOT(updateAmbient()));
    qtConnect(mainUi_->ambientY, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAmbient()));
+             this, SLOT(updateAmbient()));
    qtConnect(mainUi_->ambientZ, SIGNAL(valueChanged(double)),
-             this, SLOT(changeAmbient()));
+             this, SLOT(updateAmbient()));
 
    qtConnect(mainUi_->diffuseX, SIGNAL(valueChanged(double)),
-             this, SLOT(changeDiffuse()));
+             this, SLOT(updateDiffuse()));
    qtConnect(mainUi_->diffuseY, SIGNAL(valueChanged(double)),
-             this, SLOT(changeDiffuse()));
+             this, SLOT(updateDiffuse()));
    qtConnect(mainUi_->diffuseZ, SIGNAL(valueChanged(double)),
-             this, SLOT(changeDiffuse()));
+             this, SLOT(updateDiffuse()));
 
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
@@ -70,57 +70,67 @@ MainView::~MainView()
 {
 }
 
-void MainView::changeCamera()
+void MainView::updateCamera()
 {
    scene_->setCamera(mainUi_->cameraX->value(),
                      mainUi_->cameraY->value(),
                      mainUi_->cameraZ->value());
 }
 
-void MainView::changeTranslation()
+void MainView::setCameraPosition(double x, double y, double z)
+{
+   scene_->setCamera(x, y ,z);
+}
+
+void MainView::updateTranslation()
 {
    scene_->setTranslation(mainUi_->translateX->value(),
                           mainUi_->translateY->value(),
                           mainUi_->translateZ->value());
 }
 
-void MainView::changeRotation()
+void MainView::setTranslation(double x, double y, double z)
+{
+   scene_->setTranslation(x, y, z);
+}
+
+void MainView::updateRotation()
 {
    scene_->setRotation(mainUi_->rotateX->value(),
                        mainUi_->rotateY->value(),
                        mainUi_->rotateZ->value());
 }
 
-void MainView::changeFOV(double fov)
+void MainView::updateFov(double fov)
 {
    scene_->setFOV(fov);
 }
 
-void MainView::changeScale(double scale)
+void MainView::updateScale(double scale)
 {
    scene_->setScale(scale);
 }
 
-void MainView::changeSpecularPower(double power)
+void MainView::updateSpecularPower(double power)
 {
    scene_->setSpecularPower(power);
 }
 
-void MainView::changeAlbedo()
+void MainView::updateAlbedo()
 {
    scene_->setAlbedo(mainUi_->albedoX->value(),
                      mainUi_->albedoY->value(),
                      mainUi_->albedoZ->value());
 }
 
-void MainView::changeAmbient()
+void MainView::updateAmbient()
 {
    scene_->setAmbient(mainUi_->ambientX->value(),
                       mainUi_->ambientY->value(),
                       mainUi_->ambientZ->value());
 }
 
-void MainView::changeDiffuse()
+void MainView::updateDiffuse()
 {
    scene_->setDiffuse(mainUi_->diffuseX->value(),
                       mainUi_->diffuseY->value(),

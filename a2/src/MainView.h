@@ -22,19 +22,23 @@ public:
    void createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals);
    void show();
 
+   void setCameraPosition(double x, double y, double z);
+   void setTranslation(double x, double y, double z);
+
 signals:
    void exitSelected(bool);
 
 private slots:
-   void changeCamera();
-   void changeTranslation();
-   void changeRotation();
-   void changeFOV(double fov);
-   void changeScale(double scale);
-   void changeSpecularPower(double power);
-   void changeAlbedo();
-   void changeAmbient();
-   void changeDiffuse();
+   void updateCamera();
+
+   void updateTranslation();
+   void updateRotation();
+   void updateFov(double fov);
+   void updateScale(double scale);
+   void updateSpecularPower(double power);
+   void updateAlbedo();
+   void updateAmbient();
+   void updateDiffuse();
 
 private:
    void setupUi();

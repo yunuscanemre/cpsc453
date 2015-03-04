@@ -11,7 +11,8 @@
 using namespace std;
 // VAO and VBO to handle vertex state and data
 GLuint vertexVbo;
-GLuint myIndexBuffer;
+GLuint normalVbo;
+GLuint indiceVbo;
 
 // shader program to use
 GLuint myShaderProgram;
@@ -21,7 +22,7 @@ GLuint myShaderProgram;
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
 //#define VERTEX_INDICES 3
-#define NUM_COMPONENTS_VERTEX 3
+
 GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* vertices,
                    QVector<GLshort>* indices,
@@ -30,7 +31,7 @@ GlWidget::GlWidget(QWidget *parent,
       qVAO_(NULL),
       cameraX_(0),
       cameraY_(0),
-      cameraZ_(8),
+      cameraZ_(2.61),
       transX_(0),
       transY_(0),
       transZ_(0),
@@ -266,8 +267,8 @@ void GlWidget::setupRenderingContext()
                          (void*) 0
                         );
 
-   glGenBuffers(1, &myIndexBuffer );
-   glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, myIndexBuffer );
+   glGenBuffers(1, &indiceVbo );
+   glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, indiceVbo );
    glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(GLshort)*indices_->size(), indices_->data(), GL_STATIC_DRAW );
 
    // Load face indices into the index buffer

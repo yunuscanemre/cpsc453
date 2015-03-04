@@ -1,6 +1,7 @@
 #include <MainView.h>
 #include <GlWidget.h>
 #include <QVBoxLayout>
+#include <glm/glm.hpp>
 
 #include <Helpers.h>
 
@@ -72,33 +73,33 @@ MainView::~MainView()
 
 void MainView::updateCamera()
 {
-   scene_->setCamera(mainUi_->cameraX->value(),
-                     mainUi_->cameraY->value(),
-                     mainUi_->cameraZ->value());
+   scene_->setCamera(glm::vec3(mainUi_->cameraX->value(),
+                               mainUi_->cameraY->value(),
+                               mainUi_->cameraZ->value()));
 }
 
-void MainView::setCameraPosition(double x, double y, double z)
+void MainView::setCameraPosition(glm::vec3 position)
 {
-   scene_->setCamera(x, y ,z);
+   scene_->setCamera(position);
 }
 
 void MainView::updateTranslation()
 {
-   scene_->setTranslation(mainUi_->translateX->value(),
-                          mainUi_->translateY->value(),
-                          mainUi_->translateZ->value());
+   scene_->setTranslation(glm::vec3(mainUi_->translateX->value(),
+                                    mainUi_->translateY->value(),
+                                    mainUi_->translateZ->value()));
 }
 
-void MainView::setTranslation(double x, double y, double z)
+void MainView::setTranslation(glm::vec3 translation)
 {
-   scene_->setTranslation(x, y, z);
+   scene_->setTranslation(translation);
 }
 
 void MainView::updateRotation()
 {
-   scene_->setRotation(mainUi_->rotateX->value(),
-                       mainUi_->rotateY->value(),
-                       mainUi_->rotateZ->value());
+   scene_->setRotation(glm::vec3(mainUi_->rotateX->value(),
+                                 mainUi_->rotateY->value(),
+                                 mainUi_->rotateZ->value()));
 }
 
 void MainView::updateFov(double fov)
@@ -118,23 +119,23 @@ void MainView::updateSpecularPower(double power)
 
 void MainView::updateAlbedo()
 {
-   scene_->setAlbedo(mainUi_->albedoX->value(),
-                     mainUi_->albedoY->value(),
-                     mainUi_->albedoZ->value());
+   scene_->setAlbedo(glm::vec3(mainUi_->albedoX->value(),
+                               mainUi_->albedoY->value(),
+                               mainUi_->albedoZ->value()));
 }
 
 void MainView::updateAmbient()
 {
-   scene_->setAmbient(mainUi_->ambientX->value(),
-                      mainUi_->ambientY->value(),
-                      mainUi_->ambientZ->value());
+   scene_->setAmbient(glm::vec3(mainUi_->ambientX->value(),
+                                mainUi_->ambientY->value(),
+                                mainUi_->ambientZ->value()));
 }
 
 void MainView::updateDiffuse()
 {
-   scene_->setDiffuse(mainUi_->diffuseX->value(),
-                      mainUi_->diffuseY->value(),
-                      mainUi_->diffuseZ->value());
+   scene_->setDiffuse(glm::vec3(mainUi_->diffuseX->value(),
+                                mainUi_->diffuseY->value(),
+                                mainUi_->diffuseZ->value()));
 }
 
 void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals)

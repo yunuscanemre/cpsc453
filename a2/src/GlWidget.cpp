@@ -4,7 +4,6 @@
 #include <iostream>
 #include <Helpers.h>
 #include <QOpenGLVertexArrayObject>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -29,27 +28,15 @@ GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* normals) :
       QOpenGLWidget(parent),
       qVAO_(NULL),
-      cameraX_(0),
-      cameraY_(0),
-      cameraZ_(2.61),
-      transX_(0),
-      transY_(0),
-      transZ_(0),
-      rotateX_(0.0),
-      rotateY_(0.0),
-      rotateZ_(0.0),
+      cameraPosition_(0.0, 0.0, 1.0),
+      translation_(0.0, 0.0, 0.0),
+      rotation_(0.0, 0.0, 0.0),
       fov_(45),
       scale_(1),
       power_(1),
-      albedoX_(0.7),
-      albedoY_(0.7),
-      albedoZ_(0.7),
-      ambientX_(0.1),
-      ambientY_(0.1),
-      ambientZ_(0.1),
-      diffuseX_(0.5),
-      diffuseY_(0.2),
-      diffuseZ_(0.7),
+      albedo_(0.7, 0.7, 0.7),
+      ambient_(0.1, 0.1, 0,1),
+      diffuse_(0.5, 0.2, 0,7),
       vertices_(vertices),
       indices_(indices),
       normals_(normals)
@@ -75,10 +62,10 @@ void GlWidget::paintGL()
    glm::mat4 projMatrix = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
 
    // Camera matrix
-   glm::mat4 viewMatrix = glm::lookAt(glm::vec3(cameraX_, cameraY_, cameraZ_), // Camera is at (4,3,3), in World Space
-   glm::vec3(0, 0, 0), // and looks at the origin
-   glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-         );
+   glm::mat4 viewMatrix = glm::lookAt(cameraPosition_, // Camera is at (X,Y,Z), in World Space
+                                      glm::vec3(0, 0, 0), // and looks at the origin
+                                      glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+                                     );
 
    // Model matrix : an identity matrix (model will be at the origin)
    glm::mat4 Model = glm::mat4(1.0f);
@@ -86,14 +73,14 @@ void GlWidget::paintGL()
    // Scale Model
    Model = glm::scale(Model, glm::vec3(scale_));
 
-   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(transX_, transY_, transZ_));
+   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation_);
 
    // Translate View
    viewMatrix = viewMatrix*translationMatrix;
 
-   glm::mat4 xRotationMatrix = glm::rotate(viewMatrix, rotateX_, glm::vec3(1.0f, 0.0f, 0.0f));
-   glm::mat4 yRotationMatrix = glm::rotate(viewMatrix, rotateY_, glm::vec3(0.0f, 1.0f, 0.0f));
-   glm::mat4 zRotationMatrix = glm::rotate(viewMatrix, rotateZ_, glm::vec3(0.0f, 0.0f, 1.0f));
+   glm::mat4 xRotationMatrix = glm::rotate(viewMatrix, rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
+   glm::mat4 yRotationMatrix = glm::rotate(viewMatrix, rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
+   glm::mat4 zRotationMatrix = glm::rotate(viewMatrix, rotation_.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
    // Rotate View
    viewMatrix = viewMatrix*xRotationMatrix;
@@ -111,9 +98,9 @@ void GlWidget::paintGL()
    glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
 
    glUniform1f(specularPowerID, power_);
-   glUniform3fv(specularAlbedoID, 1, &glm::vec3(albedoX_, albedoY_, albedoZ_)[0]);
-   glUniform3fv(ambientID, 1, &glm::vec3(ambientX_, ambientY_, ambientZ_)[0]);
-   glUniform3fv(diffuseAlbedoID, 1, &glm::vec3(diffuseX_, diffuseY_, diffuseZ_)[0]);
+   glUniform3fv(specularAlbedoID, 1, &albedo_[0]);
+   glUniform3fv(ambientID, 1, &ambient_[0]);
+   glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
 
 
    // Note that this version of the draw command uses the
@@ -130,30 +117,23 @@ void GlWidget::resizeGL(int w, int h)
    glViewport(0, 0, w, h);
 }
 
-void GlWidget::setCamera(double x, double y, double z)
+void GlWidget::setCamera(glm::vec3 position)
 {
-   cameraX_ = x;
-   cameraY_ = y;
-   cameraZ_ = z;
+   cameraPosition_ = position;
    update();
 }
 
-void GlWidget::setTranslation(double x, double y, double z)
+void GlWidget::setTranslation(glm::vec3 translation)
 {
-   transX_ = x;
-   transY_ = y;
-   transZ_ = z;
+   translation_ = translation;
    update();
 }
 
-void GlWidget::setRotation(int x, int y, int z)
+void GlWidget::setRotation(glm::vec3 rotationsInDegrees)
 {
-   float xRad = M_PI*(float)x/180.0;
-   float yRad = M_PI*(float)y/180.0;
-   float zRad = M_PI*(float)z/180.0;
-   rotateX_ = xRad;
-   rotateY_ = yRad;
-   rotateZ_ = zRad;
+   rotation_.x = M_PI*(float)rotationsInDegrees.y/180.0;
+   rotation_.y = M_PI*(float)rotationsInDegrees.x/180.0;
+   rotation_.z = M_PI*(float)rotationsInDegrees.z/180.0;
    update();
 }
 
@@ -175,27 +155,21 @@ void GlWidget::setSpecularPower(double power)
    update();
 }
 
-void GlWidget::setAlbedo(double x, double y, double z)
+void GlWidget::setAlbedo(glm::vec3 albedo)
 {
-   albedoX_ = (float) x;
-   albedoY_ = (float) y;
-   albedoZ_ = (float) z;
+   albedo_ = albedo;
    update();
 }
 
-void GlWidget::setAmbient(double x, double y, double z)
+void GlWidget::setAmbient(glm::vec3 ambient)
 {
-   ambientX_ = (float) x;
-   ambientY_ = (float) y;
-   ambientZ_ = (float) z;
+   ambient_ = ambient;
    update();
 }
 
-void GlWidget::setDiffuse(double x, double y, double z)
+void GlWidget::setDiffuse(glm::vec3 diffuse)
 {
-   diffuseX_ = (float) x;
-   diffuseY_ = (float) y;
-   diffuseZ_ = (float) z;
+   diffuse_ = diffuse;
    update();
 }
 
@@ -225,7 +199,6 @@ void GlWidget::setupRenderingContext()
    loadAllShaders();
 
    // Now setup the geometry in a vertex buffer object
-
    // setup the vertex state array object. All subsequent buffers will
    // be bound to it.
    qVAO_ = new QOpenGLVertexArrayObject();
@@ -235,21 +208,8 @@ void GlWidget::setupRenderingContext()
 
    glGenBuffers(1, &vertexVbo);
    glBindBuffer( GL_ARRAY_BUFFER, vertexVbo);
-
-   // Allocate space and load vertex data into the buffer.
    int verticesByteSize = vertices_->size()*sizeof(GLfloat);
-   int normalsByteSize = normals_->size()*sizeof(GLfloat);
-   int totalByteSize = verticesByteSize + normalsByteSize;
-   glBufferData(GL_ARRAY_BUFFER, totalByteSize, NULL, GL_STATIC_DRAW);
-
-   glBufferSubData(GL_ARRAY_BUFFER, 0, verticesByteSize, vertices_->data());
-   glBufferSubData(GL_ARRAY_BUFFER, verticesByteSize, normalsByteSize, normals_->data());
-//   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices), sizeof(tetColours),
-//         tetColours);
-//   glBufferSubData(GL_ARRAY_BUFFER, sizeof(tetVertices) + sizeof(tetColours),
-//         sizeof(tetNormals), tetNormals);
-
-// THIS DOESNT SEEM RIGHT
+   glBufferData(GL_ARRAY_BUFFER, verticesByteSize, vertices_->data(), GL_STATIC_DRAW);
    glEnableVertexAttribArray(VERTEX_DATA);
    glVertexAttribPointer(VERTEX_DATA, // attribute. No particular reason for 0, but must match the layout in the shader.
                          4,                  // size
@@ -259,32 +219,23 @@ void GlWidget::setupRenderingContext()
                          (void*) 0            // array buffer offset
                         );
    glEnableVertexAttribArray(VERTEX_NORMAL);
+
+   glGenBuffers(1, &normalVbo);
+   glBindBuffer( GL_ARRAY_BUFFER, normalVbo);
+   int normalsByteSize = normals_->size()*sizeof(GLfloat);
+   glBufferData(GL_ARRAY_BUFFER, normalsByteSize, normals_->data(), GL_STATIC_DRAW);
    glVertexAttribPointer(VERTEX_NORMAL,
-                         3,                  // size
-                         GL_FLOAT,           // type
-                         GL_FALSE,           // normalized?
-                         0,                  // stride
+                         3,
+                         GL_FLOAT,
+                         GL_FALSE,
+                         0,
                          (void*) 0
                         );
 
    glGenBuffers(1, &indiceVbo );
    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, indiceVbo );
-   glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(GLshort)*indices_->size(), indices_->data(), GL_STATIC_DRAW );
-
-   // Load face indices into the index buffer
-//   glGenBuffers(1, &myIndexBuffer);
-//   glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, myIndexBuffer);
-//   glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(tetFaceIndices),
-//         tetFaceIndices, GL_STATIC_DRAW);
-
-   // Now we'll use the attribute locations to map our vertex data (in
-   // the VBO) to the shader
-//   glEnableVertexAttribArray( VERTEX_DATA);
-//   glVertexAttribPointer( VERTEX_DATA, 3, GL_FLOAT, GL_FALSE, 0,
-//         (const GLvoid*) 0);
-//   glEnableVertexAttribArray( VERTEX_COLOUR);
-//   glVertexAttribPointer( VERTEX_COLOUR, 4, GL_FLOAT, GL_FALSE, 0,
-//         (const GLvoid*) vertices_->size());
+   int indicesByteSize = sizeof(GLshort)*indices_->size();
+   glBufferData( GL_ELEMENT_ARRAY_BUFFER, indicesByteSize, indices_->data(), GL_STATIC_DRAW );
 }
 
 void GlWidget::loadAllShaders()

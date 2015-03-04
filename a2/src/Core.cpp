@@ -172,5 +172,5 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
 
    glm::vec3 cross = glm::cross(c-a, b-a);
 
-   return cross;
+   return -cross;
 }

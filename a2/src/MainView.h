@@ -5,6 +5,7 @@
 #include <ui_MainWindow.h>
 #include <QVector>
 #include <GL/gl.h>
+#include <glm/glm.hpp>
 
 class GlWidget;
 class QMainWindow;
@@ -22,8 +23,8 @@ public:
    void createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals);
    void show();
 
-   void setCameraPosition(double x, double y, double z);
-   void setTranslation(double x, double y, double z);
+   void setCameraPosition(glm::vec3 position);
+   void setTranslation(glm::vec3 translation);
 
 signals:
    void exitSelected(bool);

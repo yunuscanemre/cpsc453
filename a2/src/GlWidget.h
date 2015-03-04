@@ -5,6 +5,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QVector>
+#include <glm/glm.hpp>
 
 class QOpenGLVertexArrayObject;
 
@@ -19,15 +20,15 @@ public:
             QVector<GLfloat>* normals);
    ~GlWidget();
 
-   void setCamera(double x, double y, double z);
-   void setTranslation(double x, double y, double z);
-   void setRotation(int x, int y, int z);
+   void setCamera(glm::vec3);
+   void setTranslation(glm::vec3);
+   void setRotation(glm::vec3);
    void setFOV(double fov);
    void setScale(double scale);
    void setSpecularPower(double power);
-   void setAlbedo(double x, double y, double z);
-   void setAmbient(double x, double y, double z);
-   void setDiffuse(double x, double y, double z);
+   void setAlbedo(glm::vec3);
+   void setAmbient(glm::vec3);
+   void setDiffuse(glm::vec3);
 
 protected:
    virtual void paintGL();
@@ -39,29 +40,20 @@ private:
    bool loadShaderFile(const char *filename, GLuint shader);
    void loadAllShaders();
 
-private:
-   QOpenGLVertexArrayObject* qVAO_;
-   float cameraX_;
-   float cameraY_;
-   float cameraZ_;
-   float transX_;
-   float transY_;
-   float transZ_;
-   float rotateX_;
-   float rotateY_;
-   float rotateZ_;
+// Public for convinience of not writing getters. MUST set with setter cause it calls update
+public:
+   glm::vec3 cameraPosition_;
+   glm::vec3 translation_;
+   glm::vec3 rotation_;
    float fov_;
    float scale_;
    float power_;
-   float albedoX_;
-   float albedoY_;
-   float albedoZ_;
-   float ambientX_;
-   float ambientY_;
-   float ambientZ_;
-   float diffuseX_;
-   float diffuseY_;
-   float diffuseZ_;
+   glm::vec3 albedo_;
+   glm::vec3 ambient_;
+   glm::vec3 diffuse_;
+
+private:
+   QOpenGLVertexArrayObject* qVAO_;
    QVector<GLfloat>* vertices_;
    QVector<GLshort>* indices_;
    QVector<GLfloat>* normals_;

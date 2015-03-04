@@ -13,7 +13,10 @@ class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions
    Q_OBJECT
 
 public:
-   GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals);
+   GlWidget(QWidget *parent,
+            QVector<GLfloat>* vertices,
+            QVector<GLshort>* indices,
+            QVector<GLfloat>* normals);
    ~GlWidget();
 
    void setCamera(int x, int y, int z);
@@ -60,6 +63,7 @@ private:
    float diffuseY_;
    float diffuseZ_;
    QVector<GLfloat>* vertices_;
+   QVector<GLshort>* indices_;
    QVector<GLfloat>* normals_;
 };
 

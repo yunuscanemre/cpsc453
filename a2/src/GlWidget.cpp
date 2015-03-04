@@ -16,38 +16,16 @@ GLuint myIndexBuffer;
 // shader program to use
 GLuint myShaderProgram;
 
-// Geometry for the simple scene - a tetrahedron with some vertex
-// attributes and a list of faces specifying connectivity
-//static const GLfloat tetVertices[] = {
-//      -1.0f, 0.0f, 0.0f,
-//       1.0f, 0.0f, 0.0f,
-//       0.0f, 1.0f, 0.0f,
-//       -1.0f, 2.0f, 0.0f,
-//       1.0f, 2.0f, 0.0f,
-//       0.0f, 1.0f, 0.0f,
-//
-//};
-//static const GLushort tetFaceIndices[] = {
-// 0, 1, 2
-//};
-//static const GLfloat tetColours[] = {
-//
-//};
-
-//static const GLfloat tetNormals[] = {
-//  0.0f,0.0f,-1.0f,
-//  0.0f,1.0f,0.0f,
-//  -0.707107f, -0.707107f,0.0f,
-//  0.707107f, -0.707107f,0.0f
-//};
-
 // Constants to help with location bindings
 #define VERTEX_DATA 0
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
 //#define VERTEX_INDICES 3
 #define NUM_COMPONENTS_VERTEX 3
-GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>* normals) :
+GlWidget::GlWidget(QWidget *parent,
+                   QVector<GLfloat>* vertices,
+                   QVector<GLshort>* indices,
+                   QVector<GLfloat>* normals) :
       QOpenGLWidget(parent),
       qVAO_(NULL),
       cameraX_(0),
@@ -72,9 +50,9 @@ GlWidget::GlWidget(QWidget *parent, QVector<GLfloat>* vertices, QVector<GLfloat>
       diffuseY_(0.2),
       diffuseZ_(0.7),
       vertices_(vertices),
+      indices_(indices),
       normals_(normals)
 {
-
 }
 
 GlWidget::~GlWidget()
@@ -141,7 +119,8 @@ void GlWidget::paintGL()
    // bound index buffer to get the vertex coordinates.
 //   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
    int numberOfPoints = (vertices_->size()/4);
-   glDrawArrays(GL_TRIANGLES, 0, numberOfPoints);
+//   glDrawArrays(GL_TRIANGLES, 0, numberOfPoints);
+   glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -286,6 +265,10 @@ void GlWidget::setupRenderingContext()
                          0,                  // stride
                          (void*) 0
                         );
+
+   glGenBuffers(1, &myIndexBuffer );
+   glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, myIndexBuffer );
+   glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(GLshort)*indices_->size(), indices_->data(), GL_STATIC_DRAW );
 
    // Load face indices into the index buffer
 //   glGenBuffers(1, &myIndexBuffer);

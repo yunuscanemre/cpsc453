@@ -19,7 +19,7 @@ public:
    MainView();
    virtual ~MainView();
 
-   void createGlWidget(QVector<GLfloat>* vertices, QVector<GLfloat>* normals);
+   void createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals);
    void show();
 
 signals:

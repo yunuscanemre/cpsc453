@@ -127,9 +127,9 @@ void MainView::changeDiffuse()
                       mainUi_->diffuseZ->value());
 }
 
-void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLfloat>* normals)
+void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals)
 {
-   scene_ = new GlWidget(mainWindow_, vertices, normals);
+   scene_ = new GlWidget(mainWindow_, vertices, indices, normals);
    layout_->addWidget(scene_);
 }
 

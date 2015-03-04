@@ -19,8 +19,8 @@ public:
             QVector<GLfloat>* normals);
    ~GlWidget();
 
-   void setCamera(int x, int y, int z);
-   void setTranslation(int x, int y, int z);
+   void setCamera(double x, double y, double z);
+   void setTranslation(double x, double y, double z);
    void setRotation(int x, int y, int z);
    void setFOV(double fov);
    void setScale(double scale);
@@ -41,12 +41,12 @@ private:
 
 private:
    QOpenGLVertexArrayObject* qVAO_;
-   int cameraX_;
-   int cameraY_;
-   int cameraZ_;
-   int transX_;
-   int transY_;
-   int transZ_;
+   float cameraX_;
+   float cameraY_;
+   float cameraZ_;
+   float transX_;
+   float transY_;
+   float transZ_;
    float rotateX_;
    float rotateY_;
    float rotateZ_;

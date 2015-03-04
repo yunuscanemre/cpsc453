@@ -9,21 +9,21 @@ MainView::MainView()
    setupUi();
 
    // Camera
-   qtConnect(mainUi_->cameraX, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->cameraX, SIGNAL(valueChanged(double)),
              this, SLOT(changeCamera()));
-   qtConnect(mainUi_->cameraY, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->cameraY, SIGNAL(valueChanged(double)),
              this, SLOT(changeCamera()));
-   qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(double)),
              this, SLOT(changeCamera()));
    qtConnect(mainUi_->fovEntry, SIGNAL(valueChanged(double)),
              this, SLOT(changeFOV(double)));
 
    // Model
-   qtConnect(mainUi_->translateX, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->translateX, SIGNAL(valueChanged(double)),
              this, SLOT(changeTranslation()));
-   qtConnect(mainUi_->translateY, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->translateY, SIGNAL(valueChanged(double)),
              this, SLOT(changeTranslation()));
-   qtConnect(mainUi_->translateZ, SIGNAL(valueChanged(int)),
+   qtConnect(mainUi_->translateZ, SIGNAL(valueChanged(double)),
              this, SLOT(changeTranslation()));
 
    qtConnect(mainUi_->rotateX, SIGNAL(valueChanged(int)),

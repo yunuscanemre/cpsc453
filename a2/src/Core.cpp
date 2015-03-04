@@ -18,8 +18,8 @@ Core::Core()
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
 
-//   QString fileToLoad = "models/faerie/weapon.md2";
-   QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
+   QString fileToLoad = "models/faerie/weapon.md2";
+//   QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
    if(fileToLoad != NULL)
    {
       md2_->LoadModel(fileToLoad.toStdString().c_str());
@@ -33,13 +33,32 @@ Core::Core()
    map_ = new QMap<int, QList<triangle_t*>>();
    indices_ = new QVector<GLshort>();
 
+   float max = md2_->m_vertices[0][0];
+   float xmax = md2_->m_vertices[0][0];
+   float ymax = md2_->m_vertices[0][1];
+   float value = 0;
    for(int i = 0; i < md2_->num_xyz; i++)
    {
       for(int j = 0; j<3; j++)
       {
-         vertices_->append(md2_->m_vertices[i][j]);
+         value = md2_->m_vertices[i][j];
+         max = (value > max ? value : max);
+         vertices_->append(value);
+
+         if(j==1)
+            xmax = value > xmax ? value : xmax;
+         if(j==2)
+            ymax = value > ymax ? value : ymax;
+
       }
       vertices_->append(1.0f);
+   }
+
+   mapVerticesBetweenMinusOneToOne(max);
+
+   for(int i = 0; i < vertices_->size(); i++)
+   {
+      fprintf(stderr, "%f \n", vertices_->at(i));
    }
 
    for(int i = 0; i<md2_->num_tris; i++)
@@ -56,10 +75,9 @@ Core::Core()
 
    calculateAndAppendAverageNormals();
 
-   fprintf(stderr, "num vertices %d \n", vertices_->size());
-   fprintf(stderr, "num indices %d \n", indices_->size());
-   fprintf(stderr, "num normals %d \n", normals_->size());
-
+//   fprintf(stderr, "num vertices %d \n", vertices_->size());
+//   fprintf(stderr, "num indices %d \n", indices_->size());
+//   fprintf(stderr, "num normals %d \n", normals_->size());
 
    view_->createGlWidget(vertices_, indices_, normals_);
 }
@@ -78,9 +96,22 @@ Core::~Core()
    deletePointer(view_);
 }
 
+void Core::mapVerticesBetweenMinusOneToOne(float max)
+{
+   int skip = 3;
+   for(int i = 0; i<vertices_->size(); i++)
+   {
+      if(i!=skip)
+      {
+         vertices_->replace(i, vertices_->at(i)/max);
+      }
+      else
+         skip+=4;
+   }
+}
+
 void Core::calculateAndAppendAverageNormals()
 {
-//   fprintf(stderr, "here 3\n");
    for(int vertex = 0; vertex < md2_->num_xyz; vertex++)
    {
       GLfloat totalx = 0.0, totaly = 0.0, totalz = 0.0;
@@ -105,14 +136,11 @@ void Core::calculateAndAppendAverageNormals()
       normals_->append(avrgNormal.y);
       normals_->append(avrgNormal.z);
    }
-//   fprintf(stderr, "here 4\n");
 }
 
 glm::vec3 Core::calculateNormal(triangle_t* triangle)
 {
-//   fprintf(stderr, "here5 \n");
    float c_x = md2_->m_vertices[triangle->index_xyz[2]][0];
-//   fprintf(stderr, "here6 \n");
    float c_y = md2_->m_vertices[triangle->index_xyz[2]][1];
    float c_z = md2_->m_vertices[triangle->index_xyz[2]][2];
    glm::vec3 c(c_x, c_y, c_z);

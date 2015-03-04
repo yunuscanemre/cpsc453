@@ -129,7 +129,7 @@ void GlWidget::resizeGL(int w, int h)
    glViewport(0, 0, w, h);
 }
 
-void GlWidget::setCamera(int x, int y, int z)
+void GlWidget::setCamera(double x, double y, double z)
 {
    cameraX_ = x;
    cameraY_ = y;
@@ -137,7 +137,7 @@ void GlWidget::setCamera(int x, int y, int z)
    update();
 }
 
-void GlWidget::setTranslation(int x, int y, int z)
+void GlWidget::setTranslation(double x, double y, double z)
 {
    transX_ = x;
    transY_ = y;

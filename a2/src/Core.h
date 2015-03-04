@@ -26,6 +26,7 @@ private slots:
 private:
    glm::vec3 calculateNormal(triangle_t* triangle);
    void calculateAndAppendAverageNormals();
+   void mapVerticesBetweenMinusOneToOne(float max);
 
 private: // Members
    MainView* view_;

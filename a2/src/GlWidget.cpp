@@ -33,7 +33,7 @@ GlWidget::GlWidget(QWidget *parent,
       vertices_(vertices),
       indices_(indices),
       normals_(normals),
-      cameraPosition_(0.0, 0.0, 1.0),
+      cameraPosition_(0.0, 0.0, 2.613),
       translation_(0.0, 0.0, 0.0),
       rotation_(0.0, 0.0, 0.0),
       fov_(45),
@@ -75,19 +75,18 @@ void GlWidget::paintGL()
    // Scale Model
    Model = glm::scale(Model, glm::vec3(scale_));
 
-   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation_);
-
-   // Translate View
-   viewMatrix = viewMatrix*translationMatrix;
-
-   glm::mat4 xRotationMatrix = glm::rotate(viewMatrix, rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
-   glm::mat4 yRotationMatrix = glm::rotate(viewMatrix, rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
-   glm::mat4 zRotationMatrix = glm::rotate(viewMatrix, rotation_.z, glm::vec3(0.0f, 0.0f, 1.0f));
+   glm::mat4 xRotationMatrix = glm::rotate(Model, rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
+   glm::mat4 yRotationMatrix = glm::rotate(Model, rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
+   glm::mat4 zRotationMatrix = glm::rotate(Model, rotation_.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
    // Rotate View
-   viewMatrix = viewMatrix*xRotationMatrix;
-   viewMatrix = viewMatrix*yRotationMatrix;
-   viewMatrix = viewMatrix*zRotationMatrix;
+   Model = Model*xRotationMatrix;
+   Model = Model*yRotationMatrix;
+   Model = Model*zRotationMatrix;
+
+   // Translate View
+   glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation_);
+   viewMatrix = viewMatrix*translationMatrix;
 
    glm::mat4 modelViewMatrix = viewMatrix * Model;
 
@@ -104,12 +103,6 @@ void GlWidget::paintGL()
    glUniform3fv(ambientID, 1, &ambient_[0]);
    glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
 
-
-   // Note that this version of the draw command uses the
-   // bound index buffer to get the vertex coordinates.
-//   glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-   int numberOfPoints = (vertices_->size()/4);
-//   glDrawArrays(GL_TRIANGLES, 0, numberOfPoints);
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
 }
 

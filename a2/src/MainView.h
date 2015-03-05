@@ -26,6 +26,8 @@ public:
    void setCameraPosition(glm::vec3 position);
    void setTranslation(glm::vec3 translation);
 
+   void syncEntriesToCurrentValues();
+
 signals:
    void exitSelected(bool);
 

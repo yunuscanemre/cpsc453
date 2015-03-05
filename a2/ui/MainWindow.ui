@@ -345,6 +345,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -358,6 +361,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -370,6 +376,9 @@
               <widget class="QDoubleSpinBox" name="albedoZ">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
                </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
@@ -398,6 +407,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -411,6 +423,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -423,6 +438,9 @@
               <widget class="QDoubleSpinBox" name="ambientZ">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
                </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
@@ -451,6 +469,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -464,6 +485,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
                </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
                <property name="maximum">
                 <double>1.000000000000000</double>
                </property>
@@ -476,6 +500,9 @@
               <widget class="QDoubleSpinBox" name="diffuseZ">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
                </property>
                <property name="maximum">
                 <double>1.000000000000000</double>

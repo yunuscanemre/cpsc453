@@ -70,8 +70,8 @@ Core::Core()
    float midy = (ymax+ymin)/2;
    mapVerticesBetweenMinusOneToOne(max);
 
-   for(int i = 0; i < vertices_->size(); i++)
-      fprintf(stderr, "%f \n", vertices_->at(i));
+//   for(int i = 0; i < vertices_->size(); i++)
+//      fprintf(stderr, "%f \n", vertices_->at(i));
 
    for(int i = 0; i<md2_->num_tris; i++)
    {
@@ -93,7 +93,7 @@ Core::Core()
    fprintf(stderr, "midx %f, midy %f \n", midx, midy);
 
    view_->createGlWidget(vertices_, indices_, normals_);
-
+   view_->syncEntriesToCurrentValues();
 //   view_->setTranslation(0-midx, 0-midy, 0);
 }
 

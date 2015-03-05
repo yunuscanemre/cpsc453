@@ -138,6 +138,31 @@ void MainView::updateDiffuse()
                                 mainUi_->diffuseZ->value()));
 }
 
+void MainView::syncEntriesToCurrentValues()
+{
+   mainUi_->cameraX->setValue(scene_->cameraPosition_.x);
+   mainUi_->cameraY->setValue(scene_->cameraPosition_.y);
+   mainUi_->cameraZ->setValue(scene_->cameraPosition_.z);
+   mainUi_->translateX->setValue(scene_->translation_.x);
+   mainUi_->translateY->setValue(scene_->translation_.y);
+   mainUi_->translateZ->setValue(scene_->translation_.z);
+   mainUi_->rotateX->setValue(scene_->rotation_.x);
+   mainUi_->rotateY->setValue(scene_->rotation_.y);
+   mainUi_->rotateZ->setValue(scene_->rotation_.z);
+   mainUi_->ambientX->setValue(scene_->ambient_.x);
+   mainUi_->ambientY->setValue(scene_->ambient_.y);
+   mainUi_->ambientZ->setValue(scene_->ambient_.z);
+   mainUi_->albedoX->setValue(scene_->albedo_.x);
+   mainUi_->albedoY->setValue(scene_->albedo_.y);
+   mainUi_->albedoZ->setValue(scene_->albedo_.z);
+   mainUi_->diffuseX->setValue(scene_->diffuse_.x);
+   mainUi_->diffuseY->setValue(scene_->diffuse_.y);
+   mainUi_->diffuseZ->setValue(scene_->diffuse_.z);
+   mainUi_->fovEntry->setValue(scene_->fov_);
+   mainUi_->scaleEntry->setValue(scene_->scale_);
+   mainUi_->powerEntry->setValue(scene_->power_);
+}
+
 void MainView::createGlWidget(QVector<GLfloat>* vertices, QVector<GLshort>* indices, QVector<GLfloat>* normals)
 {
    scene_ = new GlWidget(mainWindow_, vertices, indices, normals);

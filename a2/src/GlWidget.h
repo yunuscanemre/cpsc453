@@ -41,6 +41,12 @@ private:
    void loadAllShaders();
 
 // Public for convinience of not writing getters. MUST set with setter cause it calls update
+private:
+   QOpenGLVertexArrayObject* qVAO_;
+   QVector<GLfloat>* vertices_;
+   QVector<GLshort>* indices_;
+   QVector<GLfloat>* normals_;
+
 public:
    glm::vec3 cameraPosition_;
    glm::vec3 translation_;
@@ -51,12 +57,6 @@ public:
    glm::vec3 albedo_;
    glm::vec3 ambient_;
    glm::vec3 diffuse_;
-
-private:
-   QOpenGLVertexArrayObject* qVAO_;
-   QVector<GLfloat>* vertices_;
-   QVector<GLshort>* indices_;
-   QVector<GLfloat>* normals_;
 };
 
 #endif /* GLWIDGET_H_ */

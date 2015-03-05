@@ -4,6 +4,8 @@
 #include <iostream>
 #include <Helpers.h>
 #include <QOpenGLVertexArrayObject>
+#include <glm/glm.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -28,6 +30,9 @@ GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* normals) :
       QOpenGLWidget(parent),
       qVAO_(NULL),
+      vertices_(vertices),
+      indices_(indices),
+      normals_(normals),
       cameraPosition_(0.0, 0.0, 1.0),
       translation_(0.0, 0.0, 0.0),
       rotation_(0.0, 0.0, 0.0),
@@ -35,11 +40,8 @@ GlWidget::GlWidget(QWidget *parent,
       scale_(1),
       power_(1),
       albedo_(0.7, 0.7, 0.7),
-      ambient_(0.1, 0.1, 0,1),
-      diffuse_(0.5, 0.2, 0,7),
-      vertices_(vertices),
-      indices_(indices),
-      normals_(normals)
+      ambient_(0.1, 0.1, 0.1),
+      diffuse_(0.5, 0.2, 0.7)
 {
 }
 
@@ -131,8 +133,8 @@ void GlWidget::setTranslation(glm::vec3 translation)
 
 void GlWidget::setRotation(glm::vec3 rotationsInDegrees)
 {
-   rotation_.x = M_PI*(float)rotationsInDegrees.y/180.0;
-   rotation_.y = M_PI*(float)rotationsInDegrees.x/180.0;
+   rotation_.x = M_PI*(float)rotationsInDegrees.x/180.0;
+   rotation_.y = M_PI*(float)rotationsInDegrees.y/180.0;
    rotation_.z = M_PI*(float)rotationsInDegrees.z/180.0;
    update();
 }

@@ -22,6 +22,7 @@ GLuint myShaderProgram;
 #define VERTEX_DATA 0
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
+#define PI 3.14159265
 //#define VERTEX_INDICES 3
 
 GlWidget::GlWidget(QWidget *parent,
@@ -126,9 +127,9 @@ void GlWidget::setTranslation(glm::vec3 translation)
 
 void GlWidget::setRotation(glm::vec3 rotationsInDegrees)
 {
-   rotation_.x = M_PI*(float)rotationsInDegrees.x/180.0;
-   rotation_.y = M_PI*(float)rotationsInDegrees.y/180.0;
-   rotation_.z = M_PI*(float)rotationsInDegrees.z/180.0;
+   rotation_.x = PI*(float)rotationsInDegrees.x/180.0;
+   rotation_.y = PI*(float)rotationsInDegrees.y/180.0;
+   rotation_.z = PI*(float)rotationsInDegrees.z/180.0;
    update();
 }
 

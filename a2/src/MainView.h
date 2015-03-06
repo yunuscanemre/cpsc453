@@ -30,6 +30,7 @@ public:
 
 signals:
    void exitSelected(bool);
+   void loadNewModel(bool);
 
 private slots:
    void updateCamera();
@@ -42,6 +43,11 @@ private slots:
    void updateAlbedo();
    void updateAmbient();
    void updateDiffuse();
+
+   void makeGold();
+   void makeChrome();
+   void makeCopper();
+   void makePlastic();
 
 private:
    void setupUi();

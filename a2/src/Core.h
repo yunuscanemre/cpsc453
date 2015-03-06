@@ -22,6 +22,7 @@ public:
 
 private slots:
    void exit();
+   void loadModel();
 
 private:
    glm::vec3 calculateNormal(triangle_t* triangle);

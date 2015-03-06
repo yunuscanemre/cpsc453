@@ -17,84 +17,95 @@ Core::Core()
 
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
+   qtConnect(view_, SIGNAL(loadNewModel(bool)), this,
+         SLOT(loadModel()));
 
-//   QString fileToLoad = "models/faerie/weapon.md2";
-   QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
-   if(fileToLoad != NULL)
-   {
-      md2_->LoadModel(fileToLoad.toStdString().c_str());
-   }
+   loadModel();
+}
 
-   fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
-   fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
-
-   vertices_ = new QVector<GLfloat>();
-   normals_ = new QVector<GLfloat>();
-   map_ = new QMap<int, QList<triangle_t*>>();
-   indices_ = new QVector<GLshort>();
-
-   float max = md2_->m_vertices[0][0],
-         xmax = md2_->m_vertices[0][0],
-         ymax = md2_->m_vertices[0][1],
-         xmin = md2_->m_vertices[0][0],
-         ymin = md2_->m_vertices[0][0],
-         value = 0;
-   // Get vertices and find max, min
-   for(int i = 0; i < md2_->num_xyz; i++)
-   {
-      for(int j = 0; j<3; j++)
+void Core::loadModel()
+{
+   //   QString fileToLoad = "models/faerie/weapon.md2";
+      QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
+      if(fileToLoad != NULL)
       {
-         value = md2_->m_vertices[i][j];
-         max = (value > max ? value : max);
-         vertices_->append(value);
-
-         if(j==1)
-         {
-            xmax = value > xmax ? value : xmax;
-            xmin = value < xmin ? value : xmin;
-         }
-         if(j==2)
-         {
-            ymax = value > ymax ? value : ymax;
-            ymin = value < ymin ? value : ymin;
-         }
-
+         md2_->LoadModel(fileToLoad.toStdString().c_str());
       }
-      vertices_->append(1.0f);
-   }
 
+      fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
+      fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
 
-   // Map values to range [-1, 1]
-   xmax /= max; xmin /= max; ymax /= max; ymin /= max;
-   float midx = (xmax+xmin)/2;
-   float midy = (ymax+ymin)/2;
-   mapVerticesBetweenMinusOneToOne(max);
+      vertices_ = new QVector<GLfloat>();
+      normals_ = new QVector<GLfloat>();
+      map_ = new QMap<int, QList<triangle_t*>>();
+      indices_ = new QVector<GLshort>();
 
-//   for(int i = 0; i < vertices_->size(); i++)
-//      fprintf(stderr, "%f \n", vertices_->at(i));
-
-   for(int i = 0; i<md2_->num_tris; i++)
-   {
-      triangle_t* triangle = md2_->tris + i;
-      for(int k = 0; k<3; k++)
+      float max = md2_->m_vertices[0][0],
+            xmax = md2_->m_vertices[0][0],
+            ymax = md2_->m_vertices[0][1],
+            xmin = md2_->m_vertices[0][0],
+            ymin = md2_->m_vertices[0][0],
+            value = 0;
+      // Get vertices and find max, min
+      for(int i = 0; i < md2_->num_xyz; i++)
       {
-         int index = triangle->index_xyz[k];
-         indices_->append(index);
-         (*map_)[index].append(triangle);
+         for(int j = 0; j<3; j++)
+         {
+            value = md2_->m_vertices[i][j];
+            max = (value > max ? value : max);
+            vertices_->append(value);
+
+            if(j==1)
+            {
+               xmax = value > xmax ? value : xmax;
+               xmin = value < xmin ? value : xmin;
+            }
+            if(j==2)
+            {
+               ymax = value > ymax ? value : ymax;
+               ymin = value < ymin ? value : ymin;
+            }
+
+         }
+         vertices_->append(1.0f);
       }
-   }
 
 
-   calculateAndAppendAverageNormals();
+      // Map values to range [-1, 1]
+      xmax /= max; xmin /= max; ymax /= max; ymin /= max;
+      float midx = (xmax+xmin)/2;
+      float midy = (ymax+ymin)/2;
+      mapVerticesBetweenMinusOneToOne(max);
 
-//   fprintf(stderr, "num vertices %d \n", vertices_->size());
-//   fprintf(stderr, "num indices %d \n", indices_->size());
-//   fprintf(stderr, "num normals %d \n", normals_->size());
-   fprintf(stderr, "midx %f, midy %f \n", midx, midy);
+   //   for(int i = 0; i < vertices_->size(); i++)
+   //      fprintf(stderr, "%f \n", vertices_->at(i));
 
-   view_->createGlWidget(vertices_, indices_, normals_);
-   view_->syncEntriesToCurrentValues();
-//   view_->setTranslation(0-midx, 0-midy, 0);
+      for(int i = 0; i<md2_->num_tris; i++)
+      {
+         triangle_t* triangle = md2_->tris + i;
+         for(int k = 0; k<3; k++)
+         {
+            int index = triangle->index_xyz[k];
+            indices_->append(index);
+            (*map_)[index].append(triangle);
+         }
+      }
+
+
+      calculateAndAppendAverageNormals();
+
+   //   fprintf(stderr, "size normals %d \n", normals_->size());
+   //   for(int i = 0; i < normals_->size(); i+=3)
+   //      fprintf(stderr, "%f %f %f \n", normals_->at(i), normals_->at(i+1), normals_->at(i+2));
+
+   //   fprintf(stderr, "num vertices %d \n", vertices_->size());
+   //   fprintf(stderr, "num indices %d \n", indices_->size());
+   //   fprintf(stderr, "num normals %d \n", normals_->size());
+   //   fprintf(stderr, "midx %f, midy %f \n", midx, midy);
+
+      view_->createGlWidget(vertices_, indices_, normals_);
+      view_->syncEntriesToCurrentValues();
+   //   view_->setTranslation(0-midx, 0-midy, 0);
 }
 
 void Core::exit()

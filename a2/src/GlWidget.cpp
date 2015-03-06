@@ -76,9 +76,9 @@ void GlWidget::paintGL()
    // Scale Model
    Model = glm::scale(Model, glm::vec3(scale_));
 
-   glm::mat4 xRotationMatrix = glm::rotate(Model, rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
-   glm::mat4 yRotationMatrix = glm::rotate(Model, rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
-   glm::mat4 zRotationMatrix = glm::rotate(Model, rotation_.z, glm::vec3(0.0f, 0.0f, 1.0f));
+   glm::mat4 xRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.x/180.0), glm::vec3(1.0f, 0.0f, 0.0f));
+   glm::mat4 yRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.y/180.0), glm::vec3(0.0f, 1.0f, 0.0f));
+   glm::mat4 zRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.z/180.0), glm::vec3(0.0f, 0.0f, 1.0f));
 
    // Rotate View
    Model = Model*xRotationMatrix;
@@ -127,9 +127,9 @@ void GlWidget::setTranslation(glm::vec3 translation)
 
 void GlWidget::setRotation(glm::vec3 rotationsInDegrees)
 {
-   rotation_.x = PI*(float)rotationsInDegrees.x/180.0;
-   rotation_.y = PI*(float)rotationsInDegrees.y/180.0;
-   rotation_.z = PI*(float)rotationsInDegrees.z/180.0;
+   rotation_.x = rotationsInDegrees.x;
+   rotation_.y = rotationsInDegrees.y;
+   rotation_.z = rotationsInDegrees.z;
    update();
 }
 

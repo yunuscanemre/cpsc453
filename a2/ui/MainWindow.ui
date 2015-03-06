@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>987</width>
-    <height>768</height>
+    <width>1093</width>
+    <height>887</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_12">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
@@ -312,150 +312,10 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QDoubleSpinBox" name="powerEntry">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximum">
-              <double>200.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
               <string>Specular Albedo</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QDoubleSpinBox" name="albedoX">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="albedoY">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="albedoZ">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>Ambient</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" colspan="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QDoubleSpinBox" name="ambientX">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="ambientY">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="ambientZ">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::PlusMinus</enum>
-               </property>
-               <property name="decimals">
-                <number>4</number>
-               </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_10">
-             <property name="text">
-              <string>Diffuse</string>
              </property>
             </widget>
            </item>
@@ -514,6 +374,187 @@
              </item>
             </layout>
            </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Ambient</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QDoubleSpinBox" name="albedoX">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="albedoY">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="albedoZ">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="2">
+            <widget class="QDoubleSpinBox" name="powerEntry">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximum">
+              <double>200.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Diffuse</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QDoubleSpinBox" name="ambientX">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="ambientY">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="ambientZ">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::PlusMinus</enum>
+               </property>
+               <property name="decimals">
+                <number>4</number>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QPushButton" name="gold">
+             <property name="text">
+              <string>Gold</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="chrome">
+             <property name="text">
+              <string>Chrome</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="copper">
+             <property name="text">
+              <string>Copper</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="plastic">
+             <property name="text">
+              <string>Plastic</string>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
@@ -529,7 +570,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>987</width>
+     <width>1093</width>
      <height>27</height>
     </rect>
    </property>
@@ -537,6 +578,7 @@
     <property name="title">
      <string>Menu</string>
     </property>
+    <addaction name="actionNewModel"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuSelection"/>
@@ -554,6 +596,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionNewModel">
+   <property name="text">
+    <string>New Model</string>
    </property>
   </action>
  </widget>

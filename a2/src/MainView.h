@@ -28,6 +28,7 @@ public:
 
    void syncEntriesToCurrentValues();
 
+   void loadFloor();
 signals:
    void exitSelected(bool);
    void loadNewModel(bool);

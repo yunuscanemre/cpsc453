@@ -20,6 +20,7 @@ public:
             QVector<GLfloat>* normals);
    ~GlWidget();
 
+   void loadFloor();
    void setCamera(glm::vec3);
    void setTranslation(glm::vec3);
    void setRotation(glm::vec3);

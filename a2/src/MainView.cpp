@@ -86,6 +86,11 @@ MainView::~MainView()
 {
 }
 
+void MainView::loadFloor()
+{
+   scene_->loadFloor();
+}
+
 void MainView::updateCamera()
 {
    scene_->setCamera(glm::vec3(mainUi_->cameraX->value(),

@@ -23,7 +23,6 @@ GLuint myShaderProgram;
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
 #define PI 3.14159265
-//#define VERTEX_INDICES 3
 
 GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* vertices,
@@ -105,12 +104,26 @@ void GlWidget::paintGL()
    glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
 
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
+
+   glBegin(GL_QUADS);
+   glVertex3f(-1.5, -1.5, 0.0);
+   glVertex3f(-1.5, 1.5, 0.0);
+   glVertex3f(1.5, 1.5, 0.0);
+   glVertex3f(1.5, -1.5, 0.0);
+   glEnd();
+   glFlush();
 }
 
 void GlWidget::resizeGL(int w, int h)
 {
    // Set Viewport to window dimensions
    glViewport(0, 0, w, h);
+}
+
+void GlWidget::loadFloor()
+{
+
+   update();
 }
 
 void GlWidget::setCamera(glm::vec3 position)

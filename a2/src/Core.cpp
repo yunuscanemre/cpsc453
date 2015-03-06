@@ -105,6 +105,7 @@ void Core::loadModel()
 
       view_->createGlWidget(vertices_, indices_, normals_);
       view_->syncEntriesToCurrentValues();
+      view_->loadFloor();
    //   view_->setTranslation(0-midx, 0-midy, 0);
 }
 

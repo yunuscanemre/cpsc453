@@ -283,14 +283,14 @@ void GlWidget::loadAllShaders()
    myShaderProgram = (GLuint) NULL;
    GLint testVal;
 
-   if(!loadShaderFile("src/per-fragment-phong.vs.glsl", hVertexShader))
+   if(!loadShaderFile("shaders/per-fragment-phong.vs.glsl", hVertexShader))
    {
       glDeleteShader(hVertexShader);
       glDeleteShader(hFragmentShader);
       cout << "The shader could not be found." << endl;
    }
 
-   if(!loadShaderFile("src/per-fragment-phong.fs.glsl", hFragmentShader))
+   if(!loadShaderFile("shaders/per-fragment-phong.fs.glsl", hFragmentShader))
    {
       glDeleteShader(hVertexShader);
       glDeleteShader(hFragmentShader);

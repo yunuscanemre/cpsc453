@@ -145,10 +145,10 @@
               <enum>QAbstractSpinBox::PlusMinus</enum>
              </property>
              <property name="minimum">
-              <number>-180</number>
+              <number>-900</number>
              </property>
              <property name="maximum">
-              <number>180</number>
+              <number>999</number>
              </property>
              <property name="value">
               <number>0</number>
@@ -175,10 +175,13 @@
               <enum>QAbstractSpinBox::PlusMinus</enum>
              </property>
              <property name="minimum">
-              <number>-180</number>
+              <number>-900</number>
              </property>
              <property name="maximum">
-              <number>180</number>
+              <number>999</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -202,10 +205,13 @@
               <enum>QAbstractSpinBox::PlusMinus</enum>
              </property>
              <property name="minimum">
-              <number>-180</number>
+              <number>-900</number>
              </property>
              <property name="maximum">
-              <number>180</number>
+              <number>999</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>

@@ -26,10 +26,14 @@ Core::Core()
 void Core::loadModel()
 {
    //   QString fileToLoad = "models/faerie/weapon.md2";
-      QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file");
+      QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file", "models/faerie");
       if(fileToLoad != NULL)
       {
          md2_->LoadModel(fileToLoad.toStdString().c_str());
+      }
+      else
+      {
+         return;
       }
 
       fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);

@@ -119,7 +119,6 @@ void GlWidget::paintGL()
    glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
 
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
-
 //   glBegin(GL_QUADS);
 //   glVertex3f(-1.5, -1.5, 0.0);
 //   glVertex3f(-1.5, 1.5, 0.0);
@@ -227,7 +226,7 @@ void GlWidget::setupRenderingContext()
    // be bound to it.
    qVAO_ = new QOpenGLVertexArrayObject();
    bool good = qVAO_->create();
-   good ? cout << "VOA created\n" : cout << "VOA error\n";
+   good ?  : cout << "VOA error\n";
    qVAO_->bind();
 
    glGenBuffers(1, &vertexVbo);
@@ -290,7 +289,7 @@ void GlWidget::loadAllShaders()
       glDeleteShader(hFragmentShader);
       cout << "The shader could not be found." << endl;
    }
-   std::cout << "Here" << endl;
+
    if(!loadShaderFile("src/per-fragment-phong.fs.glsl", hFragmentShader))
    {
       glDeleteShader(hVertexShader);

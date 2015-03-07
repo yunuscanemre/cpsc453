@@ -25,8 +25,8 @@ Core::Core()
 
 void Core::loadModel()
 {
-   //   QString fileToLoad = "models/faerie/weapon.md2";
-      QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file", "models/faerie");
+//      QString fileToLoad = "models/faerie/weapon.md2";
+      QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file", "models");
       if(fileToLoad != NULL)
       {
          md2_->LoadModel(fileToLoad.toStdString().c_str());
@@ -36,8 +36,8 @@ void Core::loadModel()
          return;
       }
 
-      fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
-      fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
+//      fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
+//      fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
 
       vertices_ = new QVector<GLfloat>();
       normals_ = new QVector<GLfloat>();
@@ -74,11 +74,11 @@ void Core::loadModel()
          vertices_->append(1.0f);
       }
 
+//      xmax /= max; xmin /= max; ymax /= max; ymin /= max;
+//      float midx = (xmax+xmin)/2;
+//      float midy = (ymax+ymin)/2;
 
       // Map values to range [-1, 1]
-      xmax /= max; xmin /= max; ymax /= max; ymin /= max;
-      float midx = (xmax+xmin)/2;
-      float midy = (ymax+ymin)/2;
       mapVerticesBetweenMinusOneToOne(max);
 
    //   for(int i = 0; i < vertices_->size(); i++)
@@ -95,22 +95,16 @@ void Core::loadModel()
          }
       }
 
-
       calculateAndAppendAverageNormals();
 
-   //   fprintf(stderr, "size normals %d \n", normals_->size());
-   //   for(int i = 0; i < normals_->size(); i+=3)
-   //      fprintf(stderr, "%f %f %f \n", normals_->at(i), normals_->at(i+1), normals_->at(i+2));
+//      fprintf(stderr, "size normals %d \n", normals_->size());
+//      for(int i = 0; i < normals_->size(); i+=3)
+//         fprintf(stderr, "%f %f %f \n", normals_->at(i), normals_->at(i+1), normals_->at(i+2));
 
-   //   fprintf(stderr, "num vertices %d \n", vertices_->size());
-   //   fprintf(stderr, "num indices %d \n", indices_->size());
-   //   fprintf(stderr, "num normals %d \n", normals_->size());
-   //   fprintf(stderr, "midx %f, midy %f \n", midx, midy);
 
       view_->createGlWidget(vertices_, indices_, normals_);
       view_->syncEntriesToCurrentValues();
       view_->loadFloor();
-   //   view_->setTranslation(0-midx, 0-midy, 0);
 }
 
 void Core::exit()
@@ -160,8 +154,8 @@ void Core::calculateAndAppendAverageNormals()
       avrgy = totaly/(*map_)[vertex].size();
       avrgz = totalz/(*map_)[vertex].size();
 
-      glm::vec3 avrgNormal;
-      avrgNormal = glm::normalize(glm::vec3(avrgx, avrgy, avrgz));
+      glm::vec3 avrgNormal = -glm::vec3(avrgx, avrgy, avrgz);
+//      fprintf(stderr, "avrg: %f, %f, %f \n", avrgNormal.x, avrgNormal.y, avrgNormal.z);
 
       normals_->append(avrgNormal.x);
       normals_->append(avrgNormal.y);
@@ -186,7 +180,13 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
    float a_z = md2_->m_vertices[triangle->index_xyz[0]][2];
    glm::vec3 a(a_x, a_y, a_z);
 
-   glm::vec3 cross = glm::cross(c-a, b-a);
 
-   return -cross;
+   glm::vec3 cross = glm::cross(c-a, b-a);
+//   fprintf(stderr, "before norm: %f, %f, %f \n", cross.x, cross.y, cross.z);
+   if(cross.x != 0 || cross.y != 0 || cross.z != 0)
+      cross = normalize(cross);
+
+//   fprintf(stderr, "after norm: %f, %f, %f \n", cross.x, cross.y, cross.z);
+
+   return cross;
 }

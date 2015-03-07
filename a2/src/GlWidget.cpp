@@ -14,6 +14,7 @@ using namespace std;
 GLuint vertexVbo;
 GLuint normalVbo;
 GLuint indiceVbo;
+GLuint floorVbo;
 
 // shader program to use
 GLuint myShaderProgram;
@@ -23,6 +24,20 @@ GLuint myShaderProgram;
 #define VERTEX_COLOUR 2
 #define VERTEX_NORMAL 1
 #define PI 3.14159265
+
+static const GLfloat the_floor[12] = {
+-1.5, -1.5, 0.0,
+-1.5, 1.5, 0.0,
+1.5, 1.5, 0.0,
+1.5, -1.5, 0.0,
+};
+
+//glVertex3f(-1.5, -1.5, 0.0);
+//glVertex3f(-1.5, 1.5, 0.0);
+//glVertex3f(1.5, 1.5, 0.0);
+//glVertex3f(1.5, -1.5, 0.0);
+//glEnd();
+//glFlush();
 
 GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* vertices,
@@ -38,7 +53,7 @@ GlWidget::GlWidget(QWidget *parent,
       rotation_(0.0, 0.0, 0.0),
       fov_(45),
       scale_(1),
-      power_(1),
+      power_(128),
       albedo_(0.7, 0.7, 0.7),
       ambient_(0.1, 0.1, 0.1),
       diffuse_(0.5, 0.2, 0.7)
@@ -105,13 +120,13 @@ void GlWidget::paintGL()
 
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
 
-   glBegin(GL_QUADS);
-   glVertex3f(-1.5, -1.5, 0.0);
-   glVertex3f(-1.5, 1.5, 0.0);
-   glVertex3f(1.5, 1.5, 0.0);
-   glVertex3f(1.5, -1.5, 0.0);
-   glEnd();
-   glFlush();
+//   glBegin(GL_QUADS);
+//   glVertex3f(-1.5, -1.5, 0.0);
+//   glVertex3f(-1.5, 1.5, 0.0);
+//   glVertex3f(1.5, 1.5, 0.0);
+//   glVertex3f(1.5, -1.5, 0.0);
+//   glEnd();
+//   glFlush();
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -227,10 +242,10 @@ void GlWidget::setupRenderingContext()
                          0,                  // stride
                          (void*) 0            // array buffer offset
                         );
-   glEnableVertexAttribArray(VERTEX_NORMAL);
 
    glGenBuffers(1, &normalVbo);
    glBindBuffer( GL_ARRAY_BUFFER, normalVbo);
+   glEnableVertexAttribArray(VERTEX_NORMAL);
    int normalsByteSize = normals_->size()*sizeof(GLfloat);
    glBufferData(GL_ARRAY_BUFFER, normalsByteSize, normals_->data(), GL_STATIC_DRAW);
    glVertexAttribPointer(VERTEX_NORMAL,
@@ -245,6 +260,19 @@ void GlWidget::setupRenderingContext()
    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, indiceVbo );
    int indicesByteSize = sizeof(GLshort)*indices_->size();
    glBufferData( GL_ELEMENT_ARRAY_BUFFER, indicesByteSize, indices_->data(), GL_STATIC_DRAW );
+
+//   glGenBuffers(1, &floorVbo);
+//   glBindBuffer( GL_ARRAY_BUFFER, floorVbo);
+//   glEnableVertexAttribArray(3);
+//   int floorByteSize = 12*sizeof(GLfloat);
+//   glBufferData(GL_ARRAY_BUFFER, floorByteSize, the_floor, GL_STATIC_DRAW);
+//   glVertexAttribPointer(3,
+//                         3,
+//                         GL_FLOAT,
+//                         GL_FALSE,
+//                         0,
+//                         (void*) 0
+//                        );
 }
 
 void GlWidget::loadAllShaders()

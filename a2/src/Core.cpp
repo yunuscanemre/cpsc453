@@ -153,7 +153,7 @@ void Core::calculateAndAppendAverageNormals()
       avrgy = totaly/(*map_)[vertex].size();
       avrgz = totalz/(*map_)[vertex].size();
 
-      glm::vec3 avrgNormal = -glm::vec3(avrgx, avrgy, avrgz);
+      glm::vec3 avrgNormal = glm::vec3(avrgx, avrgy, avrgz);
 //      fprintf(stderr, "avrg: %f, %f, %f \n", avrgNormal.x, avrgNormal.y, avrgNormal.z);
 
       normals_->append(avrgNormal.x);

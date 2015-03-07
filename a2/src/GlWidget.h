@@ -39,7 +39,8 @@ protected:
 private:
    void setupRenderingContext();
    bool loadShaderFile(const char *filename, GLuint shader);
-   void loadAllShaders();
+   void loadModelShaders();
+   void loadFloorShader();
 
 // Public for convinience of not writing getters. MUST set with setter cause it calls update
 private:

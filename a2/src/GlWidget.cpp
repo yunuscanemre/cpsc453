@@ -229,7 +229,8 @@ void GlWidget::setupRenderingContext()
    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
    glEnable(GL_DEPTH_TEST);
 
-   loadAllShaders();
+   loadModelShaders();
+   loadFloorShader();
 
    // Now setup the geometry in a vertex buffer object
    // setup the vertex state array object. All subsequent buffers will
@@ -284,23 +285,14 @@ void GlWidget::setupRenderingContext()
 //                        );
 }
 
-void GlWidget::loadAllShaders()
+void GlWidget::loadModelShaders()
 {
    // First setup the shaders
    //Now, let's setup the shaders
    GLuint hVertexShader = glCreateShader(GL_VERTEX_SHADER);
    GLuint hFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-   //****
-   GLuint floorVertexShader = glCreateShader(GL_VERTEX_SHADER);
-   GLuint floorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-   //*******
-
    mainShaderProgram = (GLuint) NULL;
-
-   //***
-   floorShaderProgram = (GLuint) NULL;
-   //***
 
    GLint testVal;
 
@@ -318,29 +310,8 @@ void GlWidget::loadAllShaders()
       cout << "The shader could not be found." << endl;
    }
 
-   //*****
-   if(!loadShaderFile("shaders/floor.vs", floorVertexShader))
-   {
-      glDeleteShader(floorVertexShader);
-      glDeleteShader(floorFragmentShader);
-      cout << "The floorshader could not be found." << endl;
-   }
-
-   if(!loadShaderFile("shaders/floor.fs", floorFragmentShader))
-   {
-      glDeleteShader(floorVertexShader);
-      glDeleteShader(floorFragmentShader);
-      cout << "The floorshader could not be found." << endl;
-   }
-   //*********
-
    glCompileShader(hVertexShader);
    glCompileShader(hFragmentShader);
-
-   //****
-   glCompileShader(floorVertexShader);
-   glCompileShader(floorFragmentShader);
-   //******
 
    // Check for any error generated during shader compilation
    glGetShaderiv(hVertexShader, GL_COMPILE_STATUS, &testVal);
@@ -370,36 +341,6 @@ void GlWidget::loadAllShaders()
       glDeleteShader(hFragmentShader);
    }
 
-   //**********
-   glGetShaderiv(floorVertexShader, GL_COMPILE_STATUS, &testVal);
-   if(testVal == GL_FALSE)
-   {
-      char source[8192];
-      char infoLog[8192];
-      glGetShaderSource(floorVertexShader, 8192, NULL, source);
-      glGetShaderInfoLog(floorVertexShader, 8192, NULL, infoLog);
-      cout << "The tmo shader: " << endl << (const char*) source << endl
-            << " failed to compile:" << endl;
-      fprintf(stderr, "%s\n", infoLog);
-      glDeleteShader(floorVertexShader);
-      glDeleteShader(hFragmentShader);
-   }
-   glGetShaderiv(floorFragmentShader, GL_COMPILE_STATUS, &testVal);
-   if(testVal == GL_FALSE)
-   {
-      char source[8192];
-      char infoLog[8192];
-      glGetShaderSource(floorFragmentShader, 8192, NULL, source);
-      glGetShaderInfoLog(floorFragmentShader, 8192, NULL, infoLog);
-      cout << "The floorshader: " << endl << (const char*) source << endl
-            << " failed to compile:" << endl;
-      fprintf(stderr, "%s\n", infoLog);
-      glDeleteShader(floorVertexShader);
-      glDeleteShader(floorFragmentShader);
-   }
-   //*********
-
-
    // Create the shader program and bind locations for the vertex
    // attributes before linking. The linking process can also generate errors
 
@@ -424,18 +365,44 @@ void GlWidget::loadAllShaders()
       glDeleteProgram(mainShaderProgram);
       mainShaderProgram = (GLuint) NULL;
    }
+}
 
+void GlWidget::loadFloorShader()
+{
+   GLuint floorVertexShader = glCreateShader(GL_VERTEX_SHADER);
+   floorShaderProgram = (GLuint) NULL;
 
-   // ********
+   GLint testVal;
+
+   if(!loadShaderFile("shaders/floor.vs", floorVertexShader))
+   {
+      glDeleteShader(floorVertexShader);
+      cout << "The floorshader could not be found." << endl;
+   }
+
+   glCompileShader(floorVertexShader);
+
+   glGetShaderiv(floorVertexShader, GL_COMPILE_STATUS, &testVal);
+   if(testVal == GL_FALSE)
+   {
+      char source[8192];
+      char infoLog[8192];
+      glGetShaderSource(floorVertexShader, 8192, NULL, source);
+      glGetShaderInfoLog(floorVertexShader, 8192, NULL, infoLog);
+      cout << "The tmo shader: " << endl << (const char*) source << endl
+            << " failed to compile:" << endl;
+      fprintf(stderr, "%s\n", infoLog);
+      glDeleteShader(floorVertexShader);
+   }
+
    floorShaderProgram = glCreateProgram();
    glAttachShader(floorShaderProgram, floorVertexShader);
-   glAttachShader(floorShaderProgram, floorFragmentShader);
+
 
    glBindAttribLocation(floorShaderProgram, VERTEX_DATA, "vVertex");
 
    glLinkProgram(floorShaderProgram);
    glDeleteShader(floorVertexShader);
-   glDeleteShader(floorFragmentShader);
    glGetProgramiv(floorShaderProgram, GL_LINK_STATUS, &testVal);
    if(testVal == GL_FALSE)
    {
@@ -446,8 +413,6 @@ void GlWidget::loadAllShaders()
       glDeleteProgram(floorShaderProgram);
       floorShaderProgram = (GLuint) NULL;
    }
-   // ********
-
 }
 
 // Load the shader from the specified file. Returns false if the shader could not be loaded

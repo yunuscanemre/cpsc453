@@ -17,7 +17,8 @@ GLuint indiceVbo;
 GLuint floorVbo;
 
 // shader program to use
-GLuint myShaderProgram;
+GLuint mainShaderProgram;
+GLuint floorShaderProgram;
 
 // Constants to help with location bindings
 #define VERTEX_DATA 0
@@ -68,12 +69,12 @@ GlWidget::~GlWidget()
 
 void GlWidget::paintGL()
 {
-   GLint modelViewMatrixID = glGetUniformLocation(myShaderProgram, "mv_matrix");
-   GLint projMatrixID = glGetUniformLocation(myShaderProgram, "proj_matrix");
-   GLint specularPowerID = glGetUniformLocation(myShaderProgram, "specular_power");
-   GLint specularAlbedoID = glGetUniformLocation(myShaderProgram, "specular_albedo");
-   GLint ambientID = glGetUniformLocation(myShaderProgram, "ambient");
-   GLint diffuseAlbedoID = glGetUniformLocation(myShaderProgram, "diffuse_albedo");
+   GLint modelViewMatrixID = glGetUniformLocation(mainShaderProgram, "mv_matrix");
+   GLint projMatrixID = glGetUniformLocation(mainShaderProgram, "proj_matrix");
+   GLint specularPowerID = glGetUniformLocation(mainShaderProgram, "specular_power");
+   GLint specularAlbedoID = glGetUniformLocation(mainShaderProgram, "specular_albedo");
+   GLint ambientID = glGetUniformLocation(mainShaderProgram, "ambient");
+   GLint diffuseAlbedoID = glGetUniformLocation(mainShaderProgram, "diffuse_albedo");
 
    // Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
    glm::mat4 projMatrix = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
@@ -107,7 +108,7 @@ void GlWidget::paintGL()
 
    // Clear the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   glUseProgram(myShaderProgram);
+   glUseProgram(mainShaderProgram);
 
    // Send our transformation to the currently bound shader,
    glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
@@ -119,13 +120,22 @@ void GlWidget::paintGL()
    glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
 
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
-//   glBegin(GL_QUADS);
-//   glVertex3f(-1.5, -1.5, 0.0);
-//   glVertex3f(-1.5, 1.5, 0.0);
-//   glVertex3f(1.5, 1.5, 0.0);
-//   glVertex3f(1.5, -1.5, 0.0);
-//   glEnd();
-//   glFlush();
+
+   glUseProgram(floorShaderProgram);
+   GLint tmpmodelViewMatrixID = glGetUniformLocation(floorShaderProgram, "mv_matrix");
+   GLint tmpprojMatrixID = glGetUniformLocation(floorShaderProgram, "proj_matrix");
+   Model = glm::mat4(1.0f);
+   Model = glm::scale(Model, glm::vec3(scale_));
+   modelViewMatrix = viewMatrix * Model;
+   glUniformMatrix4fv(tmpmodelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
+   glUniformMatrix4fv(tmpprojMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
+   glBegin(GL_QUADS);
+   glVertex3f(-0.5, -0.5, -2.0);
+   glVertex3f(-0.5, 0.5, -2.0);
+   glVertex3f(0.5, 0.5, -2.0);
+   glVertex3f(0.5, -0.5, -2.0);
+   glEnd();
+   glFlush();
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -280,7 +290,18 @@ void GlWidget::loadAllShaders()
    //Now, let's setup the shaders
    GLuint hVertexShader = glCreateShader(GL_VERTEX_SHADER);
    GLuint hFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-   myShaderProgram = (GLuint) NULL;
+
+   //****
+   GLuint floorVertexShader = glCreateShader(GL_VERTEX_SHADER);
+   GLuint floorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+   //*******
+
+   mainShaderProgram = (GLuint) NULL;
+
+   //***
+   floorShaderProgram = (GLuint) NULL;
+   //***
+
    GLint testVal;
 
    if(!loadShaderFile("shaders/per-fragment-phong.vs.glsl", hVertexShader))
@@ -297,8 +318,29 @@ void GlWidget::loadAllShaders()
       cout << "The shader could not be found." << endl;
    }
 
+   //*****
+   if(!loadShaderFile("shaders/floor.vs", floorVertexShader))
+   {
+      glDeleteShader(floorVertexShader);
+      glDeleteShader(floorFragmentShader);
+      cout << "The floorshader could not be found." << endl;
+   }
+
+   if(!loadShaderFile("shaders/floor.fs", floorFragmentShader))
+   {
+      glDeleteShader(floorVertexShader);
+      glDeleteShader(floorFragmentShader);
+      cout << "The floorshader could not be found." << endl;
+   }
+   //*********
+
    glCompileShader(hVertexShader);
    glCompileShader(hFragmentShader);
+
+   //****
+   glCompileShader(floorVertexShader);
+   glCompileShader(floorFragmentShader);
+   //******
 
    // Check for any error generated during shader compilation
    glGetShaderiv(hVertexShader, GL_COMPILE_STATUS, &testVal);
@@ -328,30 +370,83 @@ void GlWidget::loadAllShaders()
       glDeleteShader(hFragmentShader);
    }
 
+   //**********
+   glGetShaderiv(floorVertexShader, GL_COMPILE_STATUS, &testVal);
+   if(testVal == GL_FALSE)
+   {
+      char source[8192];
+      char infoLog[8192];
+      glGetShaderSource(floorVertexShader, 8192, NULL, source);
+      glGetShaderInfoLog(floorVertexShader, 8192, NULL, infoLog);
+      cout << "The tmo shader: " << endl << (const char*) source << endl
+            << " failed to compile:" << endl;
+      fprintf(stderr, "%s\n", infoLog);
+      glDeleteShader(floorVertexShader);
+      glDeleteShader(hFragmentShader);
+   }
+   glGetShaderiv(floorFragmentShader, GL_COMPILE_STATUS, &testVal);
+   if(testVal == GL_FALSE)
+   {
+      char source[8192];
+      char infoLog[8192];
+      glGetShaderSource(floorFragmentShader, 8192, NULL, source);
+      glGetShaderInfoLog(floorFragmentShader, 8192, NULL, infoLog);
+      cout << "The floorshader: " << endl << (const char*) source << endl
+            << " failed to compile:" << endl;
+      fprintf(stderr, "%s\n", infoLog);
+      glDeleteShader(floorVertexShader);
+      glDeleteShader(floorFragmentShader);
+   }
+   //*********
+
+
    // Create the shader program and bind locations for the vertex
    // attributes before linking. The linking process can also generate errors
 
-   myShaderProgram = glCreateProgram();
-   glAttachShader(myShaderProgram, hVertexShader);
-   glAttachShader(myShaderProgram, hFragmentShader);
+   mainShaderProgram = glCreateProgram();
+   glAttachShader(mainShaderProgram, hVertexShader);
+   glAttachShader(mainShaderProgram, hFragmentShader);
 
-   glBindAttribLocation(myShaderProgram, VERTEX_DATA, "position");
-   glBindAttribLocation(myShaderProgram, VERTEX_NORMAL, "normal");
-   glBindAttribLocation(myShaderProgram, VERTEX_COLOUR, "color");
+   glBindAttribLocation(mainShaderProgram, VERTEX_DATA, "position");
+   glBindAttribLocation(mainShaderProgram, VERTEX_NORMAL, "normal");
+   glBindAttribLocation(mainShaderProgram, VERTEX_COLOUR, "color");
 
-   glLinkProgram(myShaderProgram);
+   glLinkProgram(mainShaderProgram);
    glDeleteShader(hVertexShader);
    glDeleteShader(hFragmentShader);
-   glGetProgramiv(myShaderProgram, GL_LINK_STATUS, &testVal);
+   glGetProgramiv(mainShaderProgram, GL_LINK_STATUS, &testVal);
    if(testVal == GL_FALSE)
    {
       char infoLog[1024];
-      glGetProgramInfoLog(myShaderProgram, 1024, NULL, infoLog);
+      glGetProgramInfoLog(mainShaderProgram, 1024, NULL, infoLog);
       cout << "The shader program" << " failed to link:" << endl
             << (const char*) infoLog << endl;
-      glDeleteProgram(myShaderProgram);
-      myShaderProgram = (GLuint) NULL;
+      glDeleteProgram(mainShaderProgram);
+      mainShaderProgram = (GLuint) NULL;
    }
+
+
+   // ********
+   floorShaderProgram = glCreateProgram();
+   glAttachShader(floorShaderProgram, floorVertexShader);
+   glAttachShader(floorShaderProgram, floorFragmentShader);
+
+   glBindAttribLocation(floorShaderProgram, VERTEX_DATA, "vVertex");
+
+   glLinkProgram(floorShaderProgram);
+   glDeleteShader(floorVertexShader);
+   glDeleteShader(floorFragmentShader);
+   glGetProgramiv(floorShaderProgram, GL_LINK_STATUS, &testVal);
+   if(testVal == GL_FALSE)
+   {
+      char infoLog[1024];
+      glGetProgramInfoLog(floorShaderProgram, 1024, NULL, infoLog);
+      cout << "The tmp shader program" << " failed to link:" << endl
+            << (const char*) infoLog << endl;
+      glDeleteProgram(floorShaderProgram);
+      floorShaderProgram = (GLuint) NULL;
+   }
+   // ********
 
 }
 

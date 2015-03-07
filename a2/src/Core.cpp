@@ -102,9 +102,8 @@ void Core::loadModel()
 //         fprintf(stderr, "%f %f %f \n", normals_->at(i), normals_->at(i+1), normals_->at(i+2));
 
 
-      view_->createGlWidget(vertices_, indices_, normals_);
-      view_->syncEntriesToCurrentValues();
-      view_->loadFloor();
+   view_->createGlWidget(vertices_, indices_, normals_);
+   view_->syncEntriesToCurrentValues();
 }
 
 void Core::exit()

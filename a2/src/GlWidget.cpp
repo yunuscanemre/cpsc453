@@ -26,20 +26,6 @@ GLuint floorShaderProgram;
 #define VERTEX_NORMAL 1
 #define PI 3.14159265
 
-static const GLfloat the_floor[12] = {
--1.5, -1.5, 0.0,
--1.5, 1.5, 0.0,
-1.5, 1.5, 0.0,
-1.5, -1.5, 0.0,
-};
-
-//glVertex3f(-1.5, -1.5, 0.0);
-//glVertex3f(-1.5, 1.5, 0.0);
-//glVertex3f(1.5, 1.5, 0.0);
-//glVertex3f(1.5, -1.5, 0.0);
-//glEnd();
-//glFlush();
-
 GlWidget::GlWidget(QWidget *parent,
                    QVector<GLfloat>* vertices,
                    QVector<GLshort>* indices,
@@ -57,7 +43,8 @@ GlWidget::GlWidget(QWidget *parent,
       power_(128),
       albedo_(0.7, 0.7, 0.7),
       ambient_(0.1, 0.1, 0.1),
-      diffuse_(0.5, 0.2, 0.7)
+      diffuse_(0.5, 0.2, 0.7),
+      drawFloor_(false)
 {
 }
 
@@ -121,21 +108,24 @@ void GlWidget::paintGL()
 
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
 
-   glUseProgram(floorShaderProgram);
-   GLint tmpmodelViewMatrixID = glGetUniformLocation(floorShaderProgram, "mv_matrix");
-   GLint tmpprojMatrixID = glGetUniformLocation(floorShaderProgram, "proj_matrix");
-   Model = glm::mat4(1.0f);
-   Model = glm::scale(Model, glm::vec3(scale_));
-   modelViewMatrix = viewMatrix * Model;
-   glUniformMatrix4fv(tmpmodelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
-   glUniformMatrix4fv(tmpprojMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
-   glBegin(GL_QUADS);
-   glVertex3f(-0.5, -0.5, -2.0);
-   glVertex3f(-0.5, 0.5, -2.0);
-   glVertex3f(0.5, 0.5, -2.0);
-   glVertex3f(0.5, -0.5, -2.0);
-   glEnd();
-   glFlush();
+   if(drawFloor_)
+   {
+      glUseProgram(floorShaderProgram);
+      GLint tmpmodelViewMatrixID = glGetUniformLocation(floorShaderProgram, "mv_matrix");
+      GLint tmpprojMatrixID = glGetUniformLocation(floorShaderProgram, "proj_matrix");
+      Model = glm::mat4(1.0f);
+      Model = glm::scale(Model, glm::vec3(scale_));
+      modelViewMatrix = viewMatrix * Model;
+      glUniformMatrix4fv(tmpmodelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
+      glUniformMatrix4fv(tmpprojMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
+      glBegin(GL_QUADS);
+      glVertex3f(-0.5, -0.5, -2.0);
+      glVertex3f(-0.5, 0.5, -2.0);
+      glVertex3f(0.5, 0.5, -2.0);
+      glVertex3f(0.5, -0.5, -2.0);
+      glEnd();
+      glFlush();
+   }
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -144,9 +134,9 @@ void GlWidget::resizeGL(int w, int h)
    glViewport(0, 0, w, h);
 }
 
-void GlWidget::loadFloor()
+void GlWidget::drawFloor(bool shouldDraw)
 {
-
+   drawFloor_ = shouldDraw;
    update();
 }
 

@@ -75,6 +75,9 @@ MainView::MainView()
    qtConnect(mainUi_->plastic, SIGNAL(clicked()),
              this, SLOT(makePlastic()));
 
+   qtConnect(mainUi_->drawFloor, SIGNAL(stateChanged(int)),
+             this, SLOT(drawFloor(int)));
+
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
    qtConnect(mainUi_->actionNewModel, SIGNAL(triggered(bool)),
@@ -86,9 +89,9 @@ MainView::~MainView()
 {
 }
 
-void MainView::loadFloor()
+void MainView::drawFloor(int shouldDraw)
 {
-   scene_->loadFloor();
+   scene_->drawFloor((bool) shouldDraw);
 }
 
 void MainView::updateCamera()

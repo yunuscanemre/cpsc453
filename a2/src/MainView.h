@@ -28,7 +28,6 @@ public:
 
    void syncEntriesToCurrentValues();
 
-   void loadFloor();
 signals:
    void exitSelected(bool);
    void loadNewModel(bool);
@@ -49,6 +48,8 @@ private slots:
    void makeChrome();
    void makeCopper();
    void makePlastic();
+
+   void drawFloor(int shouldDraw);
 
 private:
    void setupUi();

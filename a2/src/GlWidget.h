@@ -20,7 +20,7 @@ public:
             QVector<GLfloat>* normals);
    ~GlWidget();
 
-   void loadFloor();
+   void drawFloor(bool shouldDraw);
    void setCamera(glm::vec3);
    void setTranslation(glm::vec3);
    void setRotation(glm::vec3);
@@ -59,6 +59,7 @@ public:
    glm::vec3 albedo_;
    glm::vec3 ambient_;
    glm::vec3 diffuse_;
+   bool drawFloor_;
 };
 
 #endif /* GLWIDGET_H_ */

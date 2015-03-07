@@ -16,7 +16,8 @@ uniform vec3 diffuse_albedo = vec3(0.5, 0.2, 0.7);
 uniform vec3 specular_albedo = vec3(0.7);
 uniform float specular_power = 128.0;
 uniform vec3 ambient = vec3(0.1, 0.1, 0.1);
-
+uniform float intensity_point_light = 1.0;
+uniform float intensity_ambient_light = 1.0;
 void main(void)
 {
     // Normalize the incoming N, L and V vectors
@@ -28,9 +29,10 @@ void main(void)
     vec3 R = reflect(-L, N);
 
     // Compute the diffuse and specular components for each fragment
-    vec3 diffuse = max(dot(N, L), 0.0) * diffuse_albedo;
-    vec3 specular = pow(max(dot(R, V), 0.0), specular_power) * specular_albedo;
-
+    vec3 diffuse = max(dot(N, L), 0.0) * diffuse_albedo * intensity_point_light;
+    vec3 specular = pow(max(dot(R, V), 0.0), specular_power) * specular_albedo * intensity_point_light;
+    vec3 ambientOverall = intensity_ambient_light * ambient;
+    
     // Write final color to the framebuffer
-    color = vec4(ambient + diffuse + specular, 1.0);
+    color = vec4(ambientOverall + diffuse + specular, 1.0);
 }

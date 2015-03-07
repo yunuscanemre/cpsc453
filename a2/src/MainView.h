@@ -40,6 +40,8 @@ private slots:
    void updateFov(double fov);
    void updateScale(double scale);
    void updateSpecularPower(double power);
+   void updatePointLightIntensity(double i);
+   void updateAmbientLightIntensity(double i);
    void updateAlbedo();
    void updateAmbient();
    void updateDiffuse();

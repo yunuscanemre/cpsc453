@@ -27,6 +27,8 @@ public:
    void setFOV(double fov);
    void setScale(double scale);
    void setSpecularPower(double power);
+   void setAmbientLightIntensity(double intensity);
+   void setPointLightIntensity(double intensity);
    void setAlbedo(glm::vec3);
    void setAmbient(glm::vec3);
    void setDiffuse(glm::vec3);
@@ -56,6 +58,8 @@ public:
    float fov_;
    float scale_;
    float power_;
+   float ambientIntensity_;
+   float pointIntensity_;
    glm::vec3 albedo_;
    glm::vec3 ambient_;
    glm::vec3 diffuse_;

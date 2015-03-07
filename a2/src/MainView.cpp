@@ -42,6 +42,12 @@ MainView::MainView()
    qtConnect(mainUi_->powerEntry, SIGNAL(valueChanged(double)),
              this, SLOT(updateSpecularPower(double)));
 
+   qtConnect(mainUi_->pointIntensity, SIGNAL(valueChanged(double)),
+             this, SLOT(updatePointLightIntensity(double)));
+
+   qtConnect(mainUi_->ambientIntensity, SIGNAL(valueChanged(double)),
+             this, SLOT(updateAmbientLightIntensity(double)));
+
    qtConnect(mainUi_->albedoX, SIGNAL(valueChanged(double)),
              this, SLOT(updateAlbedo()));
    qtConnect(mainUi_->albedoY, SIGNAL(valueChanged(double)),
@@ -138,6 +144,16 @@ void MainView::updateScale(double scale)
 void MainView::updateSpecularPower(double power)
 {
    scene_->setSpecularPower(power);
+}
+
+void MainView::updatePointLightIntensity(double i)
+{
+   scene_->setPointLightIntensity(i);
+}
+
+void MainView::updateAmbientLightIntensity(double i)
+{
+   scene_->setAmbientLightIntensity(i);
 }
 
 void MainView::updateAlbedo()

@@ -41,6 +41,8 @@ GlWidget::GlWidget(QWidget *parent,
       fov_(45),
       scale_(1),
       power_(128),
+      ambientIntensity_(1),
+      pointIntensity_(1),
       albedo_(0.7, 0.7, 0.7),
       ambient_(0.1, 0.1, 0.1),
       diffuse_(0.5, 0.2, 0.7),
@@ -56,9 +58,12 @@ GlWidget::~GlWidget()
 
 void GlWidget::paintGL()
 {
+
    GLint modelViewMatrixID = glGetUniformLocation(mainShaderProgram, "mv_matrix");
    GLint projMatrixID = glGetUniformLocation(mainShaderProgram, "proj_matrix");
    GLint specularPowerID = glGetUniformLocation(mainShaderProgram, "specular_power");
+   GLint pointLightIntensity = glGetUniformLocation(mainShaderProgram, "intensity_point_light");
+   GLint ambientLightIntensity = glGetUniformLocation(mainShaderProgram, "intensity_ambient_light");
    GLint specularAlbedoID = glGetUniformLocation(mainShaderProgram, "specular_albedo");
    GLint ambientID = glGetUniformLocation(mainShaderProgram, "ambient");
    GLint diffuseAlbedoID = glGetUniformLocation(mainShaderProgram, "diffuse_albedo");
@@ -105,7 +110,8 @@ void GlWidget::paintGL()
    glUniform3fv(specularAlbedoID, 1, &albedo_[0]);
    glUniform3fv(ambientID, 1, &ambient_[0]);
    glUniform3fv(diffuseAlbedoID, 1, &diffuse_[0]);
-
+   glUniform1f(pointLightIntensity, pointIntensity_);
+   glUniform1f(ambientLightIntensity, ambientIntensity_);
    glDrawElements( GL_TRIANGLES, indices_->size(), GL_UNSIGNED_SHORT, 0);
 
    if(drawFloor_)
@@ -175,6 +181,18 @@ void GlWidget::setScale(double scale)
 void GlWidget::setSpecularPower(double power)
 {
    power_ = (float) power;
+   update();
+}
+
+void GlWidget::setAmbientLightIntensity(double intensity)
+{
+   ambientIntensity_ = intensity;
+   update();
+}
+
+void GlWidget::setPointLightIntensity(double intensity)
+{
+   pointIntensity_ = intensity;
    update();
 }
 

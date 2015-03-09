@@ -279,18 +279,6 @@ void GlWidget::setupRenderingContext()
    int indicesByteSize = sizeof(GLshort)*indices_->size();
    glBufferData( GL_ELEMENT_ARRAY_BUFFER, indicesByteSize, indices_->data(), GL_STATIC_DRAW );
 
-//   glGenBuffers(1, &floorVbo);
-//   glBindBuffer( GL_ARRAY_BUFFER, floorVbo);
-//   glEnableVertexAttribArray(3);
-//   int floorByteSize = 12*sizeof(GLfloat);
-//   glBufferData(GL_ARRAY_BUFFER, floorByteSize, the_floor, GL_STATIC_DRAW);
-//   glVertexAttribPointer(3,
-//                         3,
-//                         GL_FLOAT,
-//                         GL_FALSE,
-//                         0,
-//                         (void*) 0
-//                        );
 }
 
 void GlWidget::loadModelShaders()

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1123</width>
+    <width>1234</width>
     <height>850</height>
    </rect>
   </property>
@@ -367,7 +367,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="pointIntensity">
              <property name="maximum">
-              <double>10.000000000000000</double>
+              <double>99.000000000000000</double>
              </property>
              <property name="singleStep">
               <double>0.100000000000000</double>
@@ -649,7 +649,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1123</width>
+     <width>1234</width>
      <height>27</height>
     </rect>
    </property>

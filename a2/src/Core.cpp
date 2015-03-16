@@ -25,7 +25,7 @@ Core::Core()
 
 void Core::loadModel()
 {
-//      QString fileToLoad = "models/faerie/weapon.md2";
+//      QString fileToLoad = "models/sdswpall/Weapon.md2";
       QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file", "models");
       if(fileToLoad != NULL)
       {
@@ -44,27 +44,28 @@ void Core::loadModel()
       map_ = new QMap<int, QList<triangle_t*>>();
       indices_ = new QVector<GLshort>();
 
-      float max = md2_->m_vertices[0][0],
+      float absmax = fabs(md2_->m_vertices[0][0]),
             xmax = md2_->m_vertices[0][0],
             ymax = md2_->m_vertices[0][1],
             xmin = md2_->m_vertices[0][0],
-            ymin = md2_->m_vertices[0][0],
-            value = 0;
+            ymin = md2_->m_vertices[0][1],
+            value = 0.0, absValue = 0.0;
       // Get vertices and find max, min
       for(int i = 0; i < md2_->num_xyz; i++)
       {
          for(int j = 0; j<3; j++)
          {
             value = md2_->m_vertices[i][j];
-            max = (value > max ? value : max);
+            absValue = fabs(value);
+            absmax = (absValue > absmax ? absValue : absmax);
             vertices_->append(value);
 
-            if(j==1)
+            if(j==0)
             {
                xmax = value > xmax ? value : xmax;
                xmin = value < xmin ? value : xmin;
             }
-            if(j==2)
+            if(j==1)
             {
                ymax = value > ymax ? value : ymax;
                ymin = value < ymin ? value : ymin;
@@ -74,15 +75,15 @@ void Core::loadModel()
          vertices_->append(1.0f);
       }
 
-//      xmax /= max; xmin /= max; ymax /= max; ymin /= max;
-//      float midx = (xmax+xmin)/2;
-//      float midy = (ymax+ymin)/2;
+      xmax /= absmax; xmin /= absmax; ymax /= absmax; ymin /= absmax;
+      float midx = (xmax+xmin)/2;
+      float midy = (ymax+ymin)/2;
 
       // Map values to range [-1, 1]
-      mapVerticesBetweenMinusOneToOne(max);
+      mapVerticesBetweenMinusOneToOne(absmax);
 
-   //   for(int i = 0; i < vertices_->size(); i++)
-   //      fprintf(stderr, "%f \n", vertices_->at(i));
+      for(int i = 0; i < vertices_->size(); i++)
+         fprintf(stderr, "%f \n", vertices_->at(i));
 
       for(int i = 0; i<md2_->num_tris; i++)
       {
@@ -103,6 +104,7 @@ void Core::loadModel()
 
 
    view_->createGlWidget(vertices_, indices_, normals_);
+   view_->setTranslation(-glm::vec3(midx, midy, 0.0));
    view_->syncEntriesToCurrentValues();
 }
 

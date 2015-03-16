@@ -24,6 +24,7 @@ public:
    void show();
 
    void setCameraPosition(glm::vec3 position);
+   void setModelCenter(glm::vec3 center);
    void setTranslation(glm::vec3 translation);
 
    void syncEntriesToCurrentValues();

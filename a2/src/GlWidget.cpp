@@ -38,6 +38,7 @@ GlWidget::GlWidget(QWidget *parent,
       cameraPosition_(0.0, 0.0, 2.613),
       translation_(0.0, 0.0, 0.0),
       rotation_(0.0, 0.0, 0.0),
+      modelCenter_(0.0, 0.0, 0.0),
       fov_(45),
       scale_(1),
       power_(128),
@@ -149,6 +150,12 @@ void GlWidget::drawFloor(bool shouldDraw)
 void GlWidget::setCamera(glm::vec3 position)
 {
    cameraPosition_ = position;
+   update();
+}
+
+void GlWidget::setModelCenter(glm::vec3 center)
+{
+   modelCenter_ = center;
    update();
 }
 

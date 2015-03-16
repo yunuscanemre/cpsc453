@@ -124,6 +124,11 @@ void MainView::setTranslation(glm::vec3 translation)
    scene_->setTranslation(translation);
 }
 
+void MainView::setModelCenter(glm::vec3 center)
+{
+   scene_->setModelCenter(center);
+}
+
 void MainView::updateRotation()
 {
    scene_->setRotation(glm::vec3(mainUi_->rotateX->value(),

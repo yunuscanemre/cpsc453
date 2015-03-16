@@ -22,7 +22,8 @@ public:
 
    void drawFloor(bool shouldDraw);
    void setCamera(glm::vec3);
-   void setTranslation(glm::vec3);
+   void setModelCenter(glm::vec3);
+   void setTranslation(glm::vec3 translation);
    void setRotation(glm::vec3);
    void setFOV(double fov);
    void setScale(double scale);
@@ -55,6 +56,7 @@ public:
    glm::vec3 cameraPosition_;
    glm::vec3 translation_;
    glm::vec3 rotation_;
+   glm::vec3 modelCenter_;
    float fov_;
    float scale_;
    float power_;

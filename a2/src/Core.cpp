@@ -82,8 +82,8 @@ void Core::loadModel()
       // Map values to range [-1, 1]
       mapVerticesBetweenMinusOneToOne(absmax);
 
-      for(int i = 0; i < vertices_->size(); i++)
-         fprintf(stderr, "%f \n", vertices_->at(i));
+//      for(int i = 0; i < vertices_->size(); i++)
+//         fprintf(stderr, "%f \n", vertices_->at(i));
 
       for(int i = 0; i<md2_->num_tris; i++)
       {
@@ -104,7 +104,8 @@ void Core::loadModel()
 
 
    view_->createGlWidget(vertices_, indices_, normals_);
-   view_->setTranslation(-glm::vec3(midx, midy, 0.0));
+//   view_->setTranslation(-glm::vec3(midx, midy, 0.0));
+   view_->setModelCenter(glm::vec3(midx, midy, 0.0));
    view_->syncEntriesToCurrentValues();
 }
 

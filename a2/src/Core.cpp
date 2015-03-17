@@ -104,7 +104,7 @@ void Core::loadModel()
 
 
    view_->createGlWidget(vertices_, indices_, normals_);
-//   view_->setTranslation(-glm::vec3(midx, midy, 0.0));
+   view_->setTranslation(-glm::vec3(midx, midy, 0.0));
    view_->setModelCenter(glm::vec3(midx, midy, 0.0));
    view_->syncEntriesToCurrentValues();
 }

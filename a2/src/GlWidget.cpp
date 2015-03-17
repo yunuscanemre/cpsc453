@@ -88,16 +88,11 @@ void GlWidget::paintGL()
    glm::mat4 yRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.y/180.0), glm::vec3(0.0f, 1.0f, 0.0f));
    glm::mat4 zRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.z/180.0), glm::vec3(0.0f, 0.0f, 1.0f));
 
-   // Rotate View
-//   Model = Model*xRotationMatrix * yRotationMatrix * zRotationMatrix * scaleMatrix;
-//   Model = Model*yRotationMatrix;
-//   Model = Model*zRotationMatrix;
-
    // Translate View
    glm::mat4 center = glm::translate(glm::mat4(1.0f), -modelCenter_);
    glm::mat4 uncenter = glm::translate(glm::mat4(1.0f), modelCenter_);
    glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation_);
-   Model = Model*translationMatrix* uncenter* xRotationMatrix * yRotationMatrix * zRotationMatrix * center * scaleMatrix;
+   Model = Model*uncenter* xRotationMatrix * yRotationMatrix * zRotationMatrix * scaleMatrix * center;
 //   viewMatrix = viewMatrix*translationMatrix;
 
    glm::mat4 modelViewMatrix = viewMatrix * Model;

@@ -1,22 +1,25 @@
-#include <GlWidget.h>
-#include <QWidget>
 #include <stdlib.h>
 #include <iostream>
-#include <Helpers.h>
-#include <QOpenGLVertexArrayObject>
-#include <glm/glm.hpp>
 
+#include <GlWidget.h>
+#include <Helpers.h>
+
+#include <QWidget>
+#include <QOpenGLVertexArrayObject>
+
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
+
 // VAO and VBO to handle vertex state and data
 GLuint vertexVbo;
 GLuint normalVbo;
 GLuint indiceVbo;
 GLuint floorVbo;
 
-// shader program to use
+// shader programs to use
 GLuint mainShaderProgram;
 GLuint floorShaderProgram;
 
@@ -79,23 +82,26 @@ void GlWidget::paintGL()
                                      );
 
    // Model matrix : an identity matrix (model will be at the origin)
-   glm::mat4 Model = glm::mat4(1.0f);
+   glm::mat4 model = glm::mat4(1.0f);
 
-   // Scale Model
-   glm::mat4 scaleMatrix = glm::scale(Model, glm::vec3(scale_));
+   // Scale Matrix
+   glm::mat4 scale = glm::scale(model, glm::vec3(scale_));
 
-   glm::mat4 xRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.x/180.0), glm::vec3(1.0f, 0.0f, 0.0f));
-   glm::mat4 yRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.y/180.0), glm::vec3(0.0f, 1.0f, 0.0f));
-   glm::mat4 zRotationMatrix = glm::rotate(Model, (float)(PI*rotation_.z/180.0), glm::vec3(0.0f, 0.0f, 1.0f));
+   // Rotation Matrices
+   glm::mat4 xRotation = glm::rotate(model, (float)(PI*rotation_.x/180.0), glm::vec3(1.0f, 0.0f, 0.0f));
+   glm::mat4 yRotation = glm::rotate(model, (float)(PI*rotation_.y/180.0), glm::vec3(0.0f, 1.0f, 0.0f));
+   glm::mat4 zRotation = glm::rotate(model, (float)(PI*rotation_.z/180.0), glm::vec3(0.0f, 0.0f, 1.0f));
 
-   // Translate View
+   // Translation Matrices
    glm::mat4 center = glm::translate(glm::mat4(1.0f), -modelCenter_);
    glm::mat4 uncenter = glm::translate(glm::mat4(1.0f), modelCenter_);
    glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation_);
-   Model = Model*uncenter* xRotationMatrix * yRotationMatrix * zRotationMatrix * scaleMatrix * center;
-//   viewMatrix = viewMatrix*translationMatrix;
 
-   glm::mat4 modelViewMatrix = viewMatrix * Model;
+   // Combine all operations (multiplication happens right to left)
+   model = model * translationMatrix * uncenter * xRotation * yRotation * zRotation * scale * center;
+
+   // Final Model View matrix
+   glm::mat4 modelViewMatrix = viewMatrix * model;
 
    // Clear the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -118,9 +124,9 @@ void GlWidget::paintGL()
       glUseProgram(floorShaderProgram);
       GLint tmpmodelViewMatrixID = glGetUniformLocation(floorShaderProgram, "mv_matrix");
       GLint tmpprojMatrixID = glGetUniformLocation(floorShaderProgram, "proj_matrix");
-      Model = glm::mat4(1.0f);
-      Model = glm::scale(Model, glm::vec3(scale_));
-      modelViewMatrix = viewMatrix * Model;
+      model = glm::mat4(1.0f);
+      model = glm::scale(model, glm::vec3(scale_));
+      modelViewMatrix = viewMatrix * model;
       glUniformMatrix4fv(tmpmodelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
       glUniformMatrix4fv(tmpprojMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
       glBegin(GL_QUADS);

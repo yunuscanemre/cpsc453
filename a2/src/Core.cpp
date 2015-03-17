@@ -25,7 +25,6 @@ Core::Core()
 
 void Core::loadModel()
 {
-//      QString fileToLoad = "models/sdswpall/Weapon.md2";
       QString fileToLoad = QFileDialog::getOpenFileName(NULL, "Select an md2 file", "models");
       if(fileToLoad != NULL)
       {
@@ -35,9 +34,6 @@ void Core::loadModel()
       {
          return;
       }
-
-//      fprintf(stderr, "md2_->num_xyz %d\n", md2_->num_xyz);
-//      fprintf(stderr, "md2_->num_tris %d\n", md2_->num_tris);
 
       vertices_ = new QVector<GLfloat>();
       normals_ = new QVector<GLfloat>();
@@ -50,6 +46,7 @@ void Core::loadModel()
             xmin = md2_->m_vertices[0][0],
             ymin = md2_->m_vertices[0][1],
             value = 0.0, absValue = 0.0;
+
       // Get vertices and find max, min
       for(int i = 0; i < md2_->num_xyz; i++)
       {
@@ -82,9 +79,6 @@ void Core::loadModel()
       // Map values to range [-1, 1]
       mapVerticesBetweenMinusOneToOne(absmax);
 
-//      for(int i = 0; i < vertices_->size(); i++)
-//         fprintf(stderr, "%f \n", vertices_->at(i));
-
       for(int i = 0; i<md2_->num_tris; i++)
       {
          triangle_t* triangle = md2_->tris + i;
@@ -97,11 +91,6 @@ void Core::loadModel()
       }
 
       calculateAndAppendAverageNormals();
-
-//      fprintf(stderr, "size normals %d \n", normals_->size());
-//      for(int i = 0; i < normals_->size(); i+=3)
-//         fprintf(stderr, "%f %f %f \n", normals_->at(i), normals_->at(i+1), normals_->at(i+2));
-
 
    view_->createGlWidget(vertices_, indices_, normals_);
    view_->setTranslation(-glm::vec3(midx, midy, 0.0));
@@ -157,7 +146,6 @@ void Core::calculateAndAppendAverageNormals()
       avrgz = totalz/(*map_)[vertex].size();
 
       glm::vec3 avrgNormal = glm::vec3(avrgx, avrgy, avrgz);
-//      fprintf(stderr, "avrg: %f, %f, %f \n", avrgNormal.x, avrgNormal.y, avrgNormal.z);
 
       normals_->append(avrgNormal.x);
       normals_->append(avrgNormal.y);
@@ -182,13 +170,10 @@ glm::vec3 Core::calculateNormal(triangle_t* triangle)
    float a_z = md2_->m_vertices[triangle->index_xyz[0]][2];
    glm::vec3 a(a_x, a_y, a_z);
 
-
    glm::vec3 cross = glm::cross(c-a, b-a);
-//   fprintf(stderr, "before norm: %f, %f, %f \n", cross.x, cross.y, cross.z);
+
    if(cross.x != 0 || cross.y != 0 || cross.z != 0)
       cross = normalize(cross);
-
-//   fprintf(stderr, "after norm: %f, %f, %f \n", cross.x, cross.y, cross.z);
 
    return cross;
 }

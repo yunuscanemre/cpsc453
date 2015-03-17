@@ -45,13 +45,13 @@ private:
    void loadModelShaders();
    void loadFloorShader();
 
-// Public for convinience of not writing getters. MUST set with setter cause it calls update
 private:
    QOpenGLVertexArrayObject* qVAO_;
    QVector<GLfloat>* vertices_;
    QVector<GLshort>* indices_;
    QVector<GLfloat>* normals_;
 
+// Public for convenience of not writing getters. MUST set with setter cause it calls update
 public:
    glm::vec3 cameraPosition_;
    glm::vec3 translation_;

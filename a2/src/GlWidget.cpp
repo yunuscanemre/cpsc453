@@ -126,7 +126,7 @@ void GlWidget::paintGL()
       GLint tmpprojMatrixID = glGetUniformLocation(floorShaderProgram, "proj_matrix");
       model = glm::mat4(1.0f);
       model = glm::scale(model, glm::vec3(scale_));
-      modelViewMatrix = viewMatrix * model;
+      modelViewMatrix = viewMatrix * model * translationMatrix;
       glUniformMatrix4fv(tmpmodelViewMatrixID, 1, GL_FALSE, &modelViewMatrix[0][0]);
       glUniformMatrix4fv(tmpprojMatrixID, 1, GL_FALSE, &projMatrix[0][0]);
       glBegin(GL_QUADS);

@@ -1,0 +1,24 @@
+Yunus Can Emre - 10056223
+
+How to compile and run
+NOTE: Has been tested with Qt5.4
+1) Exctract the contents of the zip file
+2) run: qmake
+3) run: make -j 8
+4) Run the executable named 'a2' in the bin folder in the following manner: './bin/a2'
+
+NOTE !!
+It is important that you run it in this way: './bin/a2'
+It ensures that the current working directory is the main directory and the shaders can be located.
+
+How to use:
+* Select a Model
+* Change the values in the sliders to apply the transformation operations. You can scroll through values.
+* Select Menu to load a new model or exit the application
+
+Bonuses Implemented: Intristic Rotations, Material Properties
+
+Reused/Modified code: Phong shaders, standaloneexample.cpp, md2.h and ,md2.cpp, GLM Files 
+
+
+

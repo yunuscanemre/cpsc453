@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <glm/glm.hpp>
+#include <Ray.h>
 
 class MainView;
 class RgbImage;
@@ -22,7 +23,7 @@ private slots:
 
 private:
    void raycast();
-//   void castRay(glm::vec3 camera, int i, int j);
+   Ray generateRay(int i, int j);
 
 private: // Members
    MainView* view_;

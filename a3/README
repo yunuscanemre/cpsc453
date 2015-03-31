@@ -1,0 +1,47 @@
+Yunus Can Emre - 10056223
+
+How to compile and run
+NOTE: Has been tested with Qt5.2 and Qt5.4
+1) Exctract the contents of the zip file
+2) run: qmake project.pro -o Makefile
+3) run: make -j 8
+4) Run the executable named 'a1' in the bin folder. ie. ./bin/a1
+
+How to use:
+*When the app is started it will immediately ask for an image. Select a BMP image from the "images" folder, this will be the original image. Modified image will initially be set to the original image.
+
+*All the operations that can be performed are under the modified image section. Simply increment/decrement the parameters.
+**NOTE: You can use your scroll wheel to adjust values instead of clicking the arrows of the entry widget.
+**NOTE: If you manualy enter a value, you must hit Enter or lose focus of the entry widget.
+
+*In order for dissolve entry to become available, you must click "Dissolve Image" button and select a BMP image. Then you may adjust the dissolve parameter.
+** NOTE: If you select a dissolve image that is not the same size as the original, then there will be a notification displayed. The modified image created will have the maximum width and height of the two, original and dissolve images. Therefore, the smaller image will not fill the modified image area entirely.
+
+*You can change the original image, save the current modified image, or exit the application using the options under "Menu" in the top left corner.
+
+Bonuses Implemented: Contrast, Dissolve
+
+Example results from all operations can be seen in the "results" folder.
+
+Reused/Modified code: RgbImage and TextureBMP.cpp by Samuel R. Buss
+/*
+ *
+ * RayTrace Software Package, release 1.0.4,  February 2004.
+ *
+ * Author: Samuel R. Buss
+ *
+ * Software accompanying the book
+ *		3D Computer Graphics: A Mathematical Introduction with OpenGL,
+ *		by S. Buss, Cambridge University Press, 2003.
+ *
+ * Software is "as-is" and carries no warranty.  It may be used without
+ *   restriction, but if you modify it, please change the filenames to
+ *   prevent confusion between different versions.  Please acknowledge
+ *   all use of the software in any publications or products based on it.
+ *
+ * Bug reports: Sam Buss, sbuss@ucsd.edu.
+ * Web page: http://math.ucsd.edu/~sbuss/MathCG
+ *
+ */
+
+

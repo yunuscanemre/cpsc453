@@ -23,15 +23,15 @@ bool Sphere::intersect(Ray r, glm::vec3* intersection)
    static int c = 0;
    if(c++ % 13 == 0)
    {
-//	   fprintf(stderr, "pow(glm::dot(r.direction_, D), 2.0) %f \n", pow(glm::dot(r.direction_, D), 2.0));
-	   fprintf(stderr, "dot %f \n", glm::dot(r.direction_, D));
-	   fprintf(stderr, "D: x %f, y %f, z %f \n", D.x, D.y, D.z);
-	   fprintf(stderr, "direction_: x %f, y %f, z %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
+//	   fprintf(stderr, "discriminant %f \n", discriminant);
+//	   fprintf(stderr, "dot %f \n", glm::dot(r.direction_, D));
+//	   fprintf(stderr, "D: x %f, y %f, z %f \n", D.x, D.y, D.z);
+//	   fprintf(stderr, "direction_: x %f, y %f, z %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
    }
 
    if(discriminant < 0)
    {
-      fprintf(stderr, "no hit \n");
+//      fprintf(stderr, "no hit \n");
       intersection = NULL;
       return false;
    }

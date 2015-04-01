@@ -14,12 +14,12 @@
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 20),
-   worldMinWidth_(-50),
-   worldMaxWidth_(50),
-   worldMinHeight_(-50),
-   worldMaxHeight_(50),
-   imgWidth_(300),
-   imgHeight_(300)
+   worldMinWidth_(-1),
+   worldMaxWidth_(1),
+   worldMinHeight_(-1),
+   worldMaxHeight_(1),
+   imgWidth_(1000),
+   imgHeight_(1000)
 {
    view_ = new MainView();
    view_->show();
@@ -46,7 +46,7 @@ void Core::raycast()
    image_ = new RgbImage(imgHeight_, imgWidth_);
 
 
-   Sphere s(glm::vec3(0, 0, -5), 1);
+   Sphere s(glm::vec3(0, 0, -100), 0.5);
 
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
@@ -63,7 +63,7 @@ void Core::raycast()
     	 p_uv.y = worldMaxHeight_ - j * dy;  // Origin of an image is top-left, so invert y
     	 p_uv.z = 0;
     	 glm::vec3 direction = p_uv - camera_;
-    	 Ray r(camera_, direction);
+    	 Ray r(camera_, glm::normalize(direction));
 //    	   static int a = 0;
 //    	   if(a++ % 22 == 0)
 //    		   fprintf(stderr, "d.x %f, d.y %f, d.z %f \n", direction.x, direction.y, direction.z);

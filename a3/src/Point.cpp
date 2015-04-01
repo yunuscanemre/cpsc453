@@ -1,5 +1,5 @@
 
-#include <Pixel.h>
+#include <Point.h>
 #include <Helpers.h>
 
 Point::Point()

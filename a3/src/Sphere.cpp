@@ -18,7 +18,16 @@ bool Sphere::intersect(Ray r, glm::vec3* intersection)
 {
    glm::vec3 D = r.origin_ - center_;
 
-   double discriminant = pow(2*glm::dot(r.direction_, D), 2) - 4*(pow(D.length(), 2) - pow(r_, 2));
+   double discriminant = pow(glm::dot(r.direction_, D), 2.0) - (glm::dot(D, D) - pow(r_, 2.0));
+
+   static int c = 0;
+   if(c++ % 13 == 0)
+   {
+//	   fprintf(stderr, "pow(glm::dot(r.direction_, D), 2.0) %f \n", pow(glm::dot(r.direction_, D), 2.0));
+	   fprintf(stderr, "dot %f \n", glm::dot(r.direction_, D));
+	   fprintf(stderr, "D: x %f, y %f, z %f \n", D.x, D.y, D.z);
+	   fprintf(stderr, "direction_: x %f, y %f, z %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
+   }
 
    if(discriminant < 0)
    {
@@ -27,10 +36,9 @@ bool Sphere::intersect(Ray r, glm::vec3* intersection)
       return false;
    }
 
-   double b = -1*2*glm::dot(r.direction_, D);
+   double b = -1*glm::dot(r.direction_, D);
    double t1 = (b + sqrt(discriminant))/2;
    double t2 = (b - sqrt(discriminant))/2;
-//   fprintf(stderr, "t1 %f, t2 %f \n", t1, t2);
 
    double minT = -1;
    if(t1 < 0)

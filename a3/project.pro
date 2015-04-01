@@ -22,7 +22,7 @@ SOURCES += src/*.cpp
 FORMS += ui/MainWindow.ui
 
 # Flags to pass to g++ compiler
-QMAKE_CXXFLAGS += -std=c++0x -Wall -Werror
+QMAKE_CXXFLAGS += -std=c++0x -Wall
 
 # where executable will be placed
 DESTDIR = bin/ 

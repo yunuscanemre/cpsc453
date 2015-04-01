@@ -29,7 +29,11 @@ private: // Members
    MainView* view_;
    RgbImage* image_;
    glm::vec3 camera_;
-   int width_, height_;
+   double worldMinWidth_;
+   double worldMaxWidth_;
+   double worldMinHeight_;
+   double worldMaxHeight_;
+   int imgWidth_, imgHeight_;
 
 };
 

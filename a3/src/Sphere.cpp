@@ -2,6 +2,7 @@
 #include <QStringList>
 #include <Sphere.h>
 #include <Helpers.h>
+#include <Intersection.h>
 #include <math.h>
 
 Sphere::Sphere(glm::vec3 center, double radius)
@@ -14,7 +15,7 @@ Sphere::~Sphere()
 {
 }
 
-bool Sphere::intersect(Ray r, glm::vec3* intersection)
+bool Sphere::intersect(Ray r, Intersection* intersection)
 {
    glm::vec3 D = r.origin_ - center_;
 
@@ -60,7 +61,7 @@ bool Sphere::intersect(Ray r, glm::vec3* intersection)
    //   fprintf(stderr, "minT %f \n", minT);
 //   fprintf(stderr, "r.direction before * %f, %f, %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
 //   r.direction_.operator *=(minT);
-   *intersection = r.origin_ + (r.direction_.operator *=(minT));
+   intersection->intersection_ = (r.origin_ + (r.direction_.operator *=(minT)));
 //   fprintf(stderr, "r.direction after * %f, %f, %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
 
 //   fprintf(stderr, "intersection %f, %f, %f  \n", intersection->x, intersection->y, intersection->z);

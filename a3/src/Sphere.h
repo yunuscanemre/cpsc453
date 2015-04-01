@@ -7,6 +7,8 @@
 #include <Ray.h>
 #include <glm/glm.hpp>
 
+class Intersection;
+
 class Sphere : public A_Object
 {
    Q_OBJECT
@@ -16,7 +18,7 @@ public:
    virtual ~Sphere();
 
 public:
-   virtual bool intersect(Ray r, glm::vec3* intersection);
+   virtual bool intersect(Ray r, Intersection* intersection);
 
 public:
    glm::vec3 center_;

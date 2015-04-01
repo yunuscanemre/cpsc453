@@ -1,11 +1,13 @@
 
 #include <QStringList>
 #include <A_Object.h>
+#include <Intersection.h>
 #include <Helpers.h>
 
 A_Object::A_Object()
 {
-   d_ = 0.5; s_= 0.7; n_ = 128.0;
+   material_ = Material();
+   normal_ = glm::vec3(0);
 }
 
 A_Object::~A_Object()

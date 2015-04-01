@@ -5,6 +5,7 @@
 #include <Core.h>
 #include <RgbImage.h>
 #include <QFileDialog>
+#include <Intersection.h>
 #include <QColor>
 #include <Helpers.h>
 #include <Pixel.h>
@@ -13,7 +14,7 @@
 
 Core::Core() :
    image_(NULL),
-   camera_(0, 0, 20),
+   camera_(0, 0, 5),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
@@ -45,8 +46,7 @@ void Core::raycast()
 {
    image_ = new RgbImage(imgHeight_, imgWidth_);
 
-
-   Sphere s(glm::vec3(0, 0, -100), 0.5);
+   Sphere s(glm::vec3(0, 0, -5), 1);
 
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
@@ -55,22 +55,15 @@ void Core::raycast()
    {
       for(int j = 0; j < imgHeight_; j++)
       {
-//         glm::vec3 dir(i-camera_.x, j-camera_.y, 0-camera_.z);
-//         dir = glm::normalize(dir);
-//         Ray r = generateRay(i, j);
-    	 glm::vec3 p_uv;
-    	 p_uv.x = worldMinWidth_ + i * dx;
-    	 p_uv.y = worldMaxHeight_ - j * dy;  // Origin of an image is top-left, so invert y
-    	 p_uv.z = 0;
-    	 glm::vec3 direction = p_uv - camera_;
-    	 Ray r(camera_, glm::normalize(direction));
-//    	   static int a = 0;
-//    	   if(a++ % 22 == 0)
-//    		   fprintf(stderr, "d.x %f, d.y %f, d.z %f \n", direction.x, direction.y, direction.z);
-         glm::vec3 intersection(0);
+         glm::vec3 worldPixel;
+         worldPixel.x = worldMinWidth_ + i * dx;
+         worldPixel.y = worldMaxHeight_ - j * dy; // Origin of an image is top-left, so invert y
+         worldPixel.z = 0;
+         glm::vec3 direction = worldPixel - camera_;
+         Ray r(camera_, glm::normalize(direction));
+         Intersection intersection;
          if(s.intersect(r, &intersection))
          {
-//            fprintf(stderr, "setting %d, %d \n", j+upperHeight, i+upperWidth);
             image_->SetRgbPixel(j, i, Pixel(0.3, 0, 0));
          }
          else

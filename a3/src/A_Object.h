@@ -4,7 +4,10 @@
 #include <QObject>
 #include <QString>
 #include <glm/glm.hpp>
+#include <Material.h>
 #include <Ray.h>
+
+class Intersection;
 
 class A_Object : public QObject
 {
@@ -15,12 +18,12 @@ public:
    virtual ~A_Object();
 
 public:
-   virtual bool intersect(Ray ray, glm::vec3* intersection) = 0;
+   virtual bool intersect(Ray ray, Intersection* intersection) = 0;
 
 signals:
 
 protected: // Inheriting classes need to access this
-   double d_, s_, n_;
+   Material material_;
    glm::vec3 normal_;
 };
 

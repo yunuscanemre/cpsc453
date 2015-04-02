@@ -7,6 +7,7 @@
 
 class MainView;
 class RgbImage;
+class Material;
 
 class Core : public QObject
 {
@@ -24,11 +25,16 @@ private slots:
 private:
    void raycast();
    Ray generateRay(int i, int j);
+   glm::vec3 calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
+                       glm::vec3 lightVector);
 
 private: // Members
    MainView* view_;
    RgbImage* image_;
    glm::vec3 camera_;
+   glm::vec3 lightPosition_;
+   glm::vec3 ambientLight_;
+   double lightIntensity_;
    double worldMinWidth_;
    double worldMaxWidth_;
    double worldMinHeight_;

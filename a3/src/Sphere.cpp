@@ -30,7 +30,7 @@ bool Sphere::intersect(Ray r, Intersection* intersection)
 //	   fprintf(stderr, "direction_: x %f, y %f, z %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
    }
 
-   if(discriminant < 0)
+   if(discriminant <= 0)
    {
 //      fprintf(stderr, "no hit \n");
       intersection = NULL;
@@ -44,12 +44,12 @@ bool Sphere::intersect(Ray r, Intersection* intersection)
    double minT = -1;
    if(t1 < 0)
    {
-      fprintf(stderr, "t1 was < 0 \n");
+//      fprintf(stderr, "t1 was < 0 \n");
       minT = t2;
    }
    else if (t2 < 0)
    {
-      fprintf(stderr, "t2 was < 0 \n");
+//      fprintf(stderr, "t2 was < 0 \n");
       minT = t1;
    }
    else
@@ -61,7 +61,8 @@ bool Sphere::intersect(Ray r, Intersection* intersection)
    //   fprintf(stderr, "minT %f \n", minT);
 //   fprintf(stderr, "r.direction before * %f, %f, %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
 //   r.direction_.operator *=(minT);
-   intersection->intersection_ = (r.origin_ + (r.direction_.operator *=(minT)));
+   intersection->intersection_ = (r.origin_ + (r.direction_ * (float) minT));
+   intersection->normal_ = glm::normalize(center_ - intersection->intersection_);
 //   fprintf(stderr, "r.direction after * %f, %f, %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
 
 //   fprintf(stderr, "intersection %f, %f, %f  \n", intersection->x, intersection->y, intersection->z);

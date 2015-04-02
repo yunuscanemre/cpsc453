@@ -9,12 +9,16 @@
 #include <QColor>
 #include <Helpers.h>
 #include <Pixel.h>
+#include <Material.h>
 
 #include <Sphere.h>
 
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 5),
+   lightPosition_(0, 0, 0),
+   ambientLight_(0.1, 0.1, 0.1),
+   lightIntensity_(1),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
@@ -46,7 +50,7 @@ void Core::raycast()
 {
    image_ = new RgbImage(imgHeight_, imgWidth_);
 
-   Sphere s(glm::vec3(0, 0, -5), 1);
+   Sphere s(glm::vec3(0, 0, -5), 0.5);
 
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
@@ -59,12 +63,13 @@ void Core::raycast()
          worldPixel.x = worldMinWidth_ + i * dx;
          worldPixel.y = worldMaxHeight_ - j * dy; // Origin of an image is top-left, so invert y
          worldPixel.z = 0;
-         glm::vec3 direction = worldPixel - camera_;
-         Ray r(camera_, glm::normalize(direction));
-         Intersection intersection;
-         if(s.intersect(r, &intersection))
+         glm::vec3 direction = glm::normalize(worldPixel - camera_);
+         Ray r(camera_, direction);
+         Intersection hit;
+         if(s.intersect(r, &hit))
          {
-            image_->SetRgbPixel(j, i, Pixel(0.3, 0, 0));
+            glm::vec3 lightDirection = glm::normalize(lightPosition_ - hit.intersection_);
+            image_->SetRgbPixel(j, i, Pixel(calculateColor(&hit.material_, hit.normal_, direction, lightDirection)));
          }
          else
          {
@@ -75,6 +80,23 @@ void Core::raycast()
    }
 
    view_->setImage(image_);
+}
+
+glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
+                               glm::vec3 lightVector)
+{
+   // why qMax? it was in the shaders
+   glm::vec3 diffuse = material->d_*(float)(qMax((double) glm::dot(normal, lightVector), 0.0))*(float)lightIntensity_;
+   // qMax here too ?
+   glm::vec3 reflect = glm::normalize(2 * (glm::dot(normal, lightVector)) * normal - lightVector);
+   glm::vec3 specular = material->s_ * (float)lightIntensity_ * (float) pow((glm::dot(reflect, viewDirection)), material->n_);
+   glm::vec3 ambient = ambientLight_;
+
+   glm::vec3 color = diffuse + specular + ambient;
+//   static int a = 0;
+//   if(a++ % 20 == 0)
+//   fprintf(stderr, "color x %f, y %f, z %f \n", color.x, color.y, color.z);
+   return color;
 }
 
 //Ray Core::generateRay(int i, int j)

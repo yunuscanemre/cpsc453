@@ -12,6 +12,11 @@ Pixel::Pixel(double color)
    red = color; green = color; blue = color;
 }
 
+Pixel::Pixel(glm::vec3 p)
+{
+   red = p.x; green = p.y; blue = p.z;
+}
+
 Pixel::Pixel(double r, double g, double b)
 {
    red = r; green = g; blue = b;

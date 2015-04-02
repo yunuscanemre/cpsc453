@@ -1,10 +1,13 @@
 #ifndef PIXEL_H_
 #define PIXEL_H_
 
+#include <glm/glm.hpp>
+
 struct Pixel
 {
    Pixel();
    Pixel(double color);
+   Pixel(glm::vec3 p);
    Pixel(double r, double g, double b);
    ~Pixel();
 

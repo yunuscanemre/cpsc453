@@ -28,9 +28,9 @@ void MainView::show()
 void MainView::setImage(QImage image)
 {
 //   glwidget_->makeCurrent();
-//   glwidget_->drawRgbImage(image);
+   glwidget_->setPixmap(QPixmap::fromImage(image));
 //   glwidget_->updateGL();
-   mainUi_->imgContainerWidget->setPixmap(QPixmap::fromImage(image));
+//   mainUi_->imgContainerWidget->setPixmap(QPixmap::fromImage(image));
 }
 
 
@@ -39,10 +39,10 @@ void MainView::setupUi()
    mainWindow_ = new QMainWindow();
    mainUi_ = new Ui::MainWindow();
    mainUi_->setupUi(mainWindow_);
-//   glwidget_ = new GlWidget(mainWindow_);
-//   QVBoxLayout* imgLayout = new QVBoxLayout(mainUi_->imgContainerWidget);
-//   imgLayout->addWidget(glwidget_);
-//   mainUi_->imgContainerWidget->setLayout(imgLayout);
+   glwidget_ = new GlWidget(mainWindow_);
+   QVBoxLayout* imgLayout = new QVBoxLayout(mainUi_->imgContainerWidget);
+   imgLayout->addWidget(glwidget_);
+   mainUi_->imgContainerWidget->setLayout(imgLayout);
 
 }
 

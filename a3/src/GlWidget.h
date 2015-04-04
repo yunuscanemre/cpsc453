@@ -3,23 +3,29 @@
 
 #include <QObject>
 #include <QtOpenGL/qgl.h>
+#include <QLabel>
+#include <QPixmap>
 
-class RgbImage;
+class QResizeEvent;
 
-class GlWidget : public QGLWidget
+class GlWidget : public QLabel
 {
    Q_OBJECT
 
 public:
    GlWidget(QWidget *parent);
 
-   void drawRgbImage(RgbImage* image);
+//   void setImage(QPixmap image);
 //   void rotateImage(int degrees);
 
 protected:
-   virtual void paintGL();
-   virtual void resizeGL(int w, int h);
-   virtual void initializeGL();
+//   virtual void paintGL();
+   virtual void resizeEvent(QResizeEvent* event);
+
+private:
+//   QLabel l;
+//   QPixmap p;
+//   bool img;
 };
 
 #endif /* GLWIDGET_H_ */

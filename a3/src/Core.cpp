@@ -3,7 +3,7 @@
 #include <math.h>
 #include <MainView.h>
 #include <Core.h>
-#include <RgbImage.h>
+#include <QImage>
 #include <QFileDialog>
 #include <Intersection.h>
 #include <QColor>
@@ -48,7 +48,7 @@ Core::~Core()
 
 void Core::raycast()
 {
-   image_ = new RgbImage(imgHeight_, imgWidth_);
+   image_ = new QImage(imgHeight_, imgWidth_, QImage::Format_RGB32);
 
    Sphere s(glm::vec3(0, 0, -5), 0.5);
 
@@ -69,17 +69,18 @@ void Core::raycast()
          if(s.intersect(r, &hit))
          {
             glm::vec3 lightDirection = glm::normalize(lightPosition_ - hit.intersection_);
-            image_->SetRgbPixel(j, i, Pixel(calculateColor(&hit.material_, hit.normal_, direction, lightDirection)));
+            glm::vec3 color = calculateColor(&hit.material_, hit.normal_, direction, lightDirection);
+            image_->setPixel(j, i, vec3ToQrgb(color));
          }
          else
          {
-            image_->SetRgbPixel(j, i, Pixel(1));
+            image_->setPixel(j, i, qRgb(255, 255, 255));
          }
 
       }
    }
 
-   view_->setImage(image_);
+   view_->setImage(*image_);
 }
 
 glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
@@ -97,6 +98,14 @@ glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 v
 //   if(a++ % 20 == 0)
 //   fprintf(stderr, "color x %f, y %f, z %f \n", color.x, color.y, color.z);
    return color;
+}
+
+QRgb Core::vec3ToQrgb(glm::vec3 c)
+{
+   int r = doubleToIntPixel(c.x);
+   int g = doubleToIntPixel(c.y);
+   int b = doubleToIntPixel(c.z);
+   return qRgb(r, g, b);
 }
 
 //Ray Core::generateRay(int i, int j)
@@ -125,6 +134,6 @@ void Core::saveImage()
          "Select save location and enter file name");
    if (saveFile.isNull())
       return;
-   image_->WriteBmpFile(saveFile.toStdString().c_str());
+//   image_->WriteBmpFile(saveFile.toStdString().c_str());
 }
 

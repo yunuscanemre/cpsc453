@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <ui_MainWindow.h>
+#include <QImage>
 
 class GlWidget;
 class QMainWindow;
@@ -17,7 +18,7 @@ public:
    virtual ~MainView();
    
    void show();
-   void setImage(RgbImage* image);
+   void setImage(QImage image);
 
 signals:
    void saveImageSelected(bool checked);

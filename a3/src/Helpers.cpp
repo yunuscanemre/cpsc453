@@ -3,7 +3,9 @@
 
 uint doubleToIntPixel(double val)
 {
-   return (val*255.0 + 0.5);
+   uint v = qMin((int)(val*255.0 + 0.5), 255);
+//   fprintf(stderr, "%f -> %d \n", val, v);
+   return v;
 }
 
 double intToDoublePixel(uint val)

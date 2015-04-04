@@ -3,10 +3,11 @@
 
 #include <QObject>
 #include <glm/glm.hpp>
+#include <QImage>
 #include <Ray.h>
 
 class MainView;
-class RgbImage;
+class QImage;
 class Material;
 
 class Core : public QObject
@@ -27,10 +28,11 @@ private:
    Ray generateRay(int i, int j);
    glm::vec3 calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
                        glm::vec3 lightVector);
+   QRgb vec3ToQrgb(glm::vec3 c);
 
 private: // Members
    MainView* view_;
-   RgbImage* image_;
+   QImage* image_;
    glm::vec3 camera_;
    glm::vec3 lightPosition_;
    glm::vec3 ambientLight_;

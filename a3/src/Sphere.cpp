@@ -64,7 +64,7 @@ bool Sphere::intersect(Ray r, Intersection* hit)
    hit->intersection_ = (r.origin_ + (r.direction_ * (float) minT));
    hit->normal_ = glm::normalize(center_ - hit->intersection_);
 //   fprintf(stderr, "r.direction after * %f, %f, %f \n", r.direction_.x, r.direction_.y, r.direction_.z);
-
+   hit->distance_ = minT;
 //   fprintf(stderr, "intersection %f, %f, %f  \n", intersection->x, intersection->y, intersection->z);
    return true;
 }

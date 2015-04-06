@@ -23,11 +23,12 @@ bool Plane::intersect(Ray r, Intersection* hit)
    double t = -(glm::dot(n_, r.origin_) + d) / glm::dot(n_, r.direction_);
    if(t < 0)
    {
-      fprintf(stderr, "not hit \n");
+      hit = NULL;
       return false;
    }
 
    hit->intersection_ = r.origin_ + (float) t * r.direction_;
    hit->normal_ = glm::normalize(n_);
+   hit->distance_ = t;
    return true;
 }

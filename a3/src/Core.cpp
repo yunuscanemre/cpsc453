@@ -4,6 +4,7 @@
 #include <MainView.h>
 #include <Core.h>
 #include <QImage>
+#include <algorithm>
 #include <QFileDialog>
 #include <Intersection.h>
 #include <QColor>
@@ -19,19 +20,23 @@ Core::Core() :
    camera_(0, 0, 5),
    lightPosition_(0, 0, 0),
    ambientLight_(0.1, 0.1, 0.1),
-   lightIntensity_(1),
+   lightIntensity_(1.5),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
    worldMaxHeight_(1),
-   imgWidth_(1000),
-   imgHeight_(1000)
+   imgWidth_(500),
+   imgHeight_(500)
 {
    view_ = new MainView();
    view_->show();
 
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
+
+   A_Object* s = new Sphere(glm::vec3(0, 0, -5), 0.8);
+   A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
+   objects_ << p << s;
 
    raycast();
 }
@@ -51,8 +56,6 @@ void Core::raycast()
 {
    image_ = new QImage(imgHeight_, imgWidth_, QImage::Format_RGB32);
 
-   Sphere s(glm::vec3(0, 0, -5), 0.8);
-//   Plane s(glm::vec3(0, 2, 3), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1));
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
 
@@ -68,7 +71,7 @@ void Core::raycast()
          Ray r(camera_, direction);
 //         Ray r = generateRay(i, j);
          Intersection hit;
-         if(s.intersect(r, &hit))
+         if(getIntersectionWithScene(r, &hit))
          {
             glm::vec3 lightDirection = glm::normalize(lightPosition_ - hit.intersection_);
             glm::vec3 color = calculateColor(&hit.material_, hit.normal_, direction, lightDirection);
@@ -83,6 +86,39 @@ void Core::raycast()
    }
 
    view_->setImage(*image_);
+}
+
+bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
+{
+   double minT = INT_MAX;
+   A_Object* object = NULL;
+   Intersection closestHit;
+   bool intersectionFound = false;
+   for(int i = 0; i < objects_.count(); i++)
+   {
+      Intersection h;
+      A_Object* objToCheck = objects_[i];
+      if(objToCheck->intersect(r, &h))
+      {
+         intersectionFound = true;
+         if(h.distance_ < minT)
+         {
+            closestHit = h;
+            minT = h.distance_;
+         }
+      }
+   }
+
+   if(intersectionFound)
+   {
+      *hit = closestHit;
+      return true;
+   }
+   else
+   {
+      hit = NULL;
+      return false;
+   }
 }
 
 glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,

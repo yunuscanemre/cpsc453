@@ -51,7 +51,7 @@ void Core::raycast()
 {
    image_ = new QImage(imgHeight_, imgWidth_, QImage::Format_RGB32);
 
-   Sphere s(glm::vec3(1, 0, -5), 0.8);
+   Sphere s(glm::vec3(0, 0, -5), 0.8);
 //   Plane s(glm::vec3(0, 2, 3), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1));
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
@@ -72,11 +72,11 @@ void Core::raycast()
          {
             glm::vec3 lightDirection = glm::normalize(lightPosition_ - hit.intersection_);
             glm::vec3 color = calculateColor(&hit.material_, hit.normal_, direction, lightDirection);
-            image_->setPixel(j, i, vec3ToQrgb(color));
+            image_->setPixel(i, j, vec3ToQrgb(color));
          }
          else
          {
-            image_->setPixel(j, i, qRgb(255, 255, 255));
+            image_->setPixel(i, j, qRgb(255, 255, 255));
          }
 
       }

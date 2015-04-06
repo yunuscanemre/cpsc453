@@ -25,8 +25,8 @@ Core::Core() :
    worldMaxWidth_(1),
    worldMinHeight_(-1),
    worldMaxHeight_(1),
-   imgWidth_(500),
-   imgHeight_(500)
+   imgWidth_(1000),
+   imgHeight_(1000)
 {
    view_ = new MainView();
    view_->show();

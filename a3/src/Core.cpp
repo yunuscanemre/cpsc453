@@ -12,6 +12,7 @@
 #include <Material.h>
 
 #include <Sphere.h>
+#include <Plane.h>
 
 Core::Core() :
    image_(NULL),
@@ -50,8 +51,8 @@ void Core::raycast()
 {
    image_ = new QImage(imgHeight_, imgWidth_, QImage::Format_RGB32);
 
-   Sphere s(glm::vec3(0, 0, -5), 0.5);
-
+   Sphere s(glm::vec3(1, 0, -5), 0.8);
+//   Plane s(glm::vec3(0, 2, 3), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1));
    double dx = (worldMaxWidth_ - worldMinWidth_) / imgWidth_;
    double dy = (worldMaxHeight_ - worldMinHeight_) / imgHeight_;
 
@@ -65,6 +66,7 @@ void Core::raycast()
          worldPixel.z = 0;
          glm::vec3 direction = glm::normalize(worldPixel - camera_);
          Ray r(camera_, direction);
+//         Ray r = generateRay(i, j);
          Intersection hit;
          if(s.intersect(r, &hit))
          {
@@ -108,25 +110,25 @@ QRgb Core::vec3ToQrgb(glm::vec3 c)
    return qRgb(r, g, b);
 }
 
-//Ray Core::generateRay(int i, int j)
-//{
-//   glm::vec3 lookat(0, 0, 0); // looking at origin
-//   glm::vec3 look = lookat - camera_;
-//   glm::vec3 up = glm::vec3(0, 1, 0);
-//   glm::vec3 du = glm::normalize(glm::cross(look, up));
-//   glm::vec3 dv = glm::normalize(glm::cross(look, du));
-//   double fov = 45;
-//   double f1 = ((double)width_ / (2*tan((0.5*fov)*M_PI/180)));
-//   glm::vec3 vp = glm::normalize(look);
-//   vp.x = vp.x*f1 - 0.5*(width_*du.x + height_*dv.x);
-//   vp.y = vp.y*f1 - 0.5*(width_*du.y + height_*dv.y);
-//   vp.z = vp.z*f1 - 0.5*(width_*du.z + height_*dv.z);
-//
-//   glm::vec3 direction (i*du.x + j*dv.x + vp.x,
-//                        i*du.y + j*dv.y + vp.y,
-//                        i*du.z + j*dv.z + vp.z);
-//   return Ray(camera_, direction);
-//}
+Ray Core::generateRay(int i, int j)
+{
+   glm::vec3 lookat(0, 0, 0); // looking at origin
+   glm::vec3 look = lookat - camera_;
+   glm::vec3 up = glm::vec3(0, 1, 0);
+   glm::vec3 du = glm::normalize(glm::cross(look, up));
+   glm::vec3 dv = glm::normalize(glm::cross(look, du));
+   double fov = 45;
+   double f1 = ((double)2.0 / (2*tan((0.5*fov)*M_PI/180)));
+   glm::vec3 vp = glm::normalize(look);
+   vp.x = vp.x*f1 - 0.5*(2.0*du.x + 2.0*dv.x);
+   vp.y = vp.y*f1 - 0.5*(2.0*du.y + 2.0*dv.y);
+   vp.z = vp.z*f1 - 0.5*(2.0*du.z + 2.0*dv.z);
+
+   glm::vec3 direction (i*du.x + j*dv.x + vp.x,
+                        i*du.y + j*dv.y + vp.y,
+                        i*du.z + j*dv.z + vp.z);
+   return Ray(camera_, glm::normalize(direction));
+}
 
 void Core::saveImage()
 {

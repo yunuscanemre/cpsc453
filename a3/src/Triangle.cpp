@@ -10,7 +10,7 @@ Triangle::Triangle(glm::vec3 a, glm::vec3 b, glm::vec3 c)
    a_ = a;
    b_ = b;
    c_ = c;
-   n_ = glm::normalize(glm::cross(b-a, c-a));
+   n_ = -glm::normalize(glm::cross(b-a, c-a));
 }
 
 Triangle::~Triangle()
@@ -21,7 +21,7 @@ Triangle::~Triangle()
 bool Triangle::intersect(Ray ray, Intersection* hit)
 {
    glm::vec3 u = b_ - a_; // triangle vectors
-   glm::vec3 v = b_ - a_;
+   glm::vec3 v = c_ - a_;
 
 //   Vector dir, w0, w;           // ray vectors
    float r, a, b;              // params to calc ray-plane intersect
@@ -36,11 +36,13 @@ bool Triangle::intersect(Ray ray, Intersection* hit)
       if(a == 0)                 // ray lies in triangle plane
       {
          hit = NULL;
+//         fprintf(stderr, "here 1");
          return false;
       }
       else
       {
          hit = NULL;
+//         fprintf(stderr, "here 2");
          return false;              // ray disjoint from plane
       }
    }
@@ -50,6 +52,7 @@ bool Triangle::intersect(Ray ray, Intersection* hit)
    if(r < 0.0)                    // ray goes away from triangle
    {
       hit = NULL;
+//      fprintf(stderr, "here 3");
       return false;                   // => no intersect
    }
    // for a segment, also test if (r > 1.0) => no intersect
@@ -72,15 +75,19 @@ bool Triangle::intersect(Ray ray, Intersection* hit)
    if(s < 0.0 || s > 1.0)         // I is outside T
    {
       hit = NULL;
+//      fprintf(stderr, "here 4");
       return false;
    }
    t = (uv * wu - uu * wv) / D;
+   hit->distance_ = t;
    if(t < 0.0 || (s + t) > 1.0)  // I is outside T
    {
       hit = NULL;
+//      fprintf(stderr, "here 5");
       return false;
    }
 
    hit->normal_ = n_;
+
    return true;                       // I is in T
 }

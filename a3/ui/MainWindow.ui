@@ -1,72 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>754</width>
-    <height>561</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="windowTitle">
-   <string>CPSC453 - A3 - Yunus Can Emre</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QGraphicsView" name="imgContainerWidget"/>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>754</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuSelection">
-    <property name="title">
-     <string>Menu</string>
-    </property>
-    <addaction name="actionSaveImage"/>
-    <addaction name="actionExit"/>
-   </widget>
-   <addaction name="menuSelection"/>
-  </widget>
-  <action name="actionOpenImage">
-   <property name="text">
-    <string>Open BMP Image...</string>
-   </property>
-  </action>
-  <action name="actionSaveImage">
-   <property name="text">
-    <string>Save BMP Image...</string>
-   </property>
-  </action>
-  <action name="actionExit">
-   <property name="text">
-    <string>Exit</string>
-   </property>
-  </action>
- </widget>
- <resources/>
- <connections/>
+<class>MainWindow</class>
+<widget class="QMainWindow" name="MainWindow">
+<property name="geometry">
+<rect>
+<x>0</x>
+<y>0</y>
+<width>754</width>
+<height>561</height>
+</rect>
+</property>
+<property name="sizePolicy">
+<sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+<horstretch>0</horstretch>
+<verstretch>0</verstretch>
+</sizepolicy>
+</property>
+<property name="windowTitle">
+<string>CPSC453 - A3 - Yunus Can Emre</string>
+</property>
+<widget class="QWidget" name="centralwidget">
+<property name="sizePolicy">
+<sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+<horstretch>0</horstretch>
+<verstretch>0</verstretch>
+</sizepolicy>
+</property>
+<layout class="QVBoxLayout" name="verticalLayout">
+<item>
+<widget class="QGraphicsView" name="imgContainerWidget"/>
+</item>
+<item>
+<layout class="QHBoxLayout" name="horizontalLayout">
+<item>
+<widget class="QLabel" name="label">
+<property name="text">
+<string>Cam X</string>
+</property>
+</widget>
+</item>
+<item>
+<widget class="QDoubleSpinBox" name="cameraX">
+<property name="buttonSymbols">
+<enum>QAbstractSpinBox::PlusMinus</enum>
+</property>
+<property name="singleStep">
+<double>0.010000000000000</double>
+</property>
+</widget>
+</item>
+<item>
+<widget class="QLabel" name="label_3">
+<property name="text">
+<string>Cam Y</string>
+</property>
+</widget>
+</item>
+<item>
+<widget class="QDoubleSpinBox" name="cameraY">
+<property name="buttonSymbols">
+<enum>QAbstractSpinBox::PlusMinus</enum>
+</property>
+<property name="singleStep">
+<double>0.010000000000000</double>
+</property>
+</widget>
+</item>
+<item>
+<widget class="QLabel" name="label_2">
+<property name="text">
+<string>Cam Z</string>
+</property>
+</widget>
+</item>
+<item>
+<widget class="QDoubleSpinBox" name="cameraZ">
+<property name="buttonSymbols">
+<enum>QAbstractSpinBox::PlusMinus</enum>
+</property>
+<property name="singleStep">
+<double>0.100000000000000</double>
+</property>
+<property name="value">
+<double>5.000000000000000</double>
+</property>
+</widget>
+</item>
+</layout>
+</item>
+</layout>
+</widget>
+<widget class="QStatusBar" name="statusbar"/>
+<widget class="QMenuBar" name="menuBar">
+<property name="geometry">
+<rect>
+<x>0</x>
+<y>0</y>
+<width>754</width>
+<height>27</height>
+</rect>
+</property>
+<widget class="QMenu" name="menuSelection">
+<property name="title">
+<string>Menu</string>
+</property>
+<addaction name="actionSaveImage"/>
+<addaction name="actionExit"/>
+</widget>
+<addaction name="menuSelection"/>
+</widget>
+<action name="actionOpenImage">
+<property name="text">
+<string>Open BMP Image...</string>
+</property>
+</action>
+<action name="actionSaveImage">
+<property name="text">
+<string>Save BMP Image...</string>
+</property>
+</action>
+<action name="actionExit">
+<property name="text">
+<string>Exit</string>
+</property>
+</action>
+</widget>
+<resources/>
+<connections/>
 </ui>

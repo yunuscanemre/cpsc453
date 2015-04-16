@@ -24,7 +24,7 @@ public:
 private slots:
    void saveImage();
    void exit();
-
+   void update();
 
 private:
    void raycast();

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <ui_MainWindow.h>
 #include <QImage>
+#include <glm/glm.hpp>
 
 class GlWidget;
 class QMainWindow;
@@ -20,9 +21,12 @@ public:
    void show();
    void setImage(QImage image);
 
+   glm::vec3 getCamera();
+
 signals:
    void saveImageSelected(bool checked);
    void exitSelected(bool checked);
+   void updateCamera();
 
 private:
    void setupUi();

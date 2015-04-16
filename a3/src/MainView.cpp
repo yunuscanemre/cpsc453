@@ -6,7 +6,7 @@
 #include <Helpers.h>
 #include <QGraphicsPixmapItem>
 
-MainView::MainView() 
+MainView::MainView()
 {
    setupUi();
 
@@ -15,15 +15,29 @@ MainView::MainView()
 
    qtConnect(mainUi_->actionExit, SIGNAL(triggered(bool)),
              this, SIGNAL(exitSelected(bool)));
+
+   qtConnect(mainUi_->cameraX, SIGNAL(valueChanged(double)),
+             this, SIGNAL(updateCamera()));
+   qtConnect(mainUi_->cameraY, SIGNAL(valueChanged(double)),
+             this, SIGNAL(updateCamera()));
+   qtConnect(mainUi_->cameraZ, SIGNAL(valueChanged(double)),
+             this, SIGNAL(updateCamera()));
 }
 
-MainView::~MainView() 
+MainView::~MainView()
 {
 }
 
 void MainView::show()
 {
    mainWindow_->show();
+}
+
+glm::vec3 MainView::getCamera()
+{
+   return glm::vec3(mainUi_->cameraX->value(),
+                     mainUi_->cameraY->value(),
+                     mainUi_->cameraZ->value());
 }
 
 void MainView::setImage(QImage image)

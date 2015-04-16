@@ -34,12 +34,20 @@ Core::Core() :
 
    qtConnect(view_, SIGNAL(exitSelected(bool)), this,
          SLOT(exit()));
+   qtConnect(view_, SIGNAL(updateCamera()), this,
+             SLOT(update()));
 
    A_Object* s = new Sphere(glm::vec3(0, 0, -5), 0.8);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    A_Object* t = new Triangle(glm::vec3(0, 0, -1), glm::vec3(0.3, 0.1, -1), glm::vec3(0.6, 0, -1));
    objects_ << s << p << t;
 
+   raycast();
+}
+
+void Core::update()
+{
+   camera_ = view_->getCamera();
    raycast();
 }
 

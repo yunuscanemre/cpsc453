@@ -21,7 +21,7 @@ Core::Core() :
    camera_(0, 0, 5),
    lightPosition_(0, 0, 0),
    ambientLight_(0.1, 0.1, 0.1),
-   lightIntensity_(1.5),
+   lightIntensity_(1),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
@@ -38,9 +38,10 @@ Core::Core() :
              SLOT(update()));
 
    A_Object* s = new Sphere(glm::vec3(0, 0, -5), 0.8);
+   A_Object* s2 = new Sphere(glm::vec3(0.9, 0.3, -6), 0.3);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    A_Object* t = new Triangle(glm::vec3(0, 0, -1), glm::vec3(0.3, 0.1, -1), glm::vec3(0.6, 0, -1));
-   objects_ << s << p << t;
+   objects_ << s << s2 << p << t;
 
    raycast();
 }
@@ -79,7 +80,7 @@ void Core::raycast()
          worldPixel.z = 0;
          glm::vec3 direction = glm::normalize(worldPixel - camera_);
          Ray r(camera_, direction);
-//         Ray r = generateRay(i, j);
+
          Intersection hit;
          if(getIntersectionWithScene(r, &hit))
          {
@@ -134,17 +135,12 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
 glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
                                glm::vec3 lightVector)
 {
-   // why qMax? it was in the shaders
-   glm::vec3 diffuse = material->d_*(float)(qMax((double) glm::dot(normal, lightVector), 0.0))*(float)lightIntensity_;
-   // qMax here too ?
-   glm::vec3 reflect = glm::normalize(2 * (glm::dot(normal, lightVector)) * normal - lightVector);
+   glm::vec3 diffuse = material->d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
+   glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
    glm::vec3 specular = material->s_ * (float)lightIntensity_ * (float) pow((glm::dot(reflect, viewDirection)), material->n_);
    glm::vec3 ambient = ambientLight_;
 
    glm::vec3 color = diffuse + specular + ambient;
-//   static int a = 0;
-//   if(a++ % 20 == 0)
-//   fprintf(stderr, "color x %f, y %f, z %f \n", color.x, color.y, color.z);
    return color;
 }
 

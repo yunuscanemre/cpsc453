@@ -25,6 +25,10 @@ private slots:
    void saveImage();
    void exit();
    void update();
+   inline void printvec(glm::vec3 a)
+   {
+      fprintf(stderr, "%f, %f, %f", a.x, a.y, a.z);
+   }
 
 private:
    void raycast();

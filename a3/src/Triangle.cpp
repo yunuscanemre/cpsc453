@@ -89,6 +89,7 @@ bool Triangle::intersect(Ray ray, Intersection* hit)
 
    hit->normal_ = n_;
    hit->material_ = material_;
-
+   hit->obj_ = this;
+   hit->distance_ = t;
    return true;                       // I is in T
 }

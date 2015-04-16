@@ -33,10 +33,10 @@ private slots:
 private:
    void raycast();
    Ray generateRay(int i, int j);
-   glm::vec3 calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
-                       glm::vec3 lightVector);
+   glm::vec3 calculateColor(Ray origRay, Intersection* h);
    QRgb vec3ToQrgb(glm::vec3 c);
    bool getIntersectionWithScene(Ray r, Intersection* object);
+   bool checkForShadowObject(Ray r, A_Object* startingObject, Intersection* hit);
 
 private: // Members
    MainView* view_;

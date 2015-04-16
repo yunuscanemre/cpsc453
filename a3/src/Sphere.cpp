@@ -57,5 +57,6 @@ bool Sphere::intersect(Ray r, Intersection* hit)
    hit->normal_ = glm::normalize(hit->intersection_ - center_);
    hit->distance_ = minT;
    hit->material_ = material_;
+   hit->obj_ = this;
    return true;
 }

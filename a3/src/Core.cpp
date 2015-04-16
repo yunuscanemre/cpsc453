@@ -16,18 +16,20 @@
 #include <Plane.h>
 #include <Triangle.h>
 
+static bool debug = false;
+
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 5),
-   lightPosition_(0, 0, 0),
+   lightPosition_(1, 1, 10),
    ambientLight_(0.1, 0.1, 0.1),
    lightIntensity_(1),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
    worldMaxHeight_(1),
-   imgWidth_(1000),
-   imgHeight_(1000)
+   imgWidth_(500),
+   imgHeight_(500)
 {
    view_ = new MainView();
    view_->show();
@@ -42,7 +44,8 @@ Core::Core() :
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
    A_Object* t = new Triangle(glm::vec3(0, 0, -1), glm::vec3(0.3, 0.1, -1), glm::vec3(0.6, 0, -1));
-   objects_ << s << s2 << p << t;
+//   objects_ << s << s2 << p << t;
+   objects_ <<  s << p << t << s2;
 
    raycast();
 }
@@ -85,8 +88,7 @@ void Core::raycast()
          Intersection hit;
          if(getIntersectionWithScene(r, &hit))
          {
-            glm::vec3 lightDirection = glm::normalize(lightPosition_ - hit.intersection_);
-            glm::vec3 color = calculateColor(&hit.material_, hit.normal_, direction, lightDirection);
+            glm::vec3 color = calculateColor(r, &hit);
             image_->setPixel(i, j, vec3ToQrgb(color));
          }
          else
@@ -110,9 +112,14 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
    {
       Intersection h;
       A_Object* objToCheck = objects_[i];
-      if(objToCheck->intersect(r, &h))
+      if(objToCheck->intersect(r, &h) /*&& h.distance_ > 0.2 && h.distance_ < 1000*/)
       {
          intersectionFound = true;
+//         if(debug)
+//         {
+//            fprintf(stderr, "%f \n", h.distance_);
+//            debug = false;
+//         }
          if(h.distance_ < minT)
          {
             closestHit = h;
@@ -133,12 +140,65 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
    }
 }
 
-glm::vec3 Core::calculateColor(Material* material, glm::vec3 normal, glm::vec3 viewDirection,
-                               glm::vec3 lightVector)
+bool Core::checkForShadowObject(Ray r, A_Object* startingObject, Intersection* hit)
 {
-   glm::vec3 diffuse = material->d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
+   double minT = INT_MAX;
+   A_Object* object = NULL;
+   Intersection closestHit;
+   bool intersectionFound = false;
+   for(int i = 0; i < objects_.count(); i++)
+   {
+      Intersection h;
+      A_Object* objToCheck = objects_[i];
+      if(startingObject != objToCheck && objToCheck->intersect(r, &h) && h.distance_ < 1000)
+      {
+         intersectionFound = true;
+//         if(debug)
+//         {
+//            fprintf(stderr, "%f \n", h.distance_);
+//            debug = false;
+//         }
+         if(h.distance_ < minT)
+         {
+            closestHit = h;
+            minT = h.distance_;
+         }
+      }
+   }
+
+   if(intersectionFound)
+   {
+      *hit = closestHit;
+      return true;
+   }
+   else
+   {
+      hit = NULL;
+      return false;
+   }
+}
+
+glm::vec3 Core::calculateColor(Ray origRay, Intersection* hit)
+{
+   glm::vec3 lightVector = glm::normalize(lightPosition_ - hit->intersection_);
+   double hitToLight = glm::length(lightPosition_ - hit->intersection_);
+   Ray shadowRay(hit->intersection_, lightVector);
+   Intersection shadowHit;
+   debug = true;
+   if(checkForShadowObject(shadowRay, hit->obj_, &shadowHit) &&
+     (hitToLight > glm::length(lightPosition_ - shadowHit.intersection_)  ))
+   {
+      return ambientLight_;
+   }
+
+   Material material = hit->material_;
+   glm::vec3 normal = hit->normal_;
+   glm::vec3 viewDirection = origRay.direction_;
+
+
+   glm::vec3 diffuse = material.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
    glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
-   glm::vec3 specular = material->s_ * (float)lightIntensity_ * (float) pow((glm::dot(reflect, viewDirection)), material->n_);
+   glm::vec3 specular = material.s_ * (float)lightIntensity_ * (float) pow((glm::dot(reflect, viewDirection)), material.n_);
    glm::vec3 ambient = ambientLight_;
 
    glm::vec3 color = diffuse + specular + ambient;

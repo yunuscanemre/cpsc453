@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <A_Object.h>
 #include <Material.h>
 #include <glm/glm.hpp>
 
@@ -17,6 +18,7 @@ struct Intersection
    glm::vec3 normal_;
    Material material_;
    double distance_;
+   A_Object* obj_;
 
 };
 

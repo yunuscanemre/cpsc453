@@ -19,6 +19,7 @@ public:
 
 public:
    virtual bool intersect(Ray ray, Intersection* intersection) = 0;
+   virtual void setMaterial(const Material& m);
 
 signals:
 

@@ -40,6 +40,7 @@ Core::Core() :
    A_Object* s = new Sphere(glm::vec3(0, 0, -5), 0.8);
    A_Object* s2 = new Sphere(glm::vec3(0.9, 0.3, -6), 0.3);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
+   p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
    A_Object* t = new Triangle(glm::vec3(0, 0, -1), glm::vec3(0.3, 0.1, -1), glm::vec3(0.6, 0, -1));
    objects_ << s << s2 << p << t;
 

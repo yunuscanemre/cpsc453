@@ -13,3 +13,8 @@ A_Object::A_Object()
 A_Object::~A_Object()
 {
 }
+
+void A_Object::setMaterial(const Material& m)
+{
+   material_ = m;
+}

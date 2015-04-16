@@ -30,5 +30,6 @@ bool Plane::intersect(Ray r, Intersection* hit)
    hit->intersection_ = r.origin_ + (float) t * r.direction_;
    hit->normal_ = glm::normalize(n_);
    hit->distance_ = t;
+   hit->material_ = material_;
    return true;
 }

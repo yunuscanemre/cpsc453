@@ -21,15 +21,15 @@ static bool debug = false;
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 5),
-   lightPosition_(1, 1, 10),
-   ambientLight_(0.1, 0.1, 0.1),
+   lightPosition_(1.2, 1.2, 10),
+   ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
    worldMinWidth_(-1),
    worldMaxWidth_(1),
    worldMinHeight_(-1),
    worldMaxHeight_(1),
-   imgWidth_(500),
-   imgHeight_(500)
+   imgWidth_(800),
+   imgHeight_(800)
 {
    view_ = new MainView();
    view_->show();
@@ -39,12 +39,11 @@ Core::Core() :
    qtConnect(view_, SIGNAL(updateCamera()), this,
              SLOT(update()));
 
-   A_Object* s = new Sphere(glm::vec3(0, 0, -5), 0.8);
+   A_Object* s = new Sphere(glm::vec3(-1, -1, -5), 0.8);
    A_Object* s2 = new Sphere(glm::vec3(0.9, 0.3, -6), 0.3);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
-   A_Object* t = new Triangle(glm::vec3(0, 0, -1), glm::vec3(0.3, 0.1, -1), glm::vec3(0.6, 0, -1));
-//   objects_ << s << s2 << p << t;
+   A_Object* t = new Triangle(glm::vec3(0.3, 0, -1), glm::vec3(0.8, 0.1, -1), glm::vec3(1.1, 0, -1));
    objects_ <<  s << p << t << s2;
 
    raycast();
@@ -188,7 +187,12 @@ glm::vec3 Core::calculateColor(Ray origRay, Intersection* hit)
    if(checkForShadowObject(shadowRay, hit->obj_, &shadowHit) &&
      (hitToLight > glm::length(lightPosition_ - shadowHit.intersection_)  ))
    {
-      return ambientLight_;
+      glm::vec3 d = hit->material_.d_;
+      glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
+//      fprintf(stderr, "shadowColor ");
+//      printvec(shadowColor);
+//      fprintf(stderr, "\n");
+      return shadowColor;
    }
 
    Material material = hit->material_;
@@ -198,7 +202,7 @@ glm::vec3 Core::calculateColor(Ray origRay, Intersection* hit)
 
    glm::vec3 diffuse = material.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
    glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
-   glm::vec3 specular = material.s_ * (float)lightIntensity_ * (float) pow((glm::dot(reflect, viewDirection)), material.n_);
+   glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), material.n_) * material.s_ * (float)lightIntensity_;
    glm::vec3 ambient = ambientLight_;
 
    glm::vec3 color = diffuse + specular + ambient;

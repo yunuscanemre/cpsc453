@@ -28,7 +28,7 @@ Core::Core() :
    worldMaxWidth_(1),
    worldMinHeight_(-1),
    worldMaxHeight_(1),
-   background_(1),
+   background_(0),
    imgWidth_(800),
    imgHeight_(800)
 {
@@ -45,7 +45,7 @@ Core::Core() :
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
    A_Object* t = new Triangle(glm::vec3(0.3, 0, -1), glm::vec3(0.8, 0.1, -1), glm::vec3(1.1, 0, -1));
-   objects_ <<  s << p << t << s2;
+   objects_ <<  s << s2 << p << t;
 
    raycast();
 }
@@ -85,7 +85,7 @@ void Core::raycast()
          glm::vec3 direction = glm::normalize(worldPixel - camera_);
          Ray r(camera_, direction);
 
-         glm::vec3 color = calculateColor(r, 1);
+         glm::vec3 color = calculateColor(r, 5);
          image_->setPixel(i, j, vec3ToQrgb(color));
       }
    }
@@ -103,7 +103,7 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
    {
       Intersection h;
       A_Object* objToCheck = objects_[i];
-      if(objToCheck->intersect(r, &h) /*&& h.distance_ > 0.2 && h.distance_ < 1000*/)
+      if(objToCheck->intersect(r, &h) && h.distance_ > 0.2)
       {
          intersectionFound = true;
 //         if(debug)
@@ -171,7 +171,7 @@ bool Core::checkForShadowObject(Ray r, A_Object* startingObject, Intersection* h
 
 glm::vec3 Core::calculateColor(Ray ray, int depth)
 {
-   if(depth <= 0)
+   if(depth < 0)
       return background_;
 
    Intersection hit;
@@ -180,28 +180,50 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       return background_;
    }
 
+   glm::vec3 spec(0);
+   if(hit.material_.s_.x > 0 || hit.material_.s_.y > 0 || hit.material_.s_.z > 0)
+   {
+      glm::vec3 reflectDir = glm::normalize(glm::reflect(ray.direction_, hit.normal_));
+      Ray reflection(hit.intersection_, reflectDir);
+      glm::vec3 c = calculateColor(reflection, depth-1);
+      spec.x = hit.material_.s_.x * c.x;
+      spec.y = hit.material_.s_.y * c.y;
+      spec.z = hit.material_.s_.z * c.z;
+   }
+   else
+   {
+      spec = glm::vec3(0);
+   }
+
    glm::vec3 lightVector = glm::normalize(lightPosition_ - hit.intersection_);
+   glm::vec3 viewDirection = glm::normalize(hit.intersection_ - camera_);
+   glm::vec3 local;
+
    // check shadow
    double hitToLight = glm::length(lightPosition_ - hit.intersection_);
    Ray shadowRay(hit.intersection_, lightVector);
    Intersection shadowHit;
-   debug = true;
+
    if(checkForShadowObject(shadowRay, hit.obj_, &shadowHit) &&
      (hitToLight > glm::length(lightPosition_ - shadowHit.intersection_)  ))
    {
       glm::vec3 d = hit.material_.d_;
       glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
-      return shadowColor;
+      local = shadowColor;
+   }
+   else
+   {
+      local = phong(lightVector, viewDirection, hit.normal_, hit.material_);
    }
 
-   Material material = hit.material_;
-   glm::vec3 normal = hit.normal_;
-   glm::vec3 viewDirection = glm::normalize(hit.intersection_ - camera_);
+   return local + spec;
+}
 
-
-   glm::vec3 diffuse = material.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
+glm::vec3 Core::phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m)
+{
+   glm::vec3 diffuse = m.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
    glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
-   glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), material.n_) * material.s_ * (float)lightIntensity_;
+   glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), m.n_) * m.s_ * (float)lightIntensity_;
    glm::vec3 ambient = ambientLight_;
 
    glm::vec3 color = diffuse + specular + ambient;

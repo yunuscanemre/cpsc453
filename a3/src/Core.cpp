@@ -84,17 +84,8 @@ void Core::raycast()
          glm::vec3 direction = glm::normalize(worldPixel - camera_);
          Ray r(camera_, direction);
 
-         Intersection hit;
-         if(getIntersectionWithScene(r, &hit))
-         {
-            glm::vec3 color = calculateColor(r, &hit);
-            image_->setPixel(i, j, vec3ToQrgb(color));
-         }
-         else
-         {
-            image_->setPixel(i, j, qRgb(255, 255, 255));
-         }
-
+         glm::vec3 color = calculateColor(r);
+         image_->setPixel(i, j, vec3ToQrgb(color));
       }
    }
 
@@ -177,17 +168,23 @@ bool Core::checkForShadowObject(Ray r, A_Object* startingObject, Intersection* h
    }
 }
 
-glm::vec3 Core::calculateColor(Ray origRay, Intersection* hit)
+glm::vec3 Core::calculateColor(Ray ray)
 {
-   glm::vec3 lightVector = glm::normalize(lightPosition_ - hit->intersection_);
-   double hitToLight = glm::length(lightPosition_ - hit->intersection_);
-   Ray shadowRay(hit->intersection_, lightVector);
+   Intersection hit;
+   if(!getIntersectionWithScene(ray, &hit))
+   {
+      return glm::vec3(1);
+   }
+
+   glm::vec3 lightVector = glm::normalize(lightPosition_ - hit.intersection_);
+   double hitToLight = glm::length(lightPosition_ - hit.intersection_);
+   Ray shadowRay(hit.intersection_, lightVector);
    Intersection shadowHit;
    debug = true;
-   if(checkForShadowObject(shadowRay, hit->obj_, &shadowHit) &&
+   if(checkForShadowObject(shadowRay, hit.obj_, &shadowHit) &&
      (hitToLight > glm::length(lightPosition_ - shadowHit.intersection_)  ))
    {
-      glm::vec3 d = hit->material_.d_;
+      glm::vec3 d = hit.material_.d_;
       glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
 //      fprintf(stderr, "shadowColor ");
 //      printvec(shadowColor);
@@ -195,9 +192,9 @@ glm::vec3 Core::calculateColor(Ray origRay, Intersection* hit)
       return shadowColor;
    }
 
-   Material material = hit->material_;
-   glm::vec3 normal = hit->normal_;
-   glm::vec3 viewDirection = origRay.direction_;
+   Material material = hit.material_;
+   glm::vec3 normal = hit.normal_;
+   glm::vec3 viewDirection = ray.direction_;
 
 
    glm::vec3 diffuse = material.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;

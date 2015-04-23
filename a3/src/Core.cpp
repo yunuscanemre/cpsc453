@@ -20,8 +20,8 @@ static bool debug = false;
 
 Core::Core() :
    image_(NULL),
-   camera_(0, 0, 50),
-   lightPosition_(10, 30, 10),
+   camera_(0, 0, 100),
+   lightPosition_(0, 30, 30),
    ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
    worldMinWidth_(-10),
@@ -41,15 +41,15 @@ Core::Core() :
              SLOT(update()));
 
 //   A_Object* s = new Sphere(glm::vec3(-1, 0, -5), 0.8);
-   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 9), 3.0);
+   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 15), 3.0);
 //   A_Object* s2 = new Sphere(glm::vec3(0.3, 0.3, 0.4), 0.1);
-      A_Object* s2 = new Sphere(glm::vec3(-1, 7.5, 7), 2.5);
-      A_Object* s3 = new Sphere(glm::vec3(6, 1.5, 8), 1);
+      A_Object* s2 = new Sphere(glm::vec3(-4, 6, 7), 2.5);
+      A_Object* s3 = new Sphere(glm::vec3(4, 1.5, 10), 1);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
-//   A_Object* t = new Triangle(glm::vec3(-1, 0, 0), glm::vec3(0, 0.3, 0), glm::vec3(1, 0, 0));
-//   A_Object* t = new Triangle(glm::vec3(4, -12, -4), glm::vec3(4, -4, -6), glm::vec3(7, -8, -1));
-   A_Object* t = new Triangle(glm::vec3(2, 0, 0), glm::vec3(6, 3, 0), glm::vec3(10, 0, 0));
+//   A_Object* t = new Triangle(glm::vec3(3, 4, -1), glm::vec3(3, 9, 7), glm::vec3(9, 5, 4));
+//   A_Object* t = new Triangle(glm::vec3(9, 5, 0), glm::vec3(6, 0, -7), glm::vec3(12, 0, 7));
+   A_Object* t = new Triangle(glm::vec3(-6, 4, -7), glm::vec3(0, 8, -6), glm::vec3(6, 4, -7));
    objects_ << t << s2 << p << s << s3;
 
    raycast();

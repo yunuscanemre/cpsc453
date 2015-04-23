@@ -10,86 +10,48 @@ Triangle::Triangle(glm::vec3 a, glm::vec3 b, glm::vec3 c)
    a_ = a;
    b_ = b;
    c_ = c;
-   n_ = -glm::normalize(glm::cross(b-a, c-a));
+   n_ = glm::normalize(glm::cross(b-a, c-a));
 }
 
 Triangle::~Triangle()
 {
 }
 
-// Refer to http://geomalgorithms.com/a06-_intersect-2.html
 bool Triangle::intersect(Ray ray, Intersection* hit)
 {
-   glm::vec3 u = b_ - a_; // triangle vectors
-   glm::vec3 v = c_ - a_;
+   glm::vec3 E1 = a_ - b_;
+   glm::vec3 E2 = a_ - c_;
+   glm::vec3 V = ray.direction_;
+   glm::vec3 T = a_ - ray.origin_;
 
-//   Vector dir, w0, w;           // ray vectors
-   float r, a, b;              // params to calc ray-plane intersect
+   glm::mat3 e1e2v(E1, E2, V);
+   float e1e2vDet = glm::determinant(e1e2v);
 
-   glm::vec3 dir = ray.direction_;
-//   w0 = R.P0 - T.V0;
-   glm::vec3 w0 = ray.origin_ - a_;
-   a = -glm::dot(n_, w0);
-   b = glm::dot(n_, dir);
-   if(fabs(b) < 0.00000001)
-   {     // ray is  parallel to triangle plane
-      if(a == 0)                 // ray lies in triangle plane
-      {
-         hit = NULL;
-//         fprintf(stderr, "here 1");
-         return false;
-      }
-      else
-      {
-         hit = NULL;
-//         fprintf(stderr, "here 2");
-         return false;              // ray disjoint from plane
-      }
-   }
+   glm::mat3 te2v(T, E2, V);
+   float te2vDet = glm::determinant(te2v);
 
-   // get intersect point of ray with triangle plane
-   r = a / b;
-   if(r < 0.0)                    // ray goes away from triangle
+   float beta = te2vDet / e1e2vDet;
+
+   glm::mat3 e1tv(E1, T, V);
+   float e1tvDet = glm::determinant(e1tv);
+
+   float gamma = e1tvDet / e1e2vDet;
+
+   glm::mat3 e1e2t(E1, E2, T);
+   float e1e2tDet = glm::determinant(e1e2t);
+
+   float t = e1e2tDet / e1e2vDet;
+
+   if((beta + gamma < 1.0) && (beta > 0.0) && (gamma > 0.0))
    {
-      hit = NULL;
-//      fprintf(stderr, "here 3");
-      return false;                   // => no intersect
+      hit->material_ = material_;
+      hit->obj_ = this;
+      hit->distance_ = t;
+      hit->intersection_ = ray.origin_ + t * ray.direction_;
+      hit->normal_ = -n_;
+
+      return true;
    }
-   // for a segment, also test if (r > 1.0) => no intersect
-
-   hit->intersection_ = ray.origin_ + r * dir;            // intersect point of ray and plane
-
-   // is I inside T?
-   float uu, uv, vv, wu, wv, D;
-   uu = glm::dot(u, u);
-   uv = glm::dot(u, v);
-   vv = glm::dot(v, v);
-   glm::vec3 w = hit->intersection_ - a_;
-   wu = dot(w, u);
-   wv = dot(w, v);
-   D = uv * uv - uu * vv;
-
-   // get and test parametric coords
-   float s, t;
-   s = (uv * wv - vv * wu) / D;
-   if(s < 0.0 || s > 1.0)         // I is outside T
-   {
-      hit = NULL;
-//      fprintf(stderr, "here 4");
+   else
       return false;
-   }
-   t = (uv * wu - uu * wv) / D;
-   hit->distance_ = t;
-   if(t < 0.0 || (s + t) > 1.0)  // I is outside T
-   {
-      hit = NULL;
-//      fprintf(stderr, "here 5");
-      return false;
-   }
-
-   hit->normal_ = n_;
-   hit->material_ = material_;
-   hit->obj_ = this;
-   hit->distance_ = t;
-   return true;                       // I is in T
 }

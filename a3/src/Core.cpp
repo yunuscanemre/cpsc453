@@ -20,14 +20,14 @@ static bool debug = false;
 
 Core::Core() :
    image_(NULL),
-   camera_(0, 0, 5),
-   lightPosition_(1.2, 1.2, 10),
+   camera_(0, 0, 50),
+   lightPosition_(10, 30, 10),
    ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
-   worldMinWidth_(-1),
-   worldMaxWidth_(1),
-   worldMinHeight_(-1),
-   worldMaxHeight_(1),
+   worldMinWidth_(-10),
+   worldMaxWidth_(10),
+   worldMinHeight_(-10),
+   worldMaxHeight_(10),
    background_(0),
    imgWidth_(800),
    imgHeight_(800)
@@ -40,12 +40,17 @@ Core::Core() :
    qtConnect(view_, SIGNAL(updateCamera()), this,
              SLOT(update()));
 
-   A_Object* s = new Sphere(glm::vec3(-1, -1, -5), 0.8);
-   A_Object* s2 = new Sphere(glm::vec3(0.9, 0.3, -6), 0.3);
+//   A_Object* s = new Sphere(glm::vec3(-1, 0, -5), 0.8);
+   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 9), 3.0);
+//   A_Object* s2 = new Sphere(glm::vec3(0.3, 0.3, 0.4), 0.1);
+      A_Object* s2 = new Sphere(glm::vec3(-1, 7.5, 7), 2.5);
+      A_Object* s3 = new Sphere(glm::vec3(6, 1.5, 8), 1);
    A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
    p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
-   A_Object* t = new Triangle(glm::vec3(0.3, 0, -1), glm::vec3(0.8, 0.1, -1), glm::vec3(1.1, 0, -1));
-   objects_ <<  s << s2 << p << t;
+//   A_Object* t = new Triangle(glm::vec3(-1, 0, 0), glm::vec3(0, 0.3, 0), glm::vec3(1, 0, 0));
+//   A_Object* t = new Triangle(glm::vec3(4, -12, -4), glm::vec3(4, -4, -6), glm::vec3(7, -8, -1));
+   A_Object* t = new Triangle(glm::vec3(2, 0, 0), glm::vec3(6, 3, 0), glm::vec3(10, 0, 0));
+   objects_ << t << s2 << p << s << s3;
 
    raycast();
 }
@@ -85,7 +90,7 @@ void Core::raycast()
          glm::vec3 direction = glm::normalize(worldPixel - camera_);
          Ray r(camera_, direction);
 
-         glm::vec3 color = calculateColor(r, 5);
+         glm::vec3 color = calculateColor(r, 3);
          image_->setPixel(i, j, vec3ToQrgb(color));
       }
    }
@@ -188,8 +193,10 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
    glm::vec3 spec(0);
    if(hit.material_.s_.x > 0 || hit.material_.s_.y > 0 || hit.material_.s_.z > 0)
    {
+//      glm::vec3 reflectDir = glm::normalize(ray.direction_ - 2*(glm::dot(ray.direction_, hit.normal_)) * hit.normal_);
       glm::vec3 reflectDir = glm::normalize(glm::reflect(ray.direction_, hit.normal_));
       Ray reflection(hit.intersection_, reflectDir, hit.obj_);
+      debug = true;
       glm::vec3 c = calculateColor(reflection, depth-1);
       spec.x = hit.material_.s_.x * c.x;
       spec.y = hit.material_.s_.y * c.y;

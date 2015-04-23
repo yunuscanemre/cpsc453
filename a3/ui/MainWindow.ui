@@ -45,7 +45,10 @@
          <enum>QAbstractSpinBox::PlusMinus</enum>
         </property>
         <property name="minimum">
-         <double>-99.000000000000000</double>
+         <double>-9999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>9999.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.010000000000000</double>
@@ -65,7 +68,10 @@
          <enum>QAbstractSpinBox::PlusMinus</enum>
         </property>
         <property name="minimum">
-         <double>-99.000000000000000</double>
+         <double>-9999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>9999.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.010000000000000</double>
@@ -85,13 +91,16 @@
          <enum>QAbstractSpinBox::PlusMinus</enum>
         </property>
         <property name="minimum">
-         <double>-99.000000000000000</double>
+         <double>-9999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>9999.989999999999782</double>
         </property>
         <property name="singleStep">
-         <double>0.100000000000000</double>
+         <double>5.000000000000000</double>
         </property>
         <property name="value">
-         <double>5.000000000000000</double>
+         <double>50.000000000000000</double>
         </property>
        </widget>
       </item>

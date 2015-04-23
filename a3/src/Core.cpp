@@ -20,7 +20,7 @@ static bool debug = false;
 
 Core::Core() :
    image_(NULL),
-   camera_(0, 0, 100),
+   camera_(0, 0, 30),
    ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
    worldMinWidth_(-10),
@@ -39,17 +39,28 @@ Core::Core() :
    qtConnect(view_, SIGNAL(updateCamera()), this,
              SLOT(update()));
 
-//   A_Object* s = new Sphere(glm::vec3(-1, 0, -5), 0.8);
-   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 15), 3.0);
-//   A_Object* s2 = new Sphere(glm::vec3(0.3, 0.3, 0.4), 0.1);
-      A_Object* s2 = new Sphere(glm::vec3(-4, 6, 7), 2.5);
-      A_Object* s3 = new Sphere(glm::vec3(4, 1.5, 10), 1);
-   A_Object* p = new Plane(glm::vec3(1, -5, 0), glm::vec3(0, -5, 1), glm::vec3(0, -5, -1));
-   p->setMaterial(Material(glm::vec3(0, 0.835, 1), glm::vec3(0, 0.835, 1), 20));
-//   A_Object* t = new Triangle(glm::vec3(3, 4, -1), glm::vec3(3, 9, 7), glm::vec3(9, 5, 4));
-//   A_Object* t = new Triangle(glm::vec3(9, 5, 0), glm::vec3(6, 0, -7), glm::vec3(12, 0, 7));
-   A_Object* t = new Triangle(glm::vec3(-6, 4, -7), glm::vec3(0, 8, -6), glm::vec3(6, 4, -7));
-   objects_ << t << s2 << p << s << s3;
+   // Spheres
+   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 5), 3.0);
+   A_Object* s2 = new Sphere(glm::vec3(-4, 6, 7), 2.5);
+   A_Object* s3 = new Sphere(glm::vec3(4, 1.5, 10), 1);
+   A_Object* s4 = new Sphere(glm::vec3(4, -1.5, 10), 1);
+   s4->setMaterial(Material(glm::vec3(0.01), glm::vec3(0.5), 32));
+
+   // Plane
+   A_Object* p = new Plane(glm::vec3(1, -10, 0), glm::vec3(0, -10, 1), glm::vec3(0, -10, -1));
+   p->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0), 300));
+
+   // Triangles
+   A_Object* t = new Triangle(glm::vec3(-6, 4, -7), glm::vec3(0, 8, -7), glm::vec3(6, 4, -7));
+
+   // Floor from 2 triangles
+   A_Object* tf1 = new Triangle(glm::vec3(-10, -10, -5), glm::vec3(-10, -10, -45), glm::vec3(10, -10, -45));
+   tf1->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 300));
+   A_Object* tf2 = new Triangle(glm::vec3(10, -10, -5), glm::vec3(-10.01, -10, -5), glm::vec3(10, -10, -45.01));
+   tf2->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128));
+   objects_  << s << s2 << s3 << s4 << t << tf1 << tf2;
+
+   // Lights
    Light l1 (glm::vec3(0, 30, 30), 0.5, 1, 2);
    Light l2 (glm::vec3(-60, 30, 0), 0.5, 1, 2);
    Light l3 (glm::vec3(60, 30, 0), 0.5, 1, 2);

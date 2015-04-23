@@ -13,6 +13,21 @@ class Material;
 class A_Object;
 class Intersection;
 
+struct Light
+{
+   glm::vec3 pos_;
+   float a_ = 1;
+   float b_ = 0;
+   float c_ = 0;
+
+   inline Light(glm::vec3 pos, float a, float b, float c)
+   {
+      pos_ = pos; a_ = a; b_ = b; c_ = c;
+   }
+};
+
+
+
 class Core : public QObject
 {
    Q_OBJECT
@@ -43,7 +58,6 @@ private: // Members
    MainView* view_;
    QImage* image_;
    glm::vec3 camera_;
-   glm::vec3 lightPosition_;
    glm::vec3 ambientLight_;
    double lightIntensity_;
    double worldMinWidth_;
@@ -53,6 +67,7 @@ private: // Members
    glm::vec3 background_;
    int imgWidth_, imgHeight_;
    QList<A_Object*> objects_;
+   QList<Light> lights_;
 };
 
 #endif

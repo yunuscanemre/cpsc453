@@ -21,7 +21,6 @@ static bool debug = false;
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 100),
-   lightPosition_(0, 30, 30),
    ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
    worldMinWidth_(-10),
@@ -51,6 +50,11 @@ Core::Core() :
 //   A_Object* t = new Triangle(glm::vec3(9, 5, 0), glm::vec3(6, 0, -7), glm::vec3(12, 0, 7));
    A_Object* t = new Triangle(glm::vec3(-6, 4, -7), glm::vec3(0, 8, -6), glm::vec3(6, 4, -7));
    objects_ << t << s2 << p << s << s3;
+   Light l1 (glm::vec3(0, 30, 30), 0.5, 1, 2);
+   Light l2 (glm::vec3(-60, 30, 0), 0.5, 1, 2);
+   Light l3 (glm::vec3(60, 30, 0), 0.5, 1, 2);
+   Light l4 (glm::vec3(0, 50, 0), 0.5, 1, 2);
+   lights_ << l1 << l2 << l3 << l4;
 
    raycast();
 }
@@ -207,27 +211,37 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       spec = glm::vec3(0);
    }
 
-   glm::vec3 lightVector = glm::normalize(lightPosition_ - hit.intersection_);
    glm::vec3 viewDirection = glm::normalize(hit.intersection_ - camera_);
-   glm::vec3 local;
-
-   // check shadow
-   double hitToLight = glm::length(lightPosition_ - hit.intersection_);
-   Ray shadowRay(hit.intersection_, lightVector);
-   Intersection shadowHit;
-
-   if(checkForShadowObject(shadowRay, hit.obj_, &shadowHit) &&
-     (hitToLight > glm::length(lightPosition_ - shadowHit.intersection_)  ))
+   glm::vec3 local(0);
+   for(int i = 0; i < lights_.count(); i++)
    {
-      glm::vec3 d = hit.material_.d_;
-      glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
-      local = shadowColor;
-   }
-   else
-   {
-      local = phong(lightVector, viewDirection, hit.normal_, hit.material_);
+      Light l = lights_[i];
+      glm::vec3 lightPosition = l.pos_;
+      glm::vec3 lightVector = glm::normalize(lightPosition - hit.intersection_);
+
+
+      // check shadow
+      double hitToLight = glm::length(lightPosition - hit.intersection_);
+      Ray shadowRay(hit.intersection_, lightVector);
+      Intersection shadowHit;
+
+      if(checkForShadowObject(shadowRay, hit.obj_, &shadowHit) &&
+        (hitToLight > glm::length(lightPosition - shadowHit.intersection_)  ))
+      {
+         glm::vec3 d = hit.material_.d_;
+         glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
+         local += shadowColor;
+      }
+      else
+      {
+         float attenuation = 1;//1.0f/(l.a_*pow(hitToLight, 2.0f) + l.b_*hitToLight + l.c_);
+//         fprintf(stderr, "att %f \n", attenuation);
+//         fprintf(stderr, "htl %f \n", hitToLight);
+         local += (attenuation*phong(lightVector, viewDirection, hit.normal_, hit.material_));
+      }
    }
 
+   local += ambientLight_;
    return local + spec;
 }
 
@@ -236,9 +250,8 @@ glm::vec3 Core::phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 
    glm::vec3 diffuse = m.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
    glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
    glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), m.n_) * m.s_ * (float)lightIntensity_;
-   glm::vec3 ambient = ambientLight_;
 
-   glm::vec3 color = diffuse + specular + ambient;
+   glm::vec3 color = diffuse + specular;
    return color;
 }
 

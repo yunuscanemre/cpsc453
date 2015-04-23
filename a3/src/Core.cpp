@@ -93,7 +93,7 @@ void Core::raycast()
    view_->setImage(*image_);
 }
 
-bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
+bool Core::getIntersectionWithScene(Ray r, Intersection* hit, A_Object* startingObject)
 {
    double minT = INT_MAX;
    A_Object* object = NULL;
@@ -103,8 +103,13 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit)
    {
       Intersection h;
       A_Object* objToCheck = objects_[i];
+
       if(objToCheck->intersect(r, &h) && h.distance_ > 0.2)
       {
+         if(startingObject!= NULL && startingObject == objToCheck)
+         {
+            continue;
+         }
          intersectionFound = true;
 //         if(debug)
 //         {
@@ -175,7 +180,7 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       return background_;
 
    Intersection hit;
-   if(!getIntersectionWithScene(ray, &hit))
+   if(!getIntersectionWithScene(ray, &hit, ray.startingObj_))
    {
       return background_;
    }
@@ -184,7 +189,7 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
    if(hit.material_.s_.x > 0 || hit.material_.s_.y > 0 || hit.material_.s_.z > 0)
    {
       glm::vec3 reflectDir = glm::normalize(glm::reflect(ray.direction_, hit.normal_));
-      Ray reflection(hit.intersection_, reflectDir);
+      Ray reflection(hit.intersection_, reflectDir, hit.obj_);
       glm::vec3 c = calculateColor(reflection, depth-1);
       spec.x = hit.material_.s_.x * c.x;
       spec.y = hit.material_.s_.y * c.y;

@@ -15,6 +15,7 @@ Intersection::Intersection(glm::vec3 intersectionPoint, glm::vec3 normal,
    normal_ = normal;
    material_ = material;
    distance_ = distance;
+   obj_ = NULL;
 }
 
 Intersection::~Intersection()

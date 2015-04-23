@@ -36,7 +36,7 @@ private:
    glm::vec3 calculateColor(Ray origRay, int depth);
    glm::vec3 phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m);
    QRgb vec3ToQrgb(glm::vec3 c);
-   bool getIntersectionWithScene(Ray r, Intersection* object);
+   bool getIntersectionWithScene(Ray r,Intersection* object, A_Object* startingObject = NULL);
    bool checkForShadowObject(Ray r, A_Object* startingObject, Intersection* hit);
 
 private: // Members

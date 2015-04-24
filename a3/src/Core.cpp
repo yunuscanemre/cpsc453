@@ -89,10 +89,9 @@ Core::Core() :
    objects_  << s << s2 << s3 << s4 << s5 << t << t2 << t3 << p ;
 
    // Lights
-   Light l1 (glm::vec3(0, 30, 30), 0.5, 1, 2);
-   Light l2 (glm::vec3(-60, 30, 0), 0.5, 1, 2);
-   Light l3 (glm::vec3(60, 30, 0), 0.5, 1, 2);
-   Light l4 (glm::vec3(0, 50, 0), 0.5, 1, 2);
+   Light l1 (glm::vec3(0, 30, 30), 0.02, 0.03, 1);
+   Light l2 (glm::vec3(-60, 30, 0), 0.02, 0.03, 1);
+   Light l3 (glm::vec3(60, 30, 0), 0.02, 0.03, 1);
    lights_ << l1 << l2 << l3;
 
    raycast();
@@ -262,14 +261,14 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       {
          glm::vec3 d = hit.material_.d_;
          glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
-         local += shadowColor;
+         float attenuation = 1.0f/(l.c_*pow(hitToLight, 2.0f) + l.b_*hitToLight + l.a_);
+         local += attenuation*shadowColor;
+//         local += shadowColor;
+
       }
       else
       {
-         float attenuation = 1;//1.0f/(l.a_*pow(hitToLight, 2.0f) + l.b_*hitToLight + l.c_);
-//         fprintf(stderr, "att %f \n", attenuation);
-//         fprintf(stderr, "htl %f \n", hitToLight);
-         local += (attenuation*phong(lightVector, viewDirection, hit.normal_, hit.material_));
+         local += (phong(lightVector, viewDirection, hit.normal_, hit.material_));
       }
    }
 

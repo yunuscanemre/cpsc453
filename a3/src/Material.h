@@ -9,11 +9,14 @@ struct Material
    Material(double d, double s, double n);
    Material(glm::vec3 d, double s, double n);
    Material(glm::vec3 d, glm::vec3 s, double n);
+   Material(glm::vec3 d, glm::vec3 s, double n, double o);
    ~Material();
 
    glm::vec3 d_; // diffuse
    glm::vec3 s_; // specular
+   double o_; // opaqueness
    double n_; // power
+
 //   double a_; // ambient
 };
 

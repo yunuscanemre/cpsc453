@@ -20,7 +20,7 @@ static bool debug = false;
 
 Core::Core() :
    image_(NULL),
-   camera_(0, 0, 30),
+   camera_(0, 0, 60),
    ambientLight_(0.2, 0.2, 0.2),
    lightIntensity_(1),
    worldMinWidth_(-10),
@@ -40,32 +40,58 @@ Core::Core() :
              SLOT(update()));
 
    // Spheres
-   A_Object* s = new Sphere(glm::vec3(-1.0, 0, 5), 3.0);
+
+   // Yellow sphere, 0% reflective
+   A_Object* s5 = new Sphere(glm::vec3(1, -4, 0), 2);
+   s5->setMaterial(Material(glm::vec3(0.8588, 0.949, 0.02745), glm::vec3(0.7), 128, 1));
+
+   // Red sphere, 80% reflective
+   A_Object* s = new Sphere(glm::vec3(-4, -2, 5), 3.0);
+   s->setMaterial(Material(glm::vec3(1, 0, 0), glm::vec3(0.7), 128, 0.2));
+
+   // Green sphere, 40% reflective
    A_Object* s2 = new Sphere(glm::vec3(-4, 6, 7), 2.5);
-   A_Object* s3 = new Sphere(glm::vec3(4, 1.5, 10), 1);
-   A_Object* s4 = new Sphere(glm::vec3(4, -1.5, 10), 1);
-   s4->setMaterial(Material(glm::vec3(0.01), glm::vec3(0.5), 32));
+   s2->setMaterial(Material(glm::vec3(0, 1, 0), glm::vec3(0.7), 128, 0.6));
+
+   // Blue sphere, 10% reflective
+   A_Object* s3 = new Sphere(glm::vec3(3, 7, 10), 1);
+   s3->setMaterial(Material(glm::vec3(0, 0, 1), glm::vec3(0.7), 128, 0.9));
+
+   // Black sphere, 10% reflective
+   A_Object* s4 = new Sphere(glm::vec3(8, -8, -25), 2);
+   s4->setMaterial(Material(glm::vec3(0.01), glm::vec3(0.5), 32, 0.9));
 
    // Plane
    A_Object* p = new Plane(glm::vec3(1, -10, 0), glm::vec3(0, -10, 1), glm::vec3(0, -10, -1));
-   p->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0), 300));
+   p->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(1.5), 128, 0.5));
 
    // Triangles
+   // Pink triangle, 70% reflective
    A_Object* t = new Triangle(glm::vec3(-6, 4, -7), glm::vec3(0, 8, -7), glm::vec3(6, 4, -7));
+   t->setMaterial(Material(glm::vec3(0.5, 0.2, 0.7), glm::vec3(0.7), 128, 0.3));
+
+   // Orange triangle, 30% reflective
+   A_Object* t2 = new Triangle(glm::vec3(-10, -10, -80), glm::vec3(-10, 10, -80), glm::vec3(10, -10, -80));
+   t2->setMaterial(Material(0.3f*glm::vec3(1.0, 0.537, 0.16078), glm::vec3(0.7), 128, 0.7));
+
+   // Dark Green Triangle, 0% reflective
+   A_Object* t3 = new Triangle(glm::vec3(12, -5, -80), glm::vec3(14.5, 5, -80), glm::vec3(17, -3, -90));
+   t3->setMaterial(Material(0.3f*glm::vec3(0.12549, 0.470588, 0), glm::vec3(0.7), 128, 1));
 
    // Floor from 2 triangles
-   A_Object* tf1 = new Triangle(glm::vec3(-10, -10, -5), glm::vec3(-10, -10, -45), glm::vec3(10, -10, -45));
-   tf1->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 300));
-   A_Object* tf2 = new Triangle(glm::vec3(10, -10, -5), glm::vec3(-10.01, -10, -5), glm::vec3(10, -10, -45.01));
-   tf2->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128));
-   objects_  << s << s2 << s3 << s4 << t << tf1 << tf2;
+//   A_Object* tf1 = new Triangle(glm::vec3(-10, -10, -5), glm::vec3(-10, -10, -45), glm::vec3(10, -10, -45));
+//   tf1->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128, 0.5));
+//   A_Object* tf2 = new Triangle(glm::vec3(10, -10, -5), glm::vec3(-10.01, -10, -5), glm::vec3(10, -10, -45.01));
+//   tf2->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128));
+
+   objects_  << s << s2 << s3 << s4 << s5 << t << t2 << t3 << p ;
 
    // Lights
    Light l1 (glm::vec3(0, 30, 30), 0.5, 1, 2);
    Light l2 (glm::vec3(-60, 30, 0), 0.5, 1, 2);
    Light l3 (glm::vec3(60, 30, 0), 0.5, 1, 2);
    Light l4 (glm::vec3(0, 50, 0), 0.5, 1, 2);
-   lights_ << l1 << l2 << l3 << l4;
+   lights_ << l1 << l2 << l3;
 
    raycast();
 }
@@ -131,11 +157,7 @@ bool Core::getIntersectionWithScene(Ray r, Intersection* hit, A_Object* starting
             continue;
          }
          intersectionFound = true;
-//         if(debug)
-//         {
-//            fprintf(stderr, "%f \n", h.distance_);
-//            debug = false;
-//         }
+
          if(h.distance_ < minT)
          {
             closestHit = h;
@@ -169,11 +191,7 @@ bool Core::checkForShadowObject(Ray r, A_Object* startingObject, Intersection* h
       if(startingObject != objToCheck && objToCheck->intersect(r, &h) && h.distance_ < 1000)
       {
          intersectionFound = true;
-//         if(debug)
-//         {
-//            fprintf(stderr, "%f \n", h.distance_);
-//            debug = false;
-//         }
+
          if(h.distance_ < minT)
          {
             closestHit = h;
@@ -216,6 +234,7 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       spec.x = hit.material_.s_.x * c.x;
       spec.y = hit.material_.s_.y * c.y;
       spec.z = hit.material_.s_.z * c.z;
+      spec *= (1 - hit.material_.o_);
    }
    else
    {

@@ -9,7 +9,6 @@
 #include <Intersection.h>
 #include <QColor>
 #include <Helpers.h>
-#include <Pixel.h>
 #include <Material.h>
 
 #include <Sphere.h>
@@ -61,7 +60,7 @@ Core::Core() :
 
    // Black sphere, 10% reflective
    A_Object* s4 = new Sphere(glm::vec3(8, -8, -25), 2);
-   s4->setMaterial(Material(glm::vec3(0.01), glm::vec3(0.5), 32, 0.9));
+   s4->setMaterial(Material(glm::vec3(0.01), 2.0f*glm::vec3(1), 32, 0.9));
 
    // Plane
    A_Object* p = new Plane(glm::vec3(1, -10, 0), glm::vec3(0, -10, 1), glm::vec3(0, -10, -1));

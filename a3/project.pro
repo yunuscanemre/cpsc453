@@ -16,9 +16,24 @@ LIBS += -lGLU #is not pulled in by default
 
 ###################################################### Related to files
 
-INCLUDEPATH += src
-HEADERS += src/*.h
-SOURCES += src/*.cpp
+INCLUDEPATH += src \ 
+               src/view \
+               src/objects \
+               src/models \
+               src/raytracer
+
+HEADERS += src/*.h \ 
+           src/objects/*.h \
+           src/view/*.h \
+           src/models/*.h \
+           src/raytracer/*.h
+
+SOURCES += src/*.cpp \ 
+           src/objects/*.cpp  \
+           src/view/*.cpp \
+           src/models/*.cpp \
+           src/raytracer/*.cpp
+
 FORMS += ui/MainWindow.ui
 
 # Flags to pass to g++ compiler

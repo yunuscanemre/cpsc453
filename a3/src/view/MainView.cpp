@@ -1,7 +1,5 @@
 #include <MainView.h>
-#include <GlWidget.h>
 #include <QVBoxLayout>
-#include <RgbImage.h>
 #include <QPixmap>
 #include <Helpers.h>
 #include <QGraphicsPixmapItem>

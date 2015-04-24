@@ -38,6 +38,8 @@ Core::Core() :
          SLOT(exit()));
    qtConnect(view_, SIGNAL(updateCamera()), this,
              SLOT(update()));
+   qtConnect(view_, SIGNAL(saveImageSelected(bool)), this,
+             SLOT(saveImage()));
 
    // Spheres
 
@@ -319,6 +321,6 @@ void Core::saveImage()
          "Select save location and enter file name");
    if (saveFile.isNull())
       return;
-//   image_->WriteBmpFile(saveFile.toStdString().c_str());
+   image_->save(saveFile, 0, 100);
 }
 

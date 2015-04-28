@@ -20,8 +20,7 @@ static bool debug = false;
 Core::Core() :
    image_(NULL),
    camera_(0, 0, 60),
-   ambientLight_(0.2, 0.2, 0.2),
-   lightIntensity_(1),
+   ambientLight_(0.1, 0.1, 0.1),
    worldMinWidth_(-10),
    worldMaxWidth_(10),
    worldMinHeight_(-10),
@@ -58,13 +57,13 @@ Core::Core() :
    A_Object* s3 = new Sphere(glm::vec3(3, 7, 10), 1);
    s3->setMaterial(Material(glm::vec3(0, 0, 1), glm::vec3(0.7), 128, 0.9));
 
-   // Black sphere, 10% reflective
-   A_Object* s4 = new Sphere(glm::vec3(8, -8, -25), 2);
-   s4->setMaterial(Material(glm::vec3(0.01), 2.0f*glm::vec3(1), 32, 0.9));
+   // Pink sphere, 10% reflective
+   A_Object* s4 = new Sphere(glm::vec3(12, -8, -35), 2);
+   s4->setMaterial(Material(glm::vec3(0.5, 0, 0.3), glm::vec3(0.7), 32, 0.9));
 
    // Plane
    A_Object* p = new Plane(glm::vec3(1, -10, 0), glm::vec3(0, -10, 1), glm::vec3(0, -10, -1));
-   p->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(1.5), 128, 0.5));
+   p->setMaterial(Material(glm::vec3(0, 0.2166, 0.25), glm::vec3(0.7), 128, 0));
 
    // Triangles
    // Pink triangle, 70% reflective
@@ -79,18 +78,13 @@ Core::Core() :
    A_Object* t3 = new Triangle(glm::vec3(12, -5, -80), glm::vec3(14.5, 5, -80), glm::vec3(17, -3, -90));
    t3->setMaterial(Material(0.3f*glm::vec3(0.12549, 0.470588, 0), glm::vec3(0.7), 128, 1));
 
-   // Floor from 2 triangles
-//   A_Object* tf1 = new Triangle(glm::vec3(-10, -10, -5), glm::vec3(-10, -10, -45), glm::vec3(10, -10, -45));
-//   tf1->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128, 0.5));
-//   A_Object* tf2 = new Triangle(glm::vec3(10, -10, -5), glm::vec3(-10.01, -10, -5), glm::vec3(10, -10, -45.01));
-//   tf2->setMaterial(Material(0.3f*glm::vec3(0, 0.835, 1), glm::vec3(0.7), 128));
 
    objects_  << s << s2 << s3 << s4 << s5 << t << t2 << t3 << p ;
 
    // Lights
-   Light l1 (glm::vec3(0, 30, 30), 0.02, 0.03, 1);
-   Light l2 (glm::vec3(-60, 30, 0), 0.02, 0.03, 1);
-   Light l3 (glm::vec3(60, 30, 0), 0.02, 0.03, 1);
+   Light l1 (glm::vec3(0, 30, 30), 1, 0.00002, 0.000030, 0.00005);
+   Light l2 (glm::vec3(-60, 30, -30), 1, 0.00002, 0.00003, 0.00005);
+   Light l3 (glm::vec3(60, 30, -30), 1.5, 0.00002, 0.00003, 0.00005);
    lights_ << l1 << l2 << l3;
 
    raycast();
@@ -260,26 +254,27 @@ glm::vec3 Core::calculateColor(Ray ray, int depth)
       {
          glm::vec3 d = hit.material_.d_;
          glm::vec3 shadowColor = glm::vec3(ambientLight_.x*d.x, ambientLight_.y*d.y, ambientLight_.z*d.z);
+
          float attenuation = 1.0f/(l.c_*pow(hitToLight, 2.0f) + l.b_*hitToLight + l.a_);
-         local += attenuation*shadowColor;
+         local += shadowColor*attenuation;
 //         local += shadowColor;
 
       }
       else
       {
-         local += (phong(lightVector, viewDirection, hit.normal_, hit.material_));
+         local += (phong(lightVector, viewDirection, hit.normal_, hit.material_, l.intensity_));
       }
    }
 
-   local += ambientLight_;
+//   local += ambientLight_;
    return local + spec;
 }
 
-glm::vec3 Core::phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m)
+glm::vec3 Core::phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m, float lightIntensity)
 {
-   glm::vec3 diffuse = m.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*(float)lightIntensity_;
+   glm::vec3 diffuse = m.d_*(float)(qMax((double) glm::dot(lightVector, normal), 0.0))*lightIntensity;
    glm::vec3 reflect = glm::normalize(glm::reflect(lightVector, normal));
-   glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), m.n_) * m.s_ * (float)lightIntensity_;
+   glm::vec3 specular = (float)pow(qMax(glm::dot(reflect, viewDirection), 0.0f), m.n_) * m.s_ * lightIntensity;
 
    glm::vec3 color = diffuse + specular;
    return color;

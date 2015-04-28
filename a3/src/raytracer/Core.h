@@ -19,10 +19,10 @@ struct Light
    float a_ = 1;
    float b_ = 0;
    float c_ = 0;
-
-   inline Light(glm::vec3 pos, float a, float b, float c)
+   float intensity_ = 1;
+   inline Light(glm::vec3 pos, float intensity, float a, float b, float c)
    {
-      pos_ = pos; a_ = a; b_ = b; c_ = c;
+      pos_ = pos; intensity_ = intensity; a_ = a; b_ = b; c_ = c;
    }
 };
 
@@ -49,7 +49,7 @@ private:
    void raycast();
    Ray generateRay(int i, int j);
    glm::vec3 calculateColor(Ray origRay, int depth);
-   glm::vec3 phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m);
+   glm::vec3 phong(glm::vec3 lightVector, glm::vec3 viewDirection, glm::vec3 normal, Material m, float lightIntensity);
    QRgb vec3ToQrgb(glm::vec3 c);
    bool getIntersectionWithScene(Ray r,Intersection* object, A_Object* startingObject = NULL);
    bool checkForShadowObject(Ray r, A_Object* startingObject, Intersection* hit);
